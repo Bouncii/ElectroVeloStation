@@ -13,7 +13,14 @@ composer install
 # Dépendances JavaScript (React / Vite)
 npm install
 ```
-## 3. Visualiser le site
+## 3. Sécurité (etape importante)
+Installez le .env sur le dossier racine du projet
+
+Executez la commande suivante (.env nécéssaire)
+```bash
+php artisan key:generate
+```
+## 4. Visualiser le site
 executez ces comandes en parallèles sur des terminaux à part :
 ```bash
 php artisan serve
