@@ -3,7 +3,7 @@
 /* <> */
 import { useState } from "react"
 
-import '../../css/home.css'; /* TODO : configuré un alias */
+import '@css/home.css';
 /* Fonction du header - WIP :
 - Prévoir la gestion de l'écran (ordi ou tel) via un useState
 */
