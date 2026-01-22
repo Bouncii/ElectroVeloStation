@@ -9,7 +9,12 @@ export default defineConfig({
             refresh: true,
         }),
         react(),
-    ],
+    ],resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'resources/js'),
+            '@css': path.resolve(__dirname, 'resources/css'),
+        },
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
