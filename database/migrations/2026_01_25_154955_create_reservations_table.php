@@ -17,7 +17,8 @@ return new class extends Migration
             $table->dateTime('fin');
             
             $table->foreignId('id_utilisateur')->constrained('utilisateurs');
-            $table->foreignId('id_station')->constrained('stations');
+            $table->foreignId('station_depart')->constrained('stations');
+            $table->foreignId('station_arivee')->constrained('stations');
         });
     }
 
