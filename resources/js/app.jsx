@@ -1,4 +1,4 @@
-/*  Ne pas enlever sinon c'est la merde*/
+/*  Ne pas enlever*/
 /* eslint-disable react/react-in-jsx-scope */
 
 import './bootstrap';
