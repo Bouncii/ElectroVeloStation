@@ -6,6 +6,10 @@ Route::get('/', function () {
     return inertia('home');
 });
 
-Route::get('/', function () {
+Route::get('/reservation', function () {
     return inertia('reservation');
+});
+
+Route::get('/connexion', function () {
+    return inertia('connexion');
 });

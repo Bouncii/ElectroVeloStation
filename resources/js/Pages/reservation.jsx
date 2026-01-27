@@ -127,7 +127,7 @@ function CalculCoutReservation(dureeHeures){
     else {
         coutTotal += dureeHeures * tarifHoraire;
     }
-    return coutTotal;
+    return coutTotal*(nbVelosAdulte + nbVelosEnfant);
 }
 
 function FooterReservation(){
@@ -142,6 +142,7 @@ function FooterReservation(){
 
 export default function Reservation(){
     const [formulaires, setFormulaires] = useState([]);
+    const [velosReserves, setVelosReserves] = useState(1);
 
     return (
         <>
@@ -160,7 +161,9 @@ export default function Reservation(){
                 <div key={index} className="champ">
                     <Ajouterformulaire />
                 </div>
-            ))}
+            ))
+            }
+            
             </div>
             <FooterReservation />
         </>
