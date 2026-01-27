@@ -14,15 +14,9 @@ return new class extends Migration
         Schema::create('velos', function (Blueprint $table) {
             $table->id();
             $table->integer('taille');
-            
-            $table->enum('etat', [
-                'utilise', 
-                'libre', 
-                'transportPending', 
-                'renduPending'
-            ])->default('libre');
-
-            $table->foreignId('id_station')->constrained('stations');
+            $table->enum('etat', ['libre', 'utilise', 'transportPending', 'renduPending'])->default('libre');
+            $table->foreignId('station_id')->constrained('stations')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->dateTime('debut');
             $table->dateTime('fin');
+            $table->enum('status', ['en_attente', 'confirmee', 'annulee', 'terminee'])->default('en_attente');
             
             $table->foreignId('id_utilisateur')->constrained('utilisateurs');
             $table->foreignId('station_depart')->constrained('stations');
             $table->foreignId('station_arivee')->constrained('stations');
+            $table->timestamps();
         });
     }
 

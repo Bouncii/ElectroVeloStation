@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('mail')->unique();
             $table->string('mdp');
             $table->enum('acces', ['client', 'employe', 'admin'])->default('client');
+            $table->timestamps();
         });
     }
 

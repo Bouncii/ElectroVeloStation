@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('attributions', function (Blueprint $table) {
             $table->id();
-            
-            $table->foreignId('id_reservation')->constrained('reservations');
-            $table->foreignId('id_velo')->constrained('velos');
-            $table->foreignId('id_personne')->constrained('personnes');
+            $table->foreignId('id_reservation')->constrained('reservations')->onDelete('cascade');
+            $table->foreignId('id_personne')->constrained('personnes')->onDelete('cascade');
+            $table->foreignId('id_velo')->nullable()->constrained('velos')->onDelete('set null');
+            $table->timestamps();
         });
     }
 
