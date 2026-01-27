@@ -3,6 +3,8 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+@import "tailwindcss";
+
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
@@ -19,4 +21,12 @@
 
     background-color: aquamarine;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.stationCard{
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    width: 200px;
 }

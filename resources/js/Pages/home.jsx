@@ -1,4 +1,4 @@
-/*Ne pas enlever sinon c'est la merde*/
+/*Ne pas enlever*/
 /* eslint-disable react/react-in-jsx-scope */
 /* <> */
 import { useState } from "react"
@@ -8,7 +8,7 @@ import '@css/home.css';
 - Prévoir la gestion de l'écran (ordi ou tel) via un useState
 */
 
-export function reservation(){
+export function Reservation(){
     console.log('c reserve tkt');
 }
 
@@ -17,11 +17,25 @@ export function Header(){
         <header className="Header">
             <nav className="Nav">
                 <a href ="/">Se connecter</a>
-                <button onClick={reservation}>Reservé</button>
+                <button onClick={Reservation}>Reservé</button>
             </nav>         
         </header>
     )
 }
+
+/* Les stations */
+
+const Station = (props) => {
+    return (
+        <div className="stationCard">
+            <h2>{props.name}</h2>
+            <p>{props.desc}</p>
+            <button onClick={() => alert('Vélo réservé !')}>
+            Résever
+            </button>
+        </div>
+    );
+};
 
 export default function Home(){
     const [nb,setNb] = useState(0);
@@ -33,7 +47,31 @@ export default function Home(){
     return (
         <>
             <h1>Hello user</h1>
-            <button onClick={increment}>{nb} clicks</button>
+            <header>
+                
+            </header>
+            <button onClick={increment} className = 'Button'>{nb} 
+            Click</button>
+
+            <div id="stations">
+                <h1>Nos stations</h1>
+                <Station
+                    name="Amusment Park"
+                    desc="Voici uee description super pertinante."
+                />
+                <Station
+                    name="Judgment"
+                    desc="Voici uee description super pertinante."
+                />
+                <Station
+                    name="Ashura-chan"
+                    desc="Voici uee description super pertinante."
+                />
+                <Station
+                    name="Throne"
+                    desc="Voici uee description super pertinante."
+                />
+            </div>
         </>
     );
 }
