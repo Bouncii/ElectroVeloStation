@@ -1,9 +1,14 @@
 import { useState } from "react";
 import React from "react";
+import '@css/reservation.css';
+import '../Pages/home.jsx';
+import { Header } from "../Pages/home.jsx";
 
 const ajd = new Date().toLocaleDateString("fr");
 const nbVelosAdulte = 1;
 const nbVelosEnfant = 0;
+
+
 
 function FormulaireComplet(){
         return <>
@@ -15,6 +20,8 @@ function FormulaireComplet(){
         <input type="text" name="prenom" />
         <label>Âge :</label>
         <input type="number" name="age" /> 
+        <label>Taille</label>
+        <input type="number" name="taille" />
         <label>Email :</label>
         <input type="email" name="email" />
         </form>
@@ -22,7 +29,7 @@ function FormulaireComplet(){
 }
 
 function Formulaire() {
-    return <><div className="champ">
+    return <>
         <h3>Nouveau cycliste : </h3>
         <form action="" method="post">
         <label>Nom :</label>
@@ -31,8 +38,10 @@ function Formulaire() {
         <input type="text" name="prenom" />
         <label>Âge :</label>
         <input type="number" name="age" />
+        <label>Taille</label>
+        <input type="number" name="taille" />
         </form>
-        </div>
+        
     </>
     
 }
@@ -146,7 +155,9 @@ export default function Reservation(){
 
     return (
         <>
+            <header><Header /></header>
             <h1>Réservez chez Electro Vélo Station</h1>
+            <div className="infoReservation">
             <div className="champ">
             <FormulaireReservation />
             </div>
@@ -157,6 +168,7 @@ export default function Reservation(){
 
             <button onClick={() => setFormulaires([...formulaires, {}])}> ➕ Ajouter</button>
             <button onClick={() => setFormulaires(formulaires.slice(0, -1))}> ➖ Supprimer</button>
+            </div>
             {formulaires.map((_, index) => (
                 <div key={index} className="champ">
                     <Ajouterformulaire />

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/home', function () {
+Route::get('/', function () {
     return inertia('home');
 });
 
@@ -12,4 +12,8 @@ Route::get('/reservation', function () {
 
 Route::get('/connexion', function () {
     return inertia('connexion');
+});
+
+Route::get('/creerCompte', function () {
+    return inertia('creerCompte');
 });

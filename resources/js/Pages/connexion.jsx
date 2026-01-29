@@ -8,7 +8,8 @@ function FormulaireConnexion(){
             <label>Mot de passe :</label>
             <input type="password" name="password" />
         </form>
-        <a href="reservation">Se connecter</a>
+        <button>Se connecter</button>
+        <p>Vous n'avez pas de compte ? <a href="../creerCompte">Créez-en un</a></p>
         </div>
         </>
 }

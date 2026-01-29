@@ -3,7 +3,7 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@import "tailwindcss";
+/*@import "tailwindcss";*/
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
