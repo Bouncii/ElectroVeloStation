@@ -3,30 +3,87 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-/*@import "tailwindcss";*/
-
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-/*Placeholder, won't stay that way*/
+/*.homePage {
+    background-color: #5AA9E6;
+}*/
+
 .Header {
     position: fixed;
-    top:0;
-    max-height:70;
+    top: 0;
+    max-height: 70px;
     width: 100vw;
+    text-align: justify;
+    background-color:white;
+}
 
-    display: grid;
+.Nav a {
+    float: left;
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
 
-    background-color: aquamarine;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.Nav a:hover {
+    background-color: #FFE45E;
+    color: black;
+}
+
+.Nav a.active {
+    background-color: blue;
+    color: white;
+}
+
+/*
+.topnav .icon {
+    display: none;
+}
+*/
+
+@media screen and (max-width: 600px)
+{
+    .topnav a:not(:first-child)
+    {display: none;}
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+}
+
+/*#reserverHeader {
+    cursor: pointer;
+    text-align: center;
+    background-color: #5AA9E6;
+    border: 1px solid #5AA9E6;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 8px;
+}
+
+#connecterHeader {
+    cursor: pointer;
+    text-decoration: none;
+    color: #5AA9E6;
+    margin: 8px;
+}*/
+
+#stations {
+    display: flex;
 }
 
 .stationCard{
-    border: 1px solid black;
+    flex-direction: row;
+    border: 1px solid #FFE45E;
     border-radius: 8px;
     padding: 16px;
+    margin: 16px;
     text-align: center;
     width: 200px;
+    background-color: #FFE45E;
 }

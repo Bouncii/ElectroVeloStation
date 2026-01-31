@@ -4,20 +4,28 @@
 import { useState } from "react"
 
 import '@css/home.css';
-/* Fonction du header - WIP :
-- Prévoir la gestion de l'écran (ordi ou tel) via un useState
-*/
 
-export function Reservation(){
-    console.log('c reserve tkt');
-}
 
 export function Header(){
+    
+    const toggleMenu = () => {
+            var x = document.getElementById("topnav")
+                if (x.className === "Nav") {
+                    x.className += "responsive";
+                    console.log("responsive")
+                } else {
+                    x.className = "Nav";
+                    console.log("Nav")
+                }
+        };
+
     return (
+        
         <header className="Header">
-            <nav className="Nav">
-                <a href ="/">Se connecter</a>
-                <button onClick={Reservation}>Reservé</button>
+            <nav className="Nav" id="topnav">
+                <a href="/">Accueil</a>
+                <a href ="/connexion" id="connecterHeader">Se connecter</a>
+                <button id="reserverHeader" onClick={() => window.location.href = '/reservation'}>Reserver</button>
             </nav>         
         </header>
     )
@@ -38,23 +46,19 @@ const Station = (props) => {
 };
 
 export default function Home(){
-    const [nb,setNb] = useState(0);
-
-    const increment = _ =>{
-        setNb(nb+1)
-    };
 
     return (
         <>
-            <h1>Hello user</h1>
-            <header>
-                
-            </header>
-            <button onClick={increment} className = 'Button'>{nb} 
-            Click</button>
+        <div className="homePage">
+            <Header />
+            <div style={{marginTop: '80px'}}>
+            
+            <h1>Electrovélo station</h1>
+
+            <h2>Nos stations</h2>
 
             <div id="stations">
-                <h1>Nos stations</h1>
+                
                 <Station
                     name="Amusment Park"
                     desc="Voici uee description super pertinante."
@@ -72,6 +76,8 @@ export default function Home(){
                     desc="Voici uee description super pertinante."
                 />
             </div>
+            </div>
+        </div>
         </>
     );
 }
