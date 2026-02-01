@@ -1,5 +1,9 @@
+import '@css/creerCompte.css';
+import { Header } from "./home.jsx";
+
 function FormulaireCreerCompte(){
     return <>
+        <Header/>
         <div className="blocCreerCompte">
         <h3>Création de compte</h3>
         <form action="" method="post">

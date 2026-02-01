@@ -1,0 +1,31 @@
+body {
+    background-color: #7FC8F8;
+    font-family: 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    color:#262626;
+}
+
+.blocCreerCompte {
+    margin: 100px auto;
+    padding: 20px;
+    border: 2px solid #262626;
+    border-radius: 10px;
+    background-color: white;
+    width: 300px;
+    text-align: left;
+}
+
+.blocCreerCompte label {
+    display: block;
+    margin: 10px;
+    font-weight: bold;
+}
+
+.blocCreerCompte input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

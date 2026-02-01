@@ -1,15 +1,22 @@
 body {
-    background-color: rgb(199, 221, 255);
+    background-color: #7FC8F8;
     font-family: 'Arial Narrow Bold', sans-serif;
     text-align: center;
-    
+    color:#262626;
 }
 
+.infoReservation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
 
 .infoReservation .champ {
     margin: 20px;
     padding: 20px;
-    border: 2px solid black;
+    border: 2px solid #262626;
     border-radius: 10px;
     background-color: white;
     width: 400px;
@@ -31,19 +38,47 @@ body {
     box-sizing: border-box;
 }
 
+.champ button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.champ button:hover {
+    background-color: #134fdb;
+}
+
 footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
     position: sticky;
     bottom: 0;
     width: 100%;
     padding: 10px;
-    background-color: rgb(10, 35, 96);
+    background-color: #0031A4;
     color: white;
 }
 
 footer p {
-    margin: 0;
     font-size: 14px;
-    display: inline-block;
-    margin-inline-start: 10%;
-    margin-inline-end: 10%;
+    margin: 0;            
 }
+
+footer button {
+    padding: 10px 20px;
+    background-color: #FFE45E;
+    color: rgb(10, 35, 96);
+    border: none;
+    border-radius: 5px;
+    
+}
+
+footer button:hover {
+    background-color: rgb(255, 255, 128);
+}
+
