@@ -15,4 +15,14 @@ class Station extends Model
     public function schedules() {
         return $this->hasMany(Schedule::class);
     }
+
+
+    public function departures() {
+        return $this->hasMany(Reservation::class, 'pickup_station_id');
+    }
+
+    public function arrivals() {
+        return $this->hasMany(Reservation::class, 'return_station_id');
+    }
+    
 }
