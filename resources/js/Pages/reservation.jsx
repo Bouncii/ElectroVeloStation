@@ -5,8 +5,8 @@ import '../Pages/home.jsx';
 import { Header } from "../Pages/home.jsx";
 
 const ajd = new Date().toLocaleDateString("fr");
-const nbVelosAdulte = 1;
-const nbVelosEnfant = 0;
+var nbVelosAdulte = 1;
+var nbVelosEnfant = 0;
 
 
 
@@ -118,6 +118,7 @@ function Ajouterformulaire(){
 }
 
 function CalculDureeReservation(dateDebut, dateFin, heureDebut, heureFin){
+    
     const debut = new Date(`${dateDebut}T${heureDebut}`);
     const fin = new Date(`${dateFin}T${heureFin}`);
     const dureeMs = fin - debut;
@@ -152,8 +153,9 @@ function FooterReservation(){
 export default function Reservation(){
     const [formulaires, setFormulaires] = useState([]);
     const [velosReserves, setVelosReserves] = useState(1);
-
+    {nbVelosAdulte = formulaires.length + 1}
     return (
+        
         <>
             <header><Header /></header>
             <h1>Réservez chez Electro Vélo Station</h1>
@@ -165,16 +167,14 @@ export default function Reservation(){
             <div className="champ">
             <FormulaireComplet />
             <br/>
-
-            <button onClick={() => setFormulaires([...formulaires, {}])}> ➕ Ajouter</button>
             <button onClick={() => setFormulaires(formulaires.slice(0, -1))}> ➖ Supprimer</button>
+            <button onClick={() => setFormulaires([...formulaires, {}])}> ➕ Ajouter</button>
             </div>
             {formulaires.map((_, index) => (
                 <div key={index} className="champ">
                     <Ajouterformulaire />
                 </div>
-            ))
-            }
+            ))}
             
             </div>
             <FooterReservation />

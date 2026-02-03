@@ -1,5 +1,9 @@
+import '@css/connexion.css';
+import { Header } from "./home.jsx";
+
 function FormulaireConnexion(){
     return <>
+        <Header/>
         <div className="blocConnexion">
         <h3>Connexion</h3>
         <form action="" method="post">
