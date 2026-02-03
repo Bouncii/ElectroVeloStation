@@ -5,27 +5,32 @@ import { useState } from "react"
 
 import '@css/home.css';
 
-
 export function Header(){
     
-    const toggleMenu = () => {
-            var x = document.getElementById("topnav")
-                if (x.className === "Nav") {
-                    x.className += "responsive";
-                    console.log("responsive")
-                } else {
-                    x.className = "Nav";
-                    console.log("Nav")
-                }
-        };
+
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         
         <header className="Header">
-            <nav className="Nav" id="topnav">
+            <nav className={isOpen ? "Nav responsive" : "Nav"} id="topnav">
+                
+                <div id="menu">
                 <a href="/">Accueil</a>
-                <a href ="/connexion" id="connecterHeader">Se connecter</a>
-                <button id="reserverHeader" onClick={() => window.location.href = '/reservation'}>Reserver</button>
+                <a href ="/connexion">Se connecter</a>
+                <button onClick={() => window.location.href = '/reservation'}>Reserver</button>
+                </div>
+
+                <button className="icon" onClick={() => setIsOpen(!isOpen)}>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
+
+                    <path d="M4 6H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M4 12H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M4 18H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+
+                    </svg>
+                </button>
+                
             </nav>         
         </header>
     )
@@ -51,14 +56,10 @@ export default function Home(){
         <>
         <div className="homePage">
             <Header />
-            <div style={{marginTop: '80px'}}>
-            
             <h1>Electrovélo station</h1>
 
             <h2>Nos stations</h2>
-
             <div id="stations">
-                
                 <Station
                     name="Amusment Park"
                     desc="Voici uee description super pertinante."
@@ -77,7 +78,6 @@ export default function Home(){
                 />
             </div>
             </div>
-        </div>
         </>
     );
 }
