@@ -20,7 +20,7 @@ function FormulaireComplet(){
         <input type="text" name="prenom" />
         <label>Âge :</label>
         <input type="number" name="age" /> 
-        <label>Taille</label>
+        <label>Taille (cm) :</label>
         <input type="number" name="taille" />
         <label>Email :</label>
         <input type="email" name="email" />
@@ -31,22 +31,36 @@ function FormulaireComplet(){
 function Formulaire() {
     return <>
         <h3>Nouveau cycliste : </h3>
-        <form action="" method="post">
+        <select name="enregistres" onChange={(e) => {
+            if(e.target.value != ""){
+                e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "none";
+            } else {
+                e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "block";
+            }
+        }}>
+            <option value="">Déjà enregistré ?</option>
+            <option value="1">M. Oui</option>
+            <option value="2">Mme Oui</option>
+            //TODO : ajouter les utilisateurs déjà enregistrés dans la base de données
+        </select>
+        <form className="formulaire" action="" method="post">
         <label>Nom :</label>
         <input type="text" name="nom" />
         <label>Prénom :</label>
         <input type="text" name="prenom" />
         <label>Âge :</label>
         <input type="number" name="age" />
-        <label>Taille</label>
+        <label>Taille (cm) :</label>
         <input type="number" name="taille" />
+        <button className="boutonRegister">Enregistrer</button>
         </form>
+        
         
     </>
     
 }
 
-function FormulaireReservation(props) {
+function FormulaireReservation() {
     const [dateDebut, setDateDebut] = useState("");
     const [dateFin, setDateFin] = useState("");
     const [heureDebut, setHeureDebut] = useState("");
@@ -172,7 +186,10 @@ export default function Reservation(){
             </div>
             {formulaires.map((_, index) => (
                 <div key={index} className="champ">
-                    <Ajouterformulaire />
+                <Ajouterformulaire />
+                       
+                    
+                    
                 </div>
             ))}
             
