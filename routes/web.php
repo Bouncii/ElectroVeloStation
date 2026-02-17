@@ -10,5 +10,16 @@ Route::get('/', function () {
 Route::get('/dashboard', [GlobalReservationController::class,"index"]);
 
 Route::get('/dashboard/stations', [StationManagementController::class,"index"]);
-
+		
 Route::get('/dashboard/stations/{station}', [StationManagementController::class, 'show']);
+Route::get('/reservation', function () {
+    return inertia('reservation');
+});
+
+Route::get('/connexion', function () {
+    return inertia('connexion');
+});
+
+Route::get('/creerCompte', function () {
+    return inertia('creerCompte');
+});

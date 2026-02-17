@@ -1,3 +1,6 @@
+/*  Ne pas enlever*/
+/* eslint-disable react/react-in-jsx-scope */
+
 import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/react'

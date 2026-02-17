@@ -1,0 +1,85 @@
+body {
+    /*background-color: #5AA9E6;*/
+    background-color: 262626;
+    font-family: 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    color:#262626;
+}
+
+.infoReservation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.infoReservation .champ {
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid #262626;
+    border-radius: 10px;
+    background-color: white;
+    width: 400px;
+    display: inline-block;
+    text-align: left;
+}
+
+.champ label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.champ input, .champ select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.champ button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.champ button:hover {
+    background-color: #134fdb;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #0031A4;
+    color: white;
+}
+
+footer p {
+    font-size: 14px;
+    margin: 0;            
+}
+
+footer button {
+    padding: 10px 20px;
+    background-color: #FFE45E;
+    color: rgb(10, 35, 96);
+    border: none;
+    border-radius: 5px;
+    
+}
+
+footer button:hover {
+    background-color: rgb(255, 255, 128);
+}
+
