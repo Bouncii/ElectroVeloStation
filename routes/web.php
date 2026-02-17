@@ -7,6 +7,8 @@ Route::get('/', function () {
     return inertia('home');
 });
 
+Route::get('/dashboard', [GlobalReservationController::class,"index"]);
+
 Route::get('/dashboard/stations', [StationManagementController::class,"index"]);
 
-Route::get('/dashboard', [GlobalReservationController::class,"index"]);
+Route::get('/dashboard/stations/{station}', [StationManagementController::class, 'show']);
