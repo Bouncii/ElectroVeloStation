@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Station;
 use App\Models\Bike;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StationManagementController extends Controller{

@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
+    use HasFactory;
     protected $fillable = ['start_date', 'end_date', 'user_id', 'pickup_station_id', 'return_station_id', 'status'];
 
     public function user() {
@@ -22,5 +23,9 @@ class Reservation extends Model
 
     public function attributions() {
         return $this->hasMany(Attribution::class);
+    }
+
+    public function scopePending($query){
+        return $query->where('status', 'pending');
     }
 }
