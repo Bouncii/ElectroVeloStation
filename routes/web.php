@@ -3,7 +3,7 @@ use App\Http\Controllers\StationManagementController;
 use App\Http\Controllers\GlobalReservationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/home', function () {
     return inertia('home');
 });
 
