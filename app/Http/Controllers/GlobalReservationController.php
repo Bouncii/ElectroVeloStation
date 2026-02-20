@@ -16,7 +16,7 @@ class GlobalReservationController extends Controller
             'attributions.person'
         ];
 
-        return Inertia::render('home', [
+        return Inertia::render('dashboard', [
             'pendingReservations' => Reservation::pending()
                 ->with($relations)
                 ->withCount('attributions')
