@@ -2,7 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* <></> */
 import { useState } from "react"
-
+import { usePage, Link } from '@inertiajs/react';
 import '@css/home.css';
 
 export function Background() {
@@ -19,6 +19,7 @@ export function Header(){
     
 
     const [isOpen, setIsOpen] = useState(false);
+    const data = usePage().props;
 
     return (
         
@@ -26,8 +27,10 @@ export function Header(){
             <nav className={isOpen ? "Nav responsive" : "Nav"} id="topnav">
                 
                 <div id="menu">
-                <a href="/">Accueil</a>
-                <a href ="/login">Se connecter</a>
+                <Link href="/">Accueil</Link>
+                {!data.user && (
+                        <Link href="/login">Se connecter</Link>
+                )}
                 <button onClick={() => window.location.href = '/reservation'}>Reserver</button>
                 </div>
 
@@ -54,7 +57,7 @@ const Station = (props) => {
             <img src="./frog.png" className="StationImage"></img>
             <h2>{props.name}</h2>
             <p>{props.desc}</p>
-            <a href="./TrucIG?" className="LinkStationMap">Afficher sur la carte</a>
+            <Link href="./TrucIG?" className="LinkStationMap">Afficher sur la carte</Link>
             <button onClick={() => alert('Vélo réservé !')}>
             Résever
             </button>
@@ -77,7 +80,7 @@ const TextOval = (props) => {
 const LinkOval = (props) => {
     return (
         <div className="LinkOval">
-            <a href={props.link} target="_blank" className="LinkOval">{props.text}
+            <Link href={props.link} target="_blank" className="LinkOval">{props.text}
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                     <path strokeDasharray="20" d="M3 12h17.5">
@@ -88,7 +91,7 @@ const LinkOval = (props) => {
                     </path>
                 </g>
             </svg>
-            </a>
+            </Link>
         </div>
 
     )
