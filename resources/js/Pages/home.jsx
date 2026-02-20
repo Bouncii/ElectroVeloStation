@@ -5,7 +5,6 @@ import { useState } from "react"
 
 import '@css/home.css';
 
-/* TODO : la background ne s'affiche plus en background */
 export function Background() {
   return (
 <svg 

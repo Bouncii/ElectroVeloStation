@@ -1,0 +1,32 @@
+.addStationForm {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px dashed #979bff;
+    display: flex;
+    gap: 10px;
+}
+
+.addStationForm input {
+    padding: 8px;
+    flex: 1;
+}
+
+.stationsList {
+    padding: 20px;
+}
+
+.stationDetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.stationDetails div {
+    min-width: 250px;
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+}

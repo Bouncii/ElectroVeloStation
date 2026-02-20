@@ -1,0 +1,219 @@
+
+body{
+    background-color:#D9D9D9 ;
+}
+
+.dash {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.cardReservation{
+    flex-shrink: 0;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-areas: 
+        "top top top" 
+        "hours user user"     
+        "cmd cmd status";     
+    gap: 10px;
+
+    background-color: white;
+    
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    width: 400px;
+    margin: 5%;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.cardReservation div {
+  border: 1px solid #D9D9D9;
+  border-radius: 16px;
+  padding: 10px;
+  text-align: center;
+}
+
+#containerResa {
+    display: flex;
+    flex: 0 0 50vw;
+    background-color: #D9D9D9;
+    border-radius: 8px;
+    width: 50vw;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: 10px;
+}
+
+#containerResa::-webkit-scrollbar {
+    height: 8px;
+}
+
+#containerResa::-webkit-scrollbar-thumb {
+    background: #979bff;
+    border-radius: 10px;
+}
+
+p {
+    font-size: small;
+}
+
+h3{
+    font-size: small;
+}
+
+div.resaTop {
+    grid-area: top;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center; 
+}
+
+.resaTop p {
+    margin: 0;
+    font-size: small;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+div.bottom {
+    display: contents;
+}
+
+div.hours { 
+    grid-area: hours;
+    width: 116px;
+}
+
+div.user {
+    grid-area: user;
+    text-align: start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+div.commande{
+    grid-area: cmd;
+    text-align: start;
+    align-self: end;
+}
+
+div.status {
+    grid-area: status;
+    align-self: end;
+}
+
+#waitList{
+    background-color: white;
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 16px;
+}
+
+#waitList h2 {
+       text-align: left;
+}
+
+#waitGrid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 100px;
+    gap: 15px 10px;
+    border: 1px solid #D9D9D9;;
+    padding: 20px;
+    border-radius: 8px;
+    align-items: stretch;
+}
+
+#waitGrid h3, #btnTri {
+    font-weight: bold;
+    border-bottom: 2px solid #D9D9D9;
+    padding-bottom: 10px;
+    margin: 0;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+} 
+
+#btnTri {
+    cursor: pointer;
+    transition: backbround-color 0.2s;
+}
+
+#btnTri {
+    transform: translateY(1px);
+}
+
+#waitGrid div {
+    padding: 5px 0px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#btnTri:hover{
+    color: #979bff;
+    border-bottom-color: #979bff;
+}
+
+.modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal_content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    position: relative;
+    min-width: 300px;
+    color: black;
+}
+
+.close_btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-weight: bold;
+}
+
+.box {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top:45px ;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.box a{
+    text-decoration: none;
+}
+
+#redirecBoxes {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}

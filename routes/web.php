@@ -17,3 +17,11 @@ Route::get('/connexion', function () {
 Route::get('/creerCompte', function () {
     return inertia('creerCompte');
 });
+
+Route::get('/dashboard', function () {
+    return inertia('dashboard');
+});
+
+Route::get('/stationsdash', function () {
+    return inertia('stationsdash');
+});
