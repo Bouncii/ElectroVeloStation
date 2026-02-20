@@ -11,9 +11,7 @@ export default defineConfig({
             refresh: true,
         }),
         react(),
-        tailwindcss(),
-    ],
-    resolve: {
+    ],resolve: {
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
             '@css': path.resolve(__dirname, 'resources/css'),
