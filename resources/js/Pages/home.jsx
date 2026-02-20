@@ -171,7 +171,7 @@ export default function Home(){
 
             <h2 className="titreGros">Simplifiez-vous la vie, créez un compte !</h2>
             <LinkOval
-                link='/creerCompte'
+                link='/register'
                 text="Créer un compte"    
             />
             <Background />
