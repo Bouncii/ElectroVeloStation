@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, ...$roles): Response #$roles permet de stack les param_tres 
+    public function handle(Request $request, Closure $next, ...$roles): Response #$...roles permet de stack les param_tres 
     {
         if (!Auth::check()) {
             return redirect()->route('login');
