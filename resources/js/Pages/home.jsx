@@ -27,7 +27,7 @@ export function Header(){
                 
                 <div id="menu">
                 <a href="/">Accueil</a>
-                <a href ="/connexion">Se connecter</a>
+                <a href ="/login">Se connecter</a>
                 <button onClick={() => window.location.href = '/reservation'}>Reserver</button>
                 </div>
 
