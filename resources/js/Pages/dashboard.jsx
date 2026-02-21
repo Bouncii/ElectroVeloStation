@@ -2,6 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* <></> */
 import { useState } from "react"
+import { usePage, Link } from '@inertiajs/react';
 import '@css/dashboard.css';
 
 const CardResa = (props) => {
@@ -165,6 +166,7 @@ export default function Dashboard() {
 
     return(
         <>
+        <Link href="/" id="back">Accueil</Link>
         <div className="dash">
         
             <div id="containerResa">
@@ -172,7 +174,7 @@ export default function Dashboard() {
                     <CardResa key={resa.id} {...resa} />
                 ))}
             </div>
-
+                
             <div id="redirectBoxes">
                 <RedirectBox 
                 link = '/stationsdash'/>

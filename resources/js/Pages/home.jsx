@@ -20,6 +20,7 @@ export function Header(){
 
     const [isOpen, setIsOpen] = useState(false);
     const data = usePage().props;
+    const user = data.auth.user;
 
     return (
         
@@ -28,10 +29,20 @@ export function Header(){
                 
                 <div id="menu">
                 <Link href="/">Accueil</Link>
-                {!data.user && (
+                {!user && (
                         <Link href="/login">Se connecter</Link>
                 )}
-                <button onClick={() => window.location.href = '/reservation'}>Reserver</button>
+                {user && (
+                    <>
+                        <Link href="/logout" method="post" as="button" type="button" id="logout">Se déconnecter</Link>; 
+                    </>
+                )}
+                
+                {(user?.role === "admin" || user?.role === "employee") && (
+                        <Link href="/dashboard">Dashboard</Link>
+                )}
+
+                <Link href = '/reservation'>Reserver</Link>
                 </div>
 
                 <button className="icon" onClick={() => setIsOpen(!isOpen)}>

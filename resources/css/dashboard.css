@@ -217,3 +217,12 @@ div.status {
     justify-content: center;
     align-items: flex-start;
 }
+
+#back {
+    background-color: white;
+    display: flex;
+    text-decoration: none;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px;
+}
