@@ -55,7 +55,7 @@ body{
 }
 
 #containerResa::-webkit-scrollbar-thumb {
-    background: #979bff;
+    background: #7B809A;
     border-radius: 10px;
 }
 
@@ -138,38 +138,57 @@ div.status {
     border-radius: 16px;
 }
 
-#waitList h2 {
-       text-align: left;
-}
-
 #waitGrid {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 100px;
-    gap: 15px 10px;
+    grid-template-columns: 120px 2fr 1.5fr 100px;
     border: 1px solid #D9D9D9;;
     padding: 20px;
     border-radius: 8px;
-    align-items: stretch;
+    background-color: white;
 }
 
-#waitGrid h3, #btnTri {
-    font-weight: bold;
-    border-bottom: 2px solid #D9D9D9;
-    padding-bottom: 10px;
-    margin: 0;
-    background: none;
-    border-top: none;
-    border-left: none;
-    border-right: none;
+#waitGrid h3, #btnTri, .wait_entry {
+    padding: 15px;
+    align-items: center;
 } 
+
+#waitGrid h3 {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #D9D9D9;
+    color: #7B809A;
+}
+
+.wait_entry{
+    display: contents;
+}
+
+.wait_entry div {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.sub_text {
+    color: #7B809A;
+    font-size: 0,75rem !important;
+}
+
+.btn_details {
+    background-color: #979bff;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
 #btnTri {
     cursor: pointer;
-    transition: backbround-color 0.2s;
-}
-
-#btnTri {
-    transform: translateY(1px);
+    height: fit-content;
+    margin: auto;
 }
 
 #waitGrid div {
@@ -188,17 +207,29 @@ div.status {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
+/* Animation de ma modale (et ouais) */
+@keyframes modalFade {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .modal_content {
+    animation: modalFade 0.3s ease-out;
     background-color: white;
     padding: 30px;
-    border-radius: 8px;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 500px;
+    width: 90%;
+    border: 1px solid #f0f0f0;
     position: relative;
     min-width: 300px;
     color: black;
@@ -206,12 +237,24 @@ div.status {
 
 .close_btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
     background: none;
     font-weight: bold;
+}
+
+.close_btn:hover {
+    background: #ff5f5f;
+    color: white;
 }
 
 .box {
@@ -245,4 +288,28 @@ div.status {
     width: fit-content;
     padding: 10px;
     border-radius: 8px;
+}
+
+
+
+.wait_liste_velos {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.wait_liste_velos li {
+    background: #f0f2f5;
+    padding: 6px 12px;
+    margin: auto;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #555;
+    border: 1px solid #e0e0e0;
+}
+
+#titre_modale {
+    margin-left: auto;
 }

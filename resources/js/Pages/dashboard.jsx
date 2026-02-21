@@ -6,90 +6,76 @@ import { usePage, Link } from '@inertiajs/react';
 import '@css/dashboard.css';
 
 
-const CardResa = (props) => {
-    return (
-        <div className="cardReservation">
-            <div className="resaTop">
-                
-                <p className="stationA">{props.pickup_station_name}</p>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="#000" d="m7.089 18.5l4.653-6.5L7.09 5.5h1.219l4.654 6.5l-4.654 6.5zm5.796 0l4.654-6.5l-4.655-6.5h1.22l4.654 6.5l-4.654 6.5z" />
-                </svg>
-                <p className="stationB">{props.return_station_name}</p>
-            </div>
-            <div className="bottom">
-            
-            <div className="user">
-                <p className="name">{props.last_name}{props.first_name}</p>
-                <p className="mail">{props.email}</p>
-            </div>
-            <div className="hours">
-                <p className="debut">Départ : {props.start_date}</p>
-                <p className="fin">Rendu : {props.end_date}</p>
-            </div>
-            
-            </div>
-            <div className="commande">
-                <h3>Commande</h3>
-                <p>{props.order}</p>
-            </div>
-            <div className="status">
-            <select name="pets" id="pet-select">
-                <option value="">{props.status}</option>
-                <option value="dog">En attente</option>
-                <option value="cat">Récupérée</option>
-                <option value="hamster">Rendue</option>
-            </select> 
-            </div>
-        </div>
-    )
-}
+function AfficherWaitList({pendingReservations}){
 
-const WaitListEntry = (props) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRes, setSelectedRes] = useState(null);
 
-    return(
-        <>
-        <div className="div1">
-            <p>{props.id}</p>
-            <p>{props.created_at}</p>
-        </div>
-        <div className="div2">
-            <p>{props.first_name} {props.last_name}</p>
-            <p>{props.email}</p>
-        </div>
-        <div className="div3">
-            <p>{props.pickup_station_name}</p>
-        </div>
-        <div className="div4">
-            <button onClick={() => setIsModalOpen(true)}>Détail</button>
-        </div>
+    if (!pendingReservations) {
+        return <p>Chargement des réservations...</p>
+    }
+        return (
+            <>
+                {pendingReservations.map(res => (
+                    <div key={res.id} className="wait_entry">
+                        <div className="div1">
+                        <p> {res.id}</p>
+                        <p>{res.created_at}</p>
+                        </div>
 
-        <WaitDetail
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-            data={props} 
-        />
+                        <div className="div2">
+                            <p> {res.user.first_name} {res.last_name}</p>
+                            <p> {res.user.email}</p>
+                        </div>
 
-        </>
-    )
+                        <div className="div3">
+                            <p>{res.pickup_station.name}</p>
+                        </div>
+
+                        <div className="div4">
+                            <button onClick={() => setSelectedRes(res)}>Détails</button>
+                        </div>
+                    </div>
+                ))}
+                <WaitDetail
+                    isOpen={!!selectedRes} 
+                    onClose={() => setSelectedRes(null)} 
+                    data={selectedRes} 
+                />
+            </>  
+        );
 }
 
 const WaitDetail = ({isOpen, onClose, data}) => {
-    if (!isOpen) return null;
+    if (!isOpen || !data) return null;
 
     return(
         <div className="modal_overlay">
             <div className="modal_content" onClick={(e) => e.stopPropagation}>
                 <button className="close_btn" onClick={onClose}>X</button>
-                <h2>Détails de la demande</h2>
+                <h2 className="titre_modale">Détails de la demande</h2>
                 <p><strong>ID :</strong> {data.id}</p>
-                <p><strong>Client :</strong> {data.first_name} {data.last_name}</p>
-                <p><strong>Age :</strong> {data.age}</p>
-                <p><strong>Taille :</strong> {data.height}</p>
-                <p><strong>Email :</strong> {data.email}</p>
-                <p><strong>Station :</strong> {data.pickup_station_name}</p>
+                <p><strong>Client :</strong> {data.user?.first_name} {data.user?.last_name}</p>
+                {/*<p><strong>Age :</strong> {data.user?.age}</p>
+                <p><strong>Taille :</strong> {data.user?.height}</p>*/}
+                <p><strong>Email :</strong> {data.user?.email}</p>
+                <p><strong>Départ :</strong> {data.pickup_station.name}</p>
+                <p><strong>Arrivée :</strong>   {data.return_station.name}</p>
                 <p><strong>Date :</strong> {data.created_at}</p>
+                <p><strong>Commande :</strong></p>
+                <div className="WaitListCommande">                        
+                        {data.attributions && data.attributions.length > 0 ? (
+                            <ul className="wait_liste_velos">
+                                {data.attributions.map((attr, index ) => (
+                                    <li key={attr.id || index}>
+                                        Vélo n°{attr.bike?.id}
+                                        {attr.person && ` (Attribué à : ${attr.person.first_name})`}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <span>Aucun vélo pour le moment...</span>
+                        )}
+                        </div>
                 
             </div>
         </div>
@@ -207,11 +193,9 @@ export default function Dashboard() {
                     <h3>Réservation</h3>
                     <h3>Client</h3>
                     <h3>Station départ</h3>
-                    <button id="btnTri" onClick={trierListeAttente}>Tri</button>
+                    <button id="btnTri" onClick={trierListeAttente}>  </button> {/* Boutton de tri qu'on remettra après*/ }
 
-                    {waitingEntries.map((entry) => (
-                        <WaitListEntry key={entry.id} {...entry} />
-                    ))}
+                    <AfficherWaitList pendingReservations={pendingReservations}/>
                 </div>
 
             </div>
