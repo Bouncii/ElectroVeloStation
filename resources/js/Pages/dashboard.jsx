@@ -5,6 +5,7 @@ import { useState } from "react"
 import { usePage, Link } from '@inertiajs/react';
 import '@css/dashboard.css';
 
+
 const CardResa = (props) => {
     return (
         <div className="cardReservation">
@@ -43,7 +44,6 @@ const CardResa = (props) => {
         </div>
     )
 }
-
 
 const WaitListEntry = (props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -116,41 +116,43 @@ const RedirectBox = (props) => {
     )
 }
 
+function AfficherReservations({ allReservations }){
+    if (!allReservations) {
+        return <p>Chargement des réservations...</p>
+    }
+        return (
+            <>
+            <div id="reser">
+                {allReservations.map(res => (
+                    <div key={res.id} className="reservation_card">
+                        <p>Client : {res.user?.first_name} {res.user?.last_name}</p>
+                        <p>Départ : {res.pickup_station?.name || res.pickup_station_name}</p>
+                        <div>Vélo : 
+                        {res.attributions && res.attributions.length > 0 ? (
+                            <ul className="liste_velos">
+                                {res.attributions.map((attr, index ) => (
+                                    <li key={attr.id || index}>
+                                        Vélo n°{attr.bike?.number}
+                                        {attr.person && ` (Attribué à : ${attr.person.first_name})`}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <span>Aucun vélo pour le moment...</span>
+                        )}
+                        </div>
+                    </div>
+                ))}
+
+            </div>
+            </>
+        )
+    }
 
 export default function Dashboard() {
-
-    // Placeholder. A changer pendant la liaison front et back
-
-    const reservations = [
-        {
-            id: 1,
-            pickup_station_name: "La station A",
-            return_station_name: "La station B",
-            start_date: "2026-04-02 19:53:26",
-            end_date: "2026-04-03 07:53:26",
-            last_name:"Dupont",
-            first_name:"Martin",
-            age:"54",
-            height:"1m76",
-            email:"dmartin@gmail.com",
-            order:"alors là...",
-            status:"Livrée",
-        },
-        {
-            id: 2,
-            pickup_station_name: "La station C",
-            return_station_name: "La station A",
-            start_date: "2026-03-01 10:00:00",
-            end_date: "2026-04-01 10:00:00",
-            last_name:"Truc",
-            first_name:"Bidule",
-            age:"27",
-            height:"1m68",
-            email:"truc@gmail.com",
-            order:"ouais ouais ouais...",
-            status:"Récupérée",
-        }
-    ];
+    
+    const { pendingReservations, allReservations } = usePage().props;
+    
     const [waitingEntries, setWaitingEntries] = useState([
         { id: "1", created_at: "2026-04-02 19:53:26", first_name: "Martin", last_name: "Dupont", age:"54", height:"1m76", email: "m.dupont@gmail.com", pickup_station_name: "Station A" },
         { id: "2", created_at: "2026-01-15 10:20:00", first_name: "Julie", last_name: "Durand", age:"27", height:"1m68", email: "j.durand@gmail.com", pickup_station_name: "Station C" },
@@ -169,11 +171,12 @@ export default function Dashboard() {
         <Link href="/" id="back">Accueil</Link>
         <div className="dash">
         
-            <div id="containerResa">
-                {reservations.map(resa => (
+           <div id="containerResa">
+            {/*     {reservations.map(resa => (
                     <CardResa key={resa.id} {...resa} />
-                ))}
-            </div>
+                ))}*/}
+                <AfficherReservations allReservations={allReservations}/>
+            </div> 
                 
             <div id="redirectBoxes">
                 <RedirectBox 

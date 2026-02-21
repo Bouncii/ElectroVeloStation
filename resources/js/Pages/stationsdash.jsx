@@ -23,7 +23,7 @@ function FormAddStation(){
     }
 } */
 
-/*
+
 const AddStationForm = ({ onAdd, onCancel }) => {
     const [name, setName] = useState("");
 
@@ -58,7 +58,7 @@ const AddStationForm = ({ onAdd, onCancel }) => {
             <button type="button" onClick={onCancel}>Annuler</button>
         </form>
     );
-};*/
+};
 
 const StationDetails = (props) => {
     const [name, setName] = useState(props.name);
