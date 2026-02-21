@@ -5,10 +5,12 @@ use App\Models\Station;
 use App\Models\Reservation;
 use Inertia\Inertia;
 
-class StationManagementController extends Controller{
-    public function index(){
-        return Inertia::render('home', [
-            'stations' => Station::withCount(['bikes', 'departures','arrivals'])->get()
+class StationManagementController extends Controller
+{
+    public function index()
+    {
+        return Inertia::render('stationsdash', [
+            'stations' => Station::withCount(['bikes', 'departures', 'arrivals'])->get()
         ]);
     }
 
@@ -19,15 +21,15 @@ class StationManagementController extends Controller{
         $bikeStats = [];
 
         foreach ($bikes as $bike) {
-            if (! array_key_exists($bike->size, $bikeStats)) {
+            if (!array_key_exists($bike->size, $bikeStats)) {
                 $bikeStats[$bike->size] = array_fill_keys($allStates, 0);
             }
             $bikeStats[$bike->size][$bike->state]++;
         }
 
         $loadRelations = [
-            'user', 
-            'attributions.person', 
+            'user',
+            'attributions.person',
             'attributions.bike'
         ];
 
@@ -57,4 +59,5 @@ class StationManagementController extends Controller{
             'pendingReservations' => $pendingReservations,
         ]);
     }
-};
+}
+;
