@@ -9,14 +9,16 @@ body{
     gap: 20px;
     padding: 20px;
 }
-
-.cardReservation{
+#liste_reservations {
+    display: flex;
+}
+.reservation_card{
     flex-shrink: 0;
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; 
     grid-template-areas: 
-        "top top top" 
+        "sta sta sta" 
         "hours user user"     
         "cmd cmd status";     
     gap: 10px;
@@ -30,8 +32,8 @@ body{
     border-radius: 8px;
     box-sizing: border-box;
 }
-
-.cardReservation div {
+/*7B809A*/
+.reservation_card div {
   border: 1px solid #D9D9D9;
   border-radius: 16px;
   padding: 10px;
@@ -39,7 +41,6 @@ body{
 }
 
 #containerResa {
-    display: flex;
     flex: 0 0 50vw;
     background-color: #D9D9D9;
     border-radius: 8px;
@@ -66,14 +67,14 @@ h3{
     font-size: small;
 }
 
-div.resaTop {
-    grid-area: top;
+div.stations{
+    grid-area: sta;
     display: flex;
     justify-content: space-evenly;
     align-items: center; 
 }
 
-.resaTop p {
+.stations p {
     margin: 0;
     font-size: small;
     white-space: nowrap;
@@ -89,8 +90,27 @@ div.bottom {
 div.hours { 
     grid-area: hours;
     width: 116px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
 }
 
+.depart_line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: none !important;
+    padding: 0 !important;
+}
+
+.depart_line p {
+    margin: 0;
+}
+
+.rendu {
+    padding-left: 24px;
+}
 div.user {
     grid-area: user;
     text-align: start;

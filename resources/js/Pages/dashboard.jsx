@@ -117,22 +117,42 @@ const RedirectBox = (props) => {
 }
 
 function AfficherReservations({ allReservations }){
+
     if (!allReservations) {
         return <p>Chargement des réservations...</p>
     }
         return (
             <>
-            <div id="reser">
+            <div id="liste_reservations">
                 {allReservations.map(res => (
                     <div key={res.id} className="reservation_card">
-                        <p>Client : {res.user?.first_name} {res.user?.last_name}</p>
-                        <p>Départ : {res.pickup_station?.name || res.pickup_station_name}</p>
-                        <div>Vélo : 
+                        <div className="stations">
+                        <p> {res.pickup_station?.name || res.pickup_station_name}</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="#000" d="m7.089 18.5l4.653-6.5L7.09 5.5h1.219l4.654 6.5l-4.654 6.5zm5.796 0l4.654-6.5l-4.655-6.5h1.22l4.654 6.5l-4.654 6.5z" />
+                        </svg>
+                        <p> {res.return_station?.name || res.return_station_name}</p>
+                        </div>
+
+                        <div className="hours">
+                            <div className="depart_line">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="#7B809A" d="M11.5 3a9.5 9.5 0 0 1 9.5 9.5a9.5 9.5 0 0 1-9.5 9.5A9.5 9.5 0 0 1 2 12.5A9.5 9.5 0 0 1 11.5 3m0 1A8.5 8.5 0 0 0 3 12.5a8.5 8.5 0 0 0 8.5 8.5a8.5 8.5 0 0 0 8.5-8.5A8.5 8.5 0 0 0 11.5 4M11 7h1v5.42l4.7 2.71l-.5.87l-5.2-3z" />
+                            </svg>
+                            <p>Départ : {res.start_date}</p>
+                            </div>
+                        <p className="rendu">Rendu : {res.end_date}</p>
+                        </div>
+                        <div className="user">
+                           <p> {res.user?.first_name} {res.user?.last_name}</p>
+                           <p> {res.user?.email}</p>
+                        </div>
+                        <div className="commande">                        
                         {res.attributions && res.attributions.length > 0 ? (
                             <ul className="liste_velos">
                                 {res.attributions.map((attr, index ) => (
                                     <li key={attr.id || index}>
-                                        Vélo n°{attr.bike?.number}
+                                        Vélo n°{attr.bike?.id}
                                         {attr.person && ` (Attribué à : ${attr.person.first_name})`}
                                     </li>
                                 ))}
@@ -141,6 +161,7 @@ function AfficherReservations({ allReservations }){
                             <span>Aucun vélo pour le moment...</span>
                         )}
                         </div>
+                        <div className="status">{res.status}</div>
                     </div>
                 ))}
 
@@ -172,9 +193,6 @@ export default function Dashboard() {
         <div className="dash">
         
            <div id="containerResa">
-            {/*     {reservations.map(resa => (
-                    <CardResa key={resa.id} {...resa} />
-                ))}*/}
                 <AfficherReservations allReservations={allReservations}/>
             </div> 
                 
