@@ -1,14 +1,34 @@
 
 
 import '@css/StationsDash.css';
-import { useState } from "react";
+import { useState, useForm } from "react";
 
+/* WIP - Attente CRUD stations
+function FormAddStation(){
+    const { data, setData, post, processing, errors} = useForm({
+        name:'',
+        created_at:'',
+        updated_at:'',
+    })
+    let texteBoutons;
+    if (processing) {
+        texteBoutons = 'Ajout en cours...';
+    } else {
+        texteBoutons = 'Créer une station';
+    }
 
+    function submit(e) {
+        e.preventDefault();
+        post('')
+    }
+} */
+
+/*
 const AddStationForm = ({ onAdd, onCancel }) => {
     const [name, setName] = useState("");
 
     const handleSubmit = (e) => {
-        e.preventDefault(); // pour pas recharger la page
+        e.preventDefault();
         if (!name) return;
 
         const newStation = {
@@ -23,6 +43,10 @@ const AddStationForm = ({ onAdd, onCancel }) => {
     };
 
     return (
+        
+        
+
+
         <form onSubmit={handleSubmit} className="addStationForm">
             <input 
                 type="text" 
@@ -34,7 +58,7 @@ const AddStationForm = ({ onAdd, onCancel }) => {
             <button type="button" onClick={onCancel}>Annuler</button>
         </form>
     );
-};
+};*/
 
 const StationDetails = (props) => {
     const [name, setName] = useState(props.name);
