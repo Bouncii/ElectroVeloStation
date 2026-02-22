@@ -1,159 +1,120 @@
 
 
 import '@css/StationsDash.css';
-import { useState, useForm } from "react";
+import { useState } from "react";
+import {useForm, router} from '@inertiajs/react';
 
-/* WIP - Attente CRUD stations
-function FormAddStation(){
-    const { data, setData, post, processing, errors} = useForm({
+const AddStationForm = ({ onCancel }) => {
+    const { data, setData, post, processing, errors } = useForm({
         name:'',
-        created_at:'',
-        updated_at:'',
-    })
-    let texteBoutons;
-    if (processing) {
-        texteBoutons = 'Ajout en cours...';
-    } else {
-        texteBoutons = 'Créer une station';
-    }
-
-    function submit(e) {
-        e.preventDefault();
-        post('')
-    }
-} */
-
-
-const AddStationForm = ({ onAdd, onCancel }) => {
-    const [name, setName] = useState("");
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!name) return;
-
-        const newStation = {
-            id: Date.now(), // Placeholder
-            name: name,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-        };
-
-        onAdd(newStation);
-        setName("");
+        post('/dashboard/stations', {
+            onSuccess: () => onCancel(),
+        });
     };
 
     return (
-        
-        
-
-
+    
         <form onSubmit={handleSubmit} className="addStationForm">
             <input 
                 type="text" 
                 placeholder="Nom de la station" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
+                value={data.name} 
+                onChange={(e) => setData('name', e.target.value)} 
             />
-            <button type="submit">Confirmer l'ajout</button>
+            {errors.name && <p className="error">{errors.name}</p>}
+            <button type="submit" disabled={processing}>
+                {processing ? "Ajout en cours..." : "Confirmer l'ajout"}</button>
             <button type="button" onClick={onCancel}>Annuler</button>
         </form>
     );
 };
 
-const StationDetails = (props) => {
-    const [name, setName] = useState(props.name);
-    const [updatedAt, setUpdatedAt] = useState(props.updated_at);
+const StationCard = ({ station }) => {
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleSave = () => {
-        const currentDate = new Date().toISOString();
-        setUpdatedAt(currentDate);
+    const { data, setData, put, processing, errors } = useForm({
+        name: station.name,
+    });
 
-        setIsEditing(false);
+    const handleSave = (e) => {
+        e.preventDefault();
+        put(`/dashboard/stations/${station.id}`, {
+            onSuccess: () => setIsEditing(false),
+        });
     };
 
-    
+    const handelDelete = () => {
+        if (confirm(`Supprimer la station "${station.name}" ?`)) {
+            router.delete(`/dashboard/stations/${station.id}`);
+        }
+    };
     return (
         <div className="stationsCardDetails">
             {isEditing ? (
-                <input 
-                    type="text" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                />
+                <form onSubmit={handleSave}>
+                    <input 
+                        type="text" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                    />
+                    {errors.name && <p className='error'>{errors.name}</p>}
+                    <div className='button'>
+                        <button type='submit' disabled={processing}>
+                            {processing ? 'Enregistrement en cours...' : 'Enregistrer'}
+                        </button>
+                        <button type='button' onClick={() => setIsEditing(false)}>
+                            Annuler
+                        </button>
+                    </div>
+                </form>
             ) : (
-                <h2>{name}</h2>
+                <>
+                    <h3>{station.name}</h3>
+                    <p>Créée le : {new Date(station.created_at).toLocaleString('fr-FR')}</p>
+                    <p>Modifiée le : {new Date(station.updated_at).toLocaleString('fr-FR')}</p>
+                
+                    <div className="button">
+                                                
+                        <button onClick={() => setIsEditing(true)}>Modifier</button>                        
+                        <button onClick={handelDelete}>Supprimer</button>
+                    </div>                
+                </>
             )}
-            
-            <p>Créée le : {new Date(props.created_at).toLocaleString('fr-FR')}</p>
-            <p>Edité le : {new Date(updatedAt).toLocaleString('fr-FR')}</p>
-            <div className="button">
-                {isEditing ? (
-                    <button onClick={handleSave}>Enregistrer</button>
-                ) : (
-                    <button onClick={() => setIsEditing(true)}>Modifier</button>
-                )}
-                <button onClick={props.onDelete}>Supprimer la station</button>
-            </div>
         </div>
     );
 };
 
-
-
-export default function StationsDash (){
+export default function StationsDash({ stations }){
     
     const [showForm, setShowForm] = useState(false);
-    const [stations, setStations] = useState([ // Palceholder
-        {
-            id:5,
-            name:"Olson Prairie Station",
-            created_at:"2026-02-17T15:29:05.000000Z",
-            updated_at:"2026-02-17T15:29:05.000000Z",
-        
-        },
-        
-        {
-            id:1,
-            name:"Eino Plains Station",
-            created_at:"2026-02-17T15:29:05.000000Z",
-            updated_at:"2026-02-17T15:29:05.000000Z",
-        
-        }
-    ]);
-
-    const deleteStationDetails = (id) => {
-        const updatedStations = stations.filter(station => station.id !== id);
-        setStations(updatedStations);
-    }
-
-    const addStation = (newStation) => {
-        setStations([...stations, newStation]);
-        setShowForm(false);
-    };
 
     return (
         <>
         <h1>Gestion des stations</h1>
-        
-            {showForm ? (
+
+            <button className='btn_add' onClick={() => setShowForm(!showForm)}>
+                {showForm ? "Annuler" : "Ajouter une station"}
+            </button>
+
+            {showForm && (
                 <AddStationForm
-                    onAdd={addStation}
                     onCancel={() => setShowForm(false)} />
-            ) : (
-                <button onClick={() => setShowForm(true)}>Ajouter une station</button>
             )}
-            <button id='back' onClick={() => window.location.href = '/dashboard'}>Dashboard</button>
-            <div className="stationsList">
-            <div className='stationDetails'>
-                {stations.map(station => (
-                    <StationDetails
-                        key={station.id}
-                        {...station}
-                        onDelete={() => deleteStationDetails(station.id)} />
-                ))}
+            <div className='stations_grid'>
+                {stations.length > 0 ? (
+                    stations.map((station) => (
+                        <StationCard
+                            key={station.id}
+                            station={station} />
+                    ))
+                ) : (
+                    <p>Aucunne station trouvée</p>
+                )}
             </div>
-        </div>
         </>
     );
 }
