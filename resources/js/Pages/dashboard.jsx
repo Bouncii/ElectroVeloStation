@@ -96,7 +96,7 @@ const RedirectBox = (props) => {
             </defs>
         </svg>
 
-        <a href={props.link}>Gestion des stations</a>
+        <Link href={props.link}>Gestion des stations</Link>
     
     </div>
     )
@@ -184,7 +184,7 @@ export default function Dashboard() {
                 
             <div id="redirectBoxes">
                 <RedirectBox 
-                link = '/stationsdash'/>
+                link = 'dashboard/stations'/>
             </div>
             
             <div id="waitList">
