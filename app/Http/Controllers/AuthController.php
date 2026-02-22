@@ -10,9 +10,18 @@ use Inertia\Inertia;
 
 class AuthController extends Controller{
     public function showLogin() {
+        $previousUrl = url()->previous();
+        if ($previousUrl !== route('login') && $previousUrl !== route('register')) {
+            session(['url.intended' => $previousUrl]);
+        }
+
         return Inertia::render('connexion');
     }
     public function showRegister() {
+        $previousUrl = url()->previous();
+        if ($previousUrl !== route('login') && $previousUrl !== route('register')) {
+            session(['url.intended' => $previousUrl]);
+        }
         return Inertia::render('creerCompte');
     }
 
@@ -32,7 +41,7 @@ class AuthController extends Controller{
         ]);
 
         Auth::login($user);
-        return redirect('/testConnexion');
+        return redirect()->intended('/');
     }
 
     public function login(Request $request){
@@ -43,7 +52,7 @@ class AuthController extends Controller{
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/testConnexion');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors(['email' => 'Identifiants incorrects.']);
