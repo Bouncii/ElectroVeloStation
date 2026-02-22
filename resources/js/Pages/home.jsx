@@ -34,7 +34,7 @@ export function Header(){
                 )}
                 {user && (
                     <>
-                        <Link href="/logout" method="post" as="button" type="button" id="logout">Se déconnecter</Link>; 
+                        <Link href="/logout" method="post" as="button" type="button" id="logout">Se déconnecter</Link> 
                     </>
                 )}
                 
