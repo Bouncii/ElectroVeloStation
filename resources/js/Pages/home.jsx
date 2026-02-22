@@ -125,7 +125,7 @@ export default function Home(){
         <div className="homePage">
             
             <Header />
-            <h1>.</h1>
+            <h1 id="hide">.</h1>
             <img src="./frog.png" id="imgTop"></img>
             <p id="TextTop">ELECTRO VELO STATION</p>
             <h2 id="slogan">Un slogan vraiment cool.|</h2>
@@ -167,9 +167,9 @@ export default function Home(){
                 />
             </div>
             <h2 className="titreGros">Réservez votre premier vélo.</h2>
-            <p>Vous allez voir, c'est facile !</p>
+            <p id="subText">Vous allez voir, c'est facile !</p>
 
-            <div id="tuto">            
+            <div id="tutoCards">            
                 <CardTuto
                 num="1"
                 desc="Choisir votre station"
@@ -186,7 +186,7 @@ export default function Home(){
                 text="vitaes"
                 />
             </div>
-                <h2 className="titreGros">Simplifiez-vous la vie, créez un compte !</h2>
+                <h2 className="titreGros" id="last_text">Simplifiez-vous la vie, créez un compte !</h2>
                 <LinkOval
                     link='/register'
                     text="Créer un compte"    

@@ -15,7 +15,7 @@
     overflow: hidden;
 }
 
-h1 {
+#hide {
     display: none;
 }
 
@@ -136,7 +136,7 @@ h1 {
         justify-content: center;
     }
 
-    #Ovals, #tuto {
+    #Ovals, #tutoCards {
         display: flex;
         justify-content: center;
     }
@@ -148,6 +148,7 @@ h1 {
     justify-content: center;
     gap: 16px;
     padding: 20px;
+    margin-top: 40px;
 }
 
 .stationCard{
@@ -192,7 +193,8 @@ h1 {
     display: flex;
     flex-direction: row-reverse;
     background-color: white;
-    margin: 5%;
+    margin: 20px;
+    margin-bottom: 50px;
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 16px;
@@ -220,8 +222,7 @@ h1 {
     color: #0031A4;
     font-weight: bold;
     display: flex;
-    margin-left: 10px;
-    margin-top: 32px;
+    margin-top: 100px;
 }
 
 #slogan {
@@ -233,5 +234,14 @@ h1 {
     color: white;
     font-weight: bold;
     font-size: 50px;
+    margin-bottom: 0;
 }
 
+#subText {
+    font-size: large;
+    color: #0031A4;
+}
+
+#last_text {
+    margin-bottom: 20px;
+}
