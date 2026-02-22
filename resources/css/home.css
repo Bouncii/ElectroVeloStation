@@ -15,6 +15,10 @@
     overflow: hidden;
 }
 
+h1 {
+    display: none;
+}
+
 .backgroundSvg {
     position: absolute;
     inset: 0;
@@ -33,11 +37,13 @@
 }
 
 .Nav {
-    overflow: hidden;
+    /*overflow: hidden;*/
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.Nav a, #logout {
-    float: left;
+.nav_link, #first_link, #logout {
     display: block;
     text-align: center;
     padding: 14px 16px;
@@ -48,56 +54,27 @@
     border-radius: 8px;
     border:none;
     background-color: white;
-}
-/*
-#logout {
-    float: left;
-    display: block;
-    text-align: center;
-    padding: 14px 16px;
-    margin: 8px;
-    text-decoration: none;
-    font-size: 17px;
-    color: #5AA9E6;
-    border-radius: 8px;
-}
-
-.Nav button{
-    float: left;
-    display: block;
-    text-align: center;
-    padding: 14px 16px;
-    margin: 8px;
-    font-size: 17px;
-    border: none;
-    border-radius:8px ;
-    color: white;
     cursor: pointer;
-}*/
+}
 
-.Nav a:hover, .Nav button:hover {
+.Nav a:hover, #logout:hover, #first_link:hover {
     background-color: #FFE45E;
     color: black;
 }
-
-/*.Nav a.active {
-    background-color: blue;
-    color: white;
-}*/
 
 .Nav button.icon {
     display: none;
 }
 
 #menu {
+    display: flex;
+    align-items: center;
     background-color: white;
 }
 
 @media screen and (max-width: 600px)
 {
-    .Nav a:not(:first-child) {
-        display: none;
-    }
+
 
     .Nav button:not(.icon){
         display: none;
@@ -105,33 +82,65 @@
 
     /*Menu 3 traits */
     .Nav button.icon {
-        float: right;
         display: block;
         font-size: 24px;
         margin: 8px;
-        margin-right: 16px;
+        padding-top: 5px;
+        border: none;
+        background: none;
+        cursor: pointer;
     }
-}
+    .Nav button.icon:hover {
+        background-color: #cfcfcf;
+        border-radius: 4px;
+    }
 
-@media screen and (max-width:600px) {
+    #menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .Nav.responsive #menu {
+        display: flex;
+    }
+
+
+    
     .Nav.responsive {
         position: relative;
     }
 
     .Nav.responsive button.icon {
         position: absolute;
-        right: 0;
+        right: 1;
         top: 0;
     }
 
     .Nav.responsive a,
     .Nav.responsive button:not(.icon) {
-        float: none;
+
         display: block;
         text-align: left;
     }
 }
 
+
+@media screen and (min-width:600px) {
+    #imgTop {
+        display: none;
+    }
+
+    #TextTop {
+        font-size: 45px;
+        justify-content: center;
+    }
+
+    #Ovals, #tuto {
+        display: flex;
+        justify-content: center;
+    }
+}
 
 #stations {
     display: flex;

@@ -28,26 +28,25 @@ export function Header(){
             <nav className={isOpen ? "Nav responsive" : "Nav"} id="topnav">
                 
                 <div id="menu">
-                <Link href="/">Accueil</Link>
-                {!user && (
-                        <Link href="/login">Se connecter</Link>
-                )}
-                {user && (
-                    <>
-                        <Link href="/logout" method="post" as="button" type="button" id="logout">Se déconnecter</Link> 
-                    </>
-                )}
-                
-                {(user?.role === "admin" || user?.role === "employee") && (
-                        <Link href="/dashboard">Dashboard</Link>
-                )}
+                    <Link href="/" id="first_link">Accueil</Link>
+                    {!user && (
+                            <Link href="/login" className="nav_link">Se connecter</Link>
+                    )}
+                    {user && (
+                        <>
+                            <Link href="/logout" method="post" as="button" type="button" id="logout" className="nav_link">Se déconnecter</Link> 
+                        </>
+                    )}
+                    
+                    {(user?.role === "admin" || user?.role === "employee") && (
+                            <Link href="/dashboard" className="nav_link">Dashboard</Link>
+                    )}
 
-                <Link href = '/reservation'>Reserver</Link>
+                    <Link href = '/reservation' className="nav_link">Reserver</Link>
                 </div>
 
                 <button className="icon" onClick={() => setIsOpen(!isOpen)}>
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
-
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
                     <path d="M4 6H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
                     <path d="M4 12H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
                     <path d="M4 18H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
@@ -127,23 +126,28 @@ export default function Home(){
             
             <Header />
             <h1>.</h1>
-            <img src="./frog.png"></img>
+            <img src="./frog.png" id="imgTop"></img>
             <p id="TextTop">ELECTRO VELO STATION</p>
             <h2 id="slogan">Un slogan vraiment cool.|</h2>
 
-            <TextOval 
-                text="Simplicité"
-            />
-            <TextOval 
-                text="Ecologie"
-            />
-            <TextOval 
-                text="Entreprise française"
-            />
-            <LinkOval id="reserver"
-                link='/reservation'
-                text="Réservez votre vélo"    
-            />
+            <div id="Ovals">
+                <TextOval 
+                    text="Simplicité"
+                />
+                <TextOval 
+                    text="Ecologie"
+                />
+                <TextOval 
+                    text="Entreprise française"
+                />
+            </div>
+            
+                <LinkOval id="reserver"
+                    link='/reservation'
+                    text="Réservez votre vélo"    
+                />
+            
+
             <div id="stations">
                 <Station
                     name="Amusment Park"
@@ -164,29 +168,31 @@ export default function Home(){
             </div>
             <h2 className="titreGros">Réservez votre premier vélo.</h2>
             <p>Vous allez voir, c'est facile !</p>
-            <CardTuto
-            num="1"
-            desc="Choisir votre station"
-            text="lorem"
-            />
-            <CardTuto
-            num="2"
-            desc="Validez votre réservation"
-            text="ipsum"
-            />
-            <CardTuto
-            num="3"
-            desc="Partez à l'aventure avec votre vélo !"
-            text="vitaes"
-            />
 
-            <h2 className="titreGros">Simplifiez-vous la vie, créez un compte !</h2>
-            <LinkOval
-                link='/register'
-                text="Créer un compte"    
-            />
-            <Background />
+            <div id="tuto">            
+                <CardTuto
+                num="1"
+                desc="Choisir votre station"
+                text="lorem"
+                />
+                <CardTuto
+                num="2"
+                desc="Validez votre réservation"
+                text="ipsum"
+                />
+                <CardTuto
+                num="3"
+                desc="Partez à l'aventure avec votre vélo !"
+                text="vitaes"
+                />
             </div>
+                <h2 className="titreGros">Simplifiez-vous la vie, créez un compte !</h2>
+                <LinkOval
+                    link='/register'
+                    text="Créer un compte"    
+                />
+                <Background />
+        </div>
             
         </>
     );
