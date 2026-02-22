@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\StationManagementController;
 use App\Http\Controllers\GlobalReservationController;
+use App\Http\Controllers\StationController;
 use Illuminate\Support\Facades\Route;
 
 // -------- ROUTES PUBLIQUES -------
@@ -13,12 +14,11 @@ Route::get('/reservation', function () {
 });
 
 // ----- ROUTES PROTÉGÉES -----
-// On utilise un groupe pour ne pas répéter les protections sur chaque ligne
 Route::middleware(['auth', 'role:admin,employee'])->group(function () {
 
     Route::get('/dashboard', [GlobalReservationController::class, "index"]);
-    Route::get('/stationsdash', [StationManagementController::class, "index"]);
-    Route::get('/stationsdash/{station}', [StationManagementController::class, 'show']);
+
+    Route::resource('/dashboard/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud 
 
 });
 
