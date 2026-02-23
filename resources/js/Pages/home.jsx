@@ -64,13 +64,26 @@ export function Header(){
 const Station = (props) => {
     return (
         <div className="stationCard">
-            <img src="./frog.png" className="StationImage"></img>
+            {/*<img src="./images/imgTop.png" className="StationImage"></img>*/}
             <h2>{props.name}</h2>
             <p>{props.desc}</p>
-            <Link href="./TrucIG?" className="LinkStationMap">Afficher sur la carte</Link>
+        {/*<Link href="./TrucIG?" className="LinkStationMap">Afficher sur la carte</Link>
             <button onClick={() => alert('Vélo réservé !')}>
             Résever
-            </button>
+            </button>*/}
+            <Link href={'/reservation'} className="stationcard_reserver">Réserver
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                    <path strokeDasharray="20" d="M3 12h17.5">
+                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0" />
+                    </path>
+                    <path strokeDasharray="12" strokeDashoffset="12" d="M21 12l-7 7M21 12l-7 -7">
+                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to="0" />
+                    </path>
+                </g>
+            </svg>
+            </Link>
+            
         </div>
     );
 };
@@ -126,7 +139,7 @@ export default function Home(){
             
             <Header />
             <h1 id="hide">.</h1>
-            <img src="./frog.png" id="imgTop"></img>
+            <img src="./images/imgTop.png" id="imgTop"></img>
             <p id="TextTop">ELECTRO VELO STATION</p>
             <h2 id="slogan">Un slogan vraiment cool.|</h2>
 

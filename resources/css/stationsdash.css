@@ -17,16 +17,36 @@
     padding: 20px;
 }
 
-.stationDetails {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 16px;
+.stationsCardDetails {
+    background-color: white;
+    padding: 8px;
+    width: fit-content;
+    margin: 20px;
+    border-radius: 8px;
+    min-width: 200px;
 }
 
-.stationDetails div {
+.stations_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    border-radius: 8px;
+    margin: 8px;
+    cursor: pointer;
+    padding: 4px;
+    border: none;
+}
+
+button:hover{
+    background-color: rgb(163, 202, 163);
+}
+/*
+.stationCardDetails div {
     min-width: 250px;
     background-color: white;
     padding: 16px;
     border-radius: 8px;
-}
+}*/

@@ -58,8 +58,8 @@ const StationCard = ({ station }) => {
                 <form onSubmit={handleSave}>
                     <input 
                         type="text" 
-                        value={name} 
-                        onChange={(e) => setName(e.target.value)} 
+                        value={data.name} 
+                        onChange={(e) => setData(e.target.value)} 
                     />
                     {errors.name && <p className='error'>{errors.name}</p>}
                     <div className='button'>
