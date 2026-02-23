@@ -2,7 +2,7 @@
 
 import '@css/StationsDash.css';
 import { useState } from "react";
-import {useForm, router} from '@inertiajs/react';
+import {useForm, router, Link} from '@inertiajs/react';
 
 const AddStationForm = ({ onCancel }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -59,7 +59,7 @@ const StationCard = ({ station }) => {
                     <input 
                         type="text" 
                         value={data.name} 
-                        onChange={(e) => setData(e.target.value)} 
+                        onChange={(e) => setData('name',e.target.value)} 
                     />
                     {errors.name && <p className='error'>{errors.name}</p>}
                     <div className='button'>
@@ -93,7 +93,8 @@ export default function StationsDash({ stations }){
     const [showForm, setShowForm] = useState(false);
 
     return (
-        <>
+        <> 
+        <Link href="/" id="back">Accueil</Link>
         <h1>Gestion des stations</h1>
 
             <button className='btn_add' onClick={() => setShowForm(!showForm)}>

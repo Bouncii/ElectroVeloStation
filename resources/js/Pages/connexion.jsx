@@ -42,7 +42,7 @@ function FormulaireConnexion() {
                         onChange={e => setData('password', e.target.value)} 
                     />
                     {errors.password && <div className="messageErr">{errors.password}</div>}
-                    <button type="submit" disabled={processing}>
+                    <button type="submit" id='btn' disabled={processing}>
                         {texteBouton}
                     </button>
                 </form>
