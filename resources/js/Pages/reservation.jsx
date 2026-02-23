@@ -31,6 +31,7 @@ function FormulaireComplet(){
 function Formulaire() {
     return <>
         <h3>Nouveau cycliste : </h3>
+        // Ajouter un if pour l'afficher ou non 
         <select name="enregistres" onChange={(e) => {
             if(e.target.value != ""){
                 e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "none";
@@ -38,7 +39,8 @@ function Formulaire() {
                 e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "block";
             }
         }}>
-            <option value="">Déjà enregistré ?</option>
+            <option value="">Pas encore enregistré</option>
+            //Faire en sorte de récupérer et créer les options automatiquement
             <option value="1">M. Oui</option>
             <option value="2">Mme Oui</option>
             //TODO : ajouter les utilisateurs déjà enregistrés dans la base de données
