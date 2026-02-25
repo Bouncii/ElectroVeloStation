@@ -88,7 +88,7 @@ const StationCard = ({ station }) => {
     );
 };
 
-export default function StationsDash({ stations }){
+export default function gestionStations({ stations }){
     
     const [showForm, setShowForm] = useState(false);
 

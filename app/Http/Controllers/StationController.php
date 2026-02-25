@@ -13,7 +13,7 @@ class StationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('stationsdash', [
+        return Inertia::render('gestionStations', [
             'stations' => Station::all()
         ]);
     }
