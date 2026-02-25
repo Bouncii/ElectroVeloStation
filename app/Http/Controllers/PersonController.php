@@ -17,7 +17,7 @@ class PersonController extends Controller
             'last_name'          => 'required|string|max:255',
             'age'                => 'required|integer|min:0',
             'required_bike_size' => 'required|string',
-            'user_id'            => 'required|exists:users,id',
+            'user_id'            => 'nullable|exists:users,id',
         ]);
 
         Person::create($validated);
