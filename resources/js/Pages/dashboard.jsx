@@ -23,8 +23,10 @@ function AfficherWaitList({pendingReservations}){
                         </div>
 
                         <div className="div2">
-                            <p> {res.user.first_name} {res.last_name}</p>
-                            <p> {res.user.email}</p>
+                            <p> 
+                                {res.user?.first_name ? `${res.user.first_name} ${res.user.last_name}` : "Client Anonyme"}
+                            </p>
+                            <p> {res.user?.email || "Aucun email"}</p>
                         </div>
 
                         <div className="div3">
