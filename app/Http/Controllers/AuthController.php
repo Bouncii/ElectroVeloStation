@@ -9,19 +9,19 @@ use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class AuthController extends Controller{
-    public function showLogin() {
+    private function rememberPreviousUrl(){ // methode pour enregistrer l'url avant l'acces au formulaire (n'enregistre pas le changement de page sur celui-ci)
         $previousUrl = url()->previous();
         if ($previousUrl !== route('login') && $previousUrl !== route('register')) {
             session(['url.intended' => $previousUrl]);
         }
+    }
 
+    public function showLogin() {
+        $this -> rememberPreviousUrl();
         return Inertia::render('connexion');
     }
     public function showRegister() {
-        $previousUrl = url()->previous();
-        if ($previousUrl !== route('login') && $previousUrl !== route('register')) {
-            session(['url.intended' => $previousUrl]);
-        }
+        $this -> rememberPreviousUrl();
         return Inertia::render('creerCompte');
     }
 
