@@ -1,6 +1,6 @@
 
 
-import '@css/stationsdash.css';
+import '@css/gestionStations.css';
 import { useState } from "react";
 import {useForm, router, Link} from '@inertiajs/react';
 
@@ -88,7 +88,7 @@ const StationCard = ({ station }) => {
     );
 };
 
-export default function StationsDash({ stations }){
+export default function gestionStations({ stations }){
     
     const [showForm, setShowForm] = useState(false);
 

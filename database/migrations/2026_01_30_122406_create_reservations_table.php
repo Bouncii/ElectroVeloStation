@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('pickup_station_id')->constrained('stations');
             $table->foreignId('return_station_id')->constrained('stations');
             $table->timestamps(); 
