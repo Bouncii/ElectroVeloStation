@@ -1,6 +1,6 @@
 
 
-import '@css/stationsdash.css';
+import '@css/gestionStations.css';
 import { useState } from "react";
 import {useForm, router, Link} from '@inertiajs/react';
 
