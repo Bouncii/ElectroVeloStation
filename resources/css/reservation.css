@@ -52,6 +52,19 @@ body {
     background-color: #134fdb;
 }
 
+#bAjout {
+    display: block;
+    position: sticky;
+    bottom: 80px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+}
+#bAjout:hover {
+    background-color: #134fdb;
+}
+
 footer {
     display: flex;
     flex-direction: row;
