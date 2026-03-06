@@ -4,20 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PersonController extends Controller
 {
 
+
+    /**
+     * Display a specific resource by it's id.
+     */
+    public function show(Person $person)
+    {
+        return Inertia::render('personDashboard', [
+            'person' => $person
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validated = $request->validate([
-            'first_name'         => 'required|string|max:255',
-            'last_name'          => 'required|string|max:255',
-            'age'                => 'required|integer|min:0',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'age' => 'required|integer|min:0',
             'required_bike_size' => 'required|string',
-            'user_id'            => 'nullable|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
         ]);
 
         Person::create($validated);
@@ -28,12 +41,13 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    
-    public function update(Request $request, Person $person){
+
+    public function update(Request $request, Person $person)
+    {
         $validated = $request->validate([
-            'first_name'         => 'required|string|max:255',
-            'last_name'          => 'required|string|max:255',
-            'age'                => 'required|integer|min:0',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'age' => 'required|integer|min:0',
             'required_bike_size' => 'required|string',
         ]);
         $person->update($validated);
@@ -43,7 +57,8 @@ class PersonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Person $person){
+    public function destroy(Person $person)
+    {
         $person->delete();
         return redirect()->back()->with('success', 'Personne supprimée de la liste.');
     }

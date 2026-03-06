@@ -123,7 +123,9 @@ const UserCard = ({ user }) => {
                     <ul>
                         {user.people.map(person => (
                             <li key={person.id}>
-                                {person.first_name} {person.last_name} ({person.age} ans)
+                                <Link href={`/dashboard/persons/${person.id}`} className="personLink">
+                                    {person.first_name} {person.last_name} ({person.age} ans)
+                                </Link>
                             </li>
                         ))}
                     </ul>

@@ -23,7 +23,7 @@ Route::middleware(['auth', 'role:admin,employee'])->group(function () {
 
     Route::resource('/dashboard/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud 
     Route::resource('/dashboard/users', UserController::class);
-    Route::resource('/dashboard/persons', PersonController::class)->only(['update', 'store', 'destroy']);
+    Route::resource('/dashboard/persons', PersonController::class)->only(['update', 'store', 'destroy', 'show']);
     Route::resource('schedules', ScheduleController::class)->only(['update']);
 
 });

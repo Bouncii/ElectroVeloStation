@@ -12,3 +12,7 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+.personLink{
+cursor:pointer;
+display:block;
+}
