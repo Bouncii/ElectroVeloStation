@@ -60,6 +60,6 @@ class PersonController extends Controller
     public function destroy(Person $person)
     {
         $person->delete();
-        return redirect()->back()->with('success', 'Personne supprimée de la liste.');
+        return redirect('/dashboard/users')->with('success', 'Personne supprimée de la liste.');
     }
 }
