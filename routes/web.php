@@ -25,6 +25,7 @@ Route::middleware(['auth', 'role:admin,employee'])->group(function () {
     Route::resource('/dashboard/users', UserController::class);
     Route::resource('/dashboard/persons', PersonController::class)->only(['update', 'store', 'destroy', 'show']);
     Route::resource('schedules', ScheduleController::class)->only(['update']);
+    Route::resource('/dashboard/reservations', ReservationController::class);
 
 });
 
