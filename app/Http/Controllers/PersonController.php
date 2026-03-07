@@ -4,21 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class PersonController extends Controller
 {
-
-
-    /**
-     * Display a specific resource by it's id.
-     */
-    public function show(Person $person)
-    {
-        return Inertia::render('personDashboard', [
-            'person' => $person
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -29,7 +17,7 @@ class PersonController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'age' => 'required|integer|min:0',
-            'required_bike_size' => 'required|string',
+            'required_bike_size' => 'required|integer|min:0',
             'user_id' => 'nullable|exists:users,id',
         ]);
 
@@ -48,7 +36,7 @@ class PersonController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'age' => 'required|integer|min:0',
-            'required_bike_size' => 'required|string',
+            'required_bike_size' => 'required|integer|min:0',
         ]);
         $person->update($validated);
         return redirect()->back()->with('success', 'Modifications enregistrées.');
@@ -60,6 +48,6 @@ class PersonController extends Controller
     public function destroy(Person $person)
     {
         $person->delete();
-        return redirect('/dashboard/users')->with('success', 'Personne supprimée de la liste.');
+        return redirect()->back()->with('success', 'Personne supprimée de la liste.');
     }
 }
