@@ -1,6 +1,6 @@
 import '@css/gestionUsers.css';
 import { useState } from "react";
-import {useForm, router, Link} from '@inertiajs/react';
+import {useForm, router, Link, usePage} from '@inertiajs/react';
 
 const AddUserForm = ({ onCancel}) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -45,6 +45,7 @@ const AddUserForm = ({ onCancel}) => {
 
 const UserCard = ({ user }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [showPersons, setShowPersons] = useState(false);
 
     const {data, setData, put, processing, errors } = useForm({
         first_name : user.first_name,
@@ -123,24 +124,38 @@ const UserCard = ({ user }) => {
                     <ul>
                         {user.people.map(person => (
                             <li key={person.id}>
-                                <Link href={`/dashboard/persons/${person.id}`} className="personLink">
-                                    {person.first_name} {person.last_name} ({person.age} ans)
-                                </Link>
+                                {person.first_name} {person.last_name}
                             </li>
                         ))}
                     </ul>
                 ) : (
-                    <p>Aucune personne</p>
+                    <p>Aucune personne associée</p>
                 )}
             <div className="button">
                         <button onClick={() => setIsEditing(true)}>
                             Modifier
                         </button>
-
+                        <button onClick={() => setShowPersons(!showPersons)}>
+                            {showPersons ? "Masquer les personnes" : "Voir les personnes"}
+                        </button>
                         <button onClick={handleDelete}>
                             Supprimer
                         </button>
                     </div>
+                    {showPersons && (
+                        <div className="persons_section">
+                            {user.people && user.people.length > 0 ? (
+                                user.people.map(person => 
+                                <PersonRow 
+                                    key={person.id} 
+                                    person={person}
+                                />)
+                            ) : (
+                                <p>Auccune personne associée</p>
+                            )}
+                        </div>
+                    )}
+
                 </>
             )}
 
@@ -148,6 +163,66 @@ const UserCard = ({ user }) => {
     );
 }
 
+const PersonRow = ({ person }) => {
+
+    
+    const {data, setData, put, processing, errors} = useForm({
+        first_name: person.first_name,
+        last_name: person.last_name,
+        age: person.age,
+        required_bike_size: person.required_bike_size,
+    });
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        put(`/dashboard/persons/${person.id}`, {
+            preserveScroll: true,
+        });
+    };
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        if (confirm(`Supprimer la personne "${person.first_name} ${person.last_name}" ?`)) {
+            router.delete(`/dashboard/persons/${person.id}`);
+        }
+    };
+
+    return (
+        <>
+            <form onSubmit={handleUpdate} className='person_row'>
+                <input type="text" 
+                    value={data.first_name}
+                    onChange={e => setData('first_name', e.target.value)}
+                />
+                {errors.first_name && <div style={{color: 'red', fontSize: '12px'}}>{errors.first_name}</div>}
+
+                <input type="text" 
+                    value={data.last_name}
+                    onChange={e => setData('last_name', e.target.value)}
+                />
+                {errors.last_name && <div style={{color: 'red', fontSize: '12px'}}>{errors.last_name}</div>}
+                
+                <input type="number" 
+                    value={data.age}
+                    onChange={e => setData('age', e.target.value)}
+                />
+                {errors.age && <div style={{color: 'red', fontSize: '12px'}}>{errors.age}</div>}
+                
+                <input type="number" 
+                    value={data.required_bike_size}
+                    onChange={e => setData('required_bike_size', e.target.value)}
+                />
+                {errors.required_bike_size && <div style={{color: 'red', fontSize: '12px'}}>{errors.required_bike_size}</div>}
+
+                <button type="submit" disabled={processing}>
+                    {processing ? "..." : "enregistrer"}
+                </button>
+            </form>
+            <button onClick={handleDelete}>
+                            Supprimer
+            </button>
+        </>
+    )
+}
 
 export default function gestionUsers({ users}){
 

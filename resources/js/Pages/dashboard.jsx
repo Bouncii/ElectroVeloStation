@@ -161,12 +161,6 @@ function AfficherReservations({ allReservations }){
 export default function Dashboard() {
     
     const { pendingReservations, allReservations } = usePage().props;
-    
-    const [waitingEntries, setWaitingEntries] = useState([
-        { id: "1", created_at: "2026-04-02 19:53:26", first_name: "Martin", last_name: "Dupont", age:"54", height:"1m76", email: "m.dupont@gmail.com", pickup_station_name: "Station A" },
-        { id: "2", created_at: "2026-01-15 10:20:00", first_name: "Julie", last_name: "Durand", age:"27", height:"1m68", email: "j.durand@gmail.com", pickup_station_name: "Station C" },
-        { id: "3", created_at: "2026-03-20 14:05:12", first_name: "Le", last_name: "Bernard", age:"119", height:"2m28", email: "l.bernard@gmail.com", pickup_station_name: "Station B" }
-    ]);
 
     const trierListeAttente = () => {
         const sorted = [...waitingEntries].sort((a, b) => {
@@ -176,24 +170,23 @@ export default function Dashboard() {
     };
 
     return(
-        <>
-        <Link href="/" id="back">Accueil</Link>
+    <>
         <div className="dash">
-        
+        <Link href="/" id="back">Accueil</Link>  
            <div id="containerResa">
                 <AfficherReservations allReservations={allReservations}/>
             </div> 
                 
-            <div id="redirectBoxes">
-                <RedirectBox 
-                link = 'dashboard/stations'
-                name = "Gestion des stations"/>
-                <RedirectBox 
-                link = '/dashboard/users'
-                name = "Gestion des users"
-                />
-            </div>
-            
+                <div id="redirectBoxes">
+                    <RedirectBox 
+                    link = 'dashboard/stations'
+                    name = "Gestion des stations"/>
+                    <RedirectBox 
+                    link = '/dashboard/users'
+                    name = "Gestion des users"
+                    />
+                </div>
+                 
             <div id="waitList">
                 <h2>Liste d'attente</h2>
                 <div id="waitGrid">
@@ -206,8 +199,7 @@ export default function Dashboard() {
                 </div>
 
             </div>
-
+                       
         </div>
-        </>
-    );
-}
+    </>
+)}
