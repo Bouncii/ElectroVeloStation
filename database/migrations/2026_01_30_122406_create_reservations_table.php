@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,10 +15,10 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
-            $table->foreignId('user_id')->nullable()->constrained();
-            $table->foreignId('pickup_station_id')->constrained('stations');
-            $table->foreignId('return_station_id')->constrained('stations');
-            $table->timestamps(); 
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('pickup_station_id')->constrained('stations')->onDelete('cascade');
+            $table->foreignId('return_station_id')->constrained('stations')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
