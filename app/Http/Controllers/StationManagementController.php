@@ -9,7 +9,7 @@ class StationManagementController extends Controller
 {
     public function index()
     {
-        return Inertia::render('stationsdash', [
+        return Inertia::render('home', [
             'stations' => Station::withCount(['bikes', 'departures', 'arrivals'])->get()
         ]);
     }

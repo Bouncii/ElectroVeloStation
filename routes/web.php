@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StationManagementController;
 use App\Http\Controllers\GlobalReservationController;
 use App\Http\Controllers\StationController;
@@ -16,7 +17,7 @@ Route::get('/reservation', function () {
     return inertia('reservation');
 });
 
-// ----- ROUTES PROTÉGÉES -----
+// ----- ROUTES PROTEGEES -----
 Route::middleware(['auth', 'role:admin,employee'])->group(function () {
 
     Route::get('/dashboard', [GlobalReservationController::class, "index"]);
@@ -24,8 +25,12 @@ Route::middleware(['auth', 'role:admin,employee'])->group(function () {
     Route::resource('/dashboard/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud 
     Route::resource('/dashboard/users', UserController::class);
     Route::resource('/dashboard/persons', PersonController::class)->only(['update', 'store', 'destroy', 'show']);
-    Route::resource('schedules', ScheduleController::class)->only(['update']);
+    Route::resource('/dashboard/schedules', ScheduleController::class)->only(['update']);
     Route::resource('/dashboard/reservations', ReservationController::class);
+
+    Route::get('/dashboard/dashboard', [StationManagementController::class, "index"]);
+    Route::get('/dashboard/dashboard/{station}', [StationManagementController::class, "show"]);
+
 
 });
 
