@@ -43,8 +43,8 @@ class StationReservationController extends Controller
             //Si la station aau moins un vélo de disponible, on le met dans le tableau
         }
 
-        return Inertia::render('home', [
-            'stations' => $stations
+        return Inertia::render('reservation', [
+            'stations' => $toute_stations
         ]);
 
     }

@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import '@css/reservation.css';
 import { Header } from "../Pages/home.jsx";
 
 export default function Reservation({ 
     schedules = [], // Horaires des stations récupérés depuis le backend
     peopleDb = [], // Cyclistes enregistrés dans la base de données
-    auth, // Informations d'authentification de l'utilisateur
-    stations = [] // Liste des stations récupérée depuis le backend
+    auth = {}, // Informations d'authentification de l'utilisateur
+    stations = []// Liste des stations récupérée depuis le backend
  }) {
+    console.log("Schedules:", schedules);
+    console.log("People DB:", peopleDb);
+    console.log("Auth:", auth);
+    console.log("Stations:", stations);
 
     // -----------------------------
     // STATE RESERVATION
