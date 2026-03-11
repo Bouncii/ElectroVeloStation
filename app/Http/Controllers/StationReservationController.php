@@ -13,14 +13,6 @@ class StationReservationController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        $stations = Station::all();
-
-        return Inertia::render('Reservation', [
-            'stations' => $stations
-        ]);
-    }
 
     //Pour remplir le tableau des stations sur le front
 
