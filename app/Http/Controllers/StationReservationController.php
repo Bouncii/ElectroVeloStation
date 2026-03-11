@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Station;
-use App\Models\Reservation;
 use Inertia\Inertia;
 
 class StationReservationController extends Controller
@@ -14,35 +13,47 @@ class StationReservationController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $stations = Station::all();
+
+        return Inertia::render('Reservation', [
+            'stations' => $stations
+        ]);
+    }
+
+    //Pour remplir le tableau des stations sur le front
 
     public function show(Station $station)
     {
-        $bikes = $station->bikes()->get();
-        $allStates = ['available', 'in_use', 'transport_pending', 'return_pending', 'maintenance'];
-        $bikeStats = array_fill_keys($allStates, 0);
+        $toute_stations = Station::all();
+        $stations = [];
 
-        foreach ($bikes as $bike) {
-            $bikeStats[$bike->state]++;
+
+        foreach($toute_stations as $s) {
+            $bikes = $s->bikes()->get();
+            $allStates = ['available', 'in_use', 'transport_pending', 'return_pending', 'maintenance'];
+            $bikeStats = array_fill_keys($allStates, 0);
+
+
+            foreach ($bikes as $bike) {
+                $bikeStats[$bike->state]++;
+            }
+
+            //On a un tableau avec les états des vélos en général, ici pour vérifier que la station a au moins 
+            //un vélo de libre
+
+            if ($bikeStats['available'] > 0) 
+            {
+                $stations[] = $s;
+            }   
+
+            //Si la station aau moins un vélo de disponible, on le met dans le tableau
         }
 
-        //On a un tableau avec les états des vélos en général, ici pour vérifier que la station a au moins 
-        //un vélo de libre
-
-        if ($bikeStats['available'] <= 0) 
-        {
-            abort(404);
-        }   
-
-        //Si la station n'a pas de vélo disponible, on renvoie une erreur 
-
         return Inertia::render('home', [
-            'station' => $station,
-            'bikeStats' => $bikeStats,
+            'stations' => $stations
         ]);
-
-
-
-
 
     }
 
