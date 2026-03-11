@@ -159,7 +159,10 @@ export default function gestionStations({ stations }){
         []);
     return (
         <> 
+        <div className={styles.nav}>
         <Link href="/" className={styles.back}>Accueil</Link>
+        <Link href="/dashboard" className={styles.back}>Dashboard</Link>
+        </div> 
         <h1>Gestion des stations</h1>
 
             <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>

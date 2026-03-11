@@ -91,3 +91,18 @@ button:hover, .back:hover{
 .btn_save_mini:hover {
     background: #e0f2f1;
 }
+
+.back {
+    background-color: white;
+    text-decoration: none;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 2%;
+    margin-top: 2%;
+}
+
+.nav{
+    display: flex;
+    justify-content: center;
+}

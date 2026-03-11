@@ -182,6 +182,10 @@ div.status {
     cursor: pointer;
 }
 
+.btn_details:hover{
+    background-color: var(--faintText);
+}
+
 .btnTri {
     cursor: pointer;
     height: fit-content;
@@ -286,8 +290,6 @@ div.status {
     border-radius: 8px;
     margin-bottom: auto;
 }
-
-
 
 .wait_liste_velos {
     list-style: none;
