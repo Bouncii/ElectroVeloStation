@@ -3,7 +3,7 @@
 /* <></> */
 import { useState, useEffect } from "react"
 import { usePage, Link } from '@inertiajs/react';
-import styles from "@css/dashboard.module.css"
+import styles from "@css/dashboard.module.css";
 import '@css/app.css';
 
 function AfficherWaitList({pendingReservations}){

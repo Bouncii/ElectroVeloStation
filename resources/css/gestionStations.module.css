@@ -32,15 +32,14 @@
     justify-content: center;
 }
 
-button:not(#btn), #back {
+button {
     border-radius: 8px;
     margin: 8px;
     cursor: pointer;
-    /*padding: 4px;*/
     border: none;
 }
 
-button:hover, #back:hover{
+button:hover, .back:hover{
     background-color: rgb(163, 202, 163);
 }
 /*

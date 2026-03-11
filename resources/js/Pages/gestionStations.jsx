@@ -1,9 +1,8 @@
-
-
-import '@css/gestionStations.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useForm, router, Link} from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
+import styles from '@css/gestionStations.module.css';
+import '@css/app.css';
 
 const AddStationForm = ({ onCancel }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -19,14 +18,14 @@ const AddStationForm = ({ onCancel }) => {
 
     return (
     
-        <form onSubmit={handleSubmit} className="addStationForm">
+        <form onSubmit={handleSubmit} className={styles.addStationForm}>
             <input 
                 type="text" 
                 placeholder="Nom de la station" 
                 value={data.name} 
                 onChange={(e) => setData('name', e.target.value)} 
             />
-            {errors.name && <p className="error">{errors.name}</p>}
+            {errors.name && <p className={styles.error}>{errors.name}</p>}
             <button type="submit" disabled={processing}>
                 {processing ? "Ajout en cours..." : "Confirmer l'ajout"}</button>
             <button type="button" onClick={onCancel}>Annuler</button>
@@ -55,7 +54,7 @@ const StationCard = ({ station }) => {
         }
     };
     return (
-        <div className="stationsCardDetails">
+        <div className={styles.stationsCardDetails}>
             {isEditing ? (
                 <form onSubmit={handleSave}>
                     <input 
@@ -63,8 +62,8 @@ const StationCard = ({ station }) => {
                         value={data.name} 
                         onChange={(e) => setData('name',e.target.value)} 
                     />
-                    {errors.name && <p className='error'>{errors.name}</p>}
-                    <div className='button'>
+                    {errors.name && <p className={styles.error}>{errors.name}</p>}
+                    <div className={styles.button}>
                         <button type='submit' disabled={processing}>
                             {processing ? 'Enregistrement en cours...' : 'Enregistrer'}
                         </button>
@@ -79,14 +78,14 @@ const StationCard = ({ station }) => {
                     <p>Créée le : {new Date(station.created_at).toLocaleString('fr-FR')}</p>
                     <p>Modifiée le : {new Date(station.updated_at).toLocaleString('fr-FR')}</p>
                 
-                    <div className="button">
+                    <div className={styles.button}>
                                                 
                         <button onClick={() => setIsEditing(true)}>Modifier</button>   
                         <button onClick={() => setShowHours(!showHours)}>{showHours ? "Masquer horaires" : "Voir horaires"}</button>
                         <button onClick={handelDelete}>Supprimer</button>
                     </div>
                     {showHours && (
-                        <div className="schedules_section">
+                        <div className={styles.schedules_section}>
                             <h4>Horaires d'ouverture</h4>
                             {station.schedules && station.schedules.length > 0 ? (
                                 station.schedules.map(schedule => <ScheduleRow key={schedule.id} schedule={schedule} />)
@@ -113,15 +112,15 @@ const ScheduleRow = ({ schedule }) => {
 
     const handleUpdate = (e) => {
         e.preventDefault();
-        put(`/schedules/${schedule.id}`, {
+        put(`/dashboard/schedules/${schedule.id}`, {
             preserveScroll: true,
         });
     };
 
     return (
         <>
-            <form onSubmit={handleUpdate} className="schedule_row">
-                <span className="day_label">{days[schedule.day_of_week]}</span>
+            <form onSubmit={handleUpdate} className={styles.schedule_row}>
+                <span className={styles.day_label}>{days[schedule.day_of_week]}</span>
                 <input 
                     type="time" 
                     value={data.open_time} 
@@ -137,7 +136,7 @@ const ScheduleRow = ({ schedule }) => {
                     {processing ? "..." : "enregistrer"}
                 </button>
             </form>
-            {recentlySuccessful && flash.success && (<p className="success_text_mini">{flash.success}</p>)}
+            {recentlySuccessful && flash.success && (<p className={styles.success_text_mini}>{flash.success}</p>)}
         </>
     );
 };
@@ -149,12 +148,21 @@ export default function gestionStations({ stations }){
     
     const [showForm, setShowForm] = useState(false);
 
+    useEffect(() => {
+            document.body.setAttribute('data-theme','admin');
+            document.body.classList.add('theme-admin', 'admin');
+            return () => {
+                document.body.removeAttribute('data-theme');
+                document.body.classList.remove('theme-admin');
+            };
+        },
+        []);
     return (
         <> 
-        <Link href="/" id="back">Accueil</Link>
+        <Link href="/" className={styles.back}>Accueil</Link>
         <h1>Gestion des stations</h1>
 
-            <button className='btn_add' onClick={() => setShowForm(!showForm)}>
+            <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>
                 {showForm ? "Annuler" : "Ajouter une station"}
             </button>
 
@@ -162,7 +170,7 @@ export default function gestionStations({ stations }){
                 <AddStationForm
                     onCancel={() => setShowForm(false)} />
             )}
-            <div className='stations_grid'>
+            <div className={styles.stations_grid}>
                 {stations.length > 0 ? (
                     stations.map((station) => (
                         <StationCard
