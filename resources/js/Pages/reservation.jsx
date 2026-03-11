@@ -4,10 +4,10 @@ import '@css/reservation.css';
 import { Header } from "../Pages/home.jsx";
 
 export default function Reservation({ 
-    schedules = [],
-    peopleDb = [],
-    auth,
-    stations = []
+    schedules = [], // Horaires des stations récupérés depuis le backend
+    peopleDb = [], // Cyclistes enregistrés dans la base de données
+    auth, // Informations d'authentification de l'utilisateur
+    stations = [] // Liste des stations récupérée depuis le backend
  }) {
 
     // -----------------------------
