@@ -5,7 +5,7 @@ use App\Models\Station;
 use App\Models\Reservation;
 use Inertia\Inertia;
 
-class StationManagementController extends Controller
+class DashboardController extends Controller
 {
     public function index()
     {

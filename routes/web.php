@@ -1,6 +1,6 @@
 <?php
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\StationManagementController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GlobalReservationController;
 use App\Http\Controllers\StationController;
 use Illuminate\Support\Facades\Route;
@@ -18,21 +18,21 @@ Route::get('/reservation', function () {
 });
 
 // ----- ROUTES PROTEGEES -----
-Route::middleware(['auth', 'role:admin,employee'])->group(function () {
+Route::middleware(['auth', 'role:admin,employee'])
+    ->prefix('panel')
+    ->group(function () {
 
-    Route::get('/dashboard', [GlobalReservationController::class, "index"]);
+        Route::get('/', [GlobalReservationController::class, "index"]);
+        Route::resource('/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud 
+        Route::resource('/users', UserController::class);
+        Route::resource('/persons', PersonController::class)->only(['update', 'store', 'destroy', 'show']);
+        Route::resource('/schedules', ScheduleController::class)->only(['update']);
+        Route::resource('/reservations', ReservationController::class);
 
-    Route::resource('/dashboard/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud 
-    Route::resource('/dashboard/users', UserController::class);
-    Route::resource('/dashboard/persons', PersonController::class)->only(['update', 'store', 'destroy', 'show']);
-    Route::resource('/dashboard/schedules', ScheduleController::class)->only(['update']);
-    Route::resource('/dashboard/reservations', ReservationController::class);
-
-    Route::get('/dashboard/dashboard', [StationManagementController::class, "index"]);
-    Route::get('/dashboard/dashboard/{station}', [StationManagementController::class, "show"]);
-
-
-});
+        Route::get('/dashboard', [DashboardController::class, "index"]);
+        Route::get('/dashboard/{station}', [DashboardController::class, "show"]);
+    }
+);
 
 // ----- ROUTE DE DEBUG -----
 Route::get('/testConnexion', function () {

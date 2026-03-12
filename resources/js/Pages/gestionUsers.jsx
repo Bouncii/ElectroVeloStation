@@ -13,7 +13,7 @@ const AddUserForm = ({ onCancel}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/dashboard/users', {
+        post('/panel/users', {
             onSuccess: () => onCancel(),
         });
     };
@@ -56,14 +56,14 @@ const UserCard = ({ user }) => {
 
     const handleSave = (e) => {
         e.preventDefault();
-        put(`/dashboard/users/${user.id}`, {
+        put(`/panel/users/${user.id}`, {
             onSuccess: () => setIsEditing(false),
         });
     };
 
     const handleDelete = () => {
         if (confirm(`Supprimer l'utilisateur' "${user.first_name}${user.last_name}" ?`)) {
-            router.delete(`/dashboard/users/${user.id}`);
+            router.delete(`/panel/users/${user.id}`);
         }
     };
 
@@ -174,7 +174,7 @@ const PersonRow = ({ person }) => {
     });
     const handleUpdate = (e) => {
         e.preventDefault();
-        put(`/dashboard/persons/${person.id}`, {
+        put(`/panel/persons/${person.id}`, {
             preserveScroll: true,
         });
     };
@@ -182,7 +182,7 @@ const PersonRow = ({ person }) => {
     const handleDelete = (e) => {
         e.preventDefault();
         if (confirm(`Supprimer la personne "${person.first_name} ${person.last_name}" ?`)) {
-            router.delete(`/dashboard/persons/${person.id}`);
+            router.delete(`/panel/persons/${person.id}`);
         }
     };
 

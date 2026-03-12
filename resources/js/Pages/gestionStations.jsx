@@ -11,7 +11,7 @@ const AddStationForm = ({ onCancel }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/dashboard/stations', {
+        post('/panel/stations', {
             onSuccess: () => onCancel(),
         });
     };
@@ -43,14 +43,14 @@ const StationCard = ({ station }) => {
 
     const handleSave = (e) => {
         e.preventDefault();
-        put(`/dashboard/stations/${station.id}`, {
+        put(`/panel/stations/${station.id}`, {
             onSuccess: () => setIsEditing(false),
         });
     };
 
     const handelDelete = () => {
         if (confirm(`Supprimer la station "${station.name}" ?`)) {
-            router.delete(`/dashboard/stations/${station.id}`);
+            router.delete(`/panel/stations/${station.id}`);
         }
     };
     return (
@@ -112,7 +112,7 @@ const ScheduleRow = ({ schedule }) => {
 
     const handleUpdate = (e) => {
         e.preventDefault();
-        put(`/dashboard/schedules/${schedule.id}`, {
+        put(`/panel/schedules/${schedule.id}`, {
             preserveScroll: true,
         });
     };
@@ -161,7 +161,7 @@ export default function gestionStations({ stations }){
         <> 
         <div className={styles.nav}>
         <Link href="/" className={styles.back}>Accueil</Link>
-        <Link href="/dashboard" className={styles.back}>Dashboard</Link>
+        <Link href="/panel" className={styles.back}>Panel</Link>
         </div> 
         <h1>Gestion des stations</h1>
 

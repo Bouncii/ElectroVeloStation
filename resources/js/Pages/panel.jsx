@@ -3,7 +3,7 @@
 /* <></> */
 import { useState, useEffect } from "react"
 import { usePage, Link } from '@inertiajs/react';
-import styles from "@css/dashboard.module.css";
+import styles from "@css/panel.module.css";
 import '@css/app.css';
 
 function AfficherWaitList({pendingReservations}){
@@ -158,7 +158,7 @@ function AfficherReservations({ allReservations }){
         )
     }
 
-export default function Dashboard() {
+export default function Panel() {
     
     const { pendingReservations, allReservations } = usePage().props;
 
@@ -188,10 +188,10 @@ export default function Dashboard() {
                 
                 <div className={styles.redirectBoxes}>
                     <RedirectBox 
-                    link = 'dashboard/stations'
+                    link = 'panel/stations'
                     name = "Gestion des stations"/>
                     <RedirectBox 
-                    link = '/dashboard/users'
+                    link = '/panel/users'
                     name = "Gestion des users"
                     />
                 </div>
