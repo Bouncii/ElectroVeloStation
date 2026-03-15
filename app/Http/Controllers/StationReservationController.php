@@ -9,14 +9,14 @@ class StationReservationController extends Controller
     public function index()
     {
         return Inertia::render('stationsdash', [
-            'stations' => Station::withCount(['bikes'])->get()
+            'station' => Station::withCount(['bikes'])->get()
         ]);
     }
 
 
     //Pour remplir le tableau des stations sur le front
 
-    public function show(Station $station)
+    public function show()
     {
         $toute_stations = Station::all();
         $stations = [];
@@ -44,7 +44,7 @@ class StationReservationController extends Controller
         }
 
         return Inertia::render('reservation', [
-            'stations' => $toute_stations
+            'stations' => $stations
         ]);
 
     }

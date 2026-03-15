@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\StationManagementController;
+use App\Http\Controllers\StationReservationController;
 use App\Http\Controllers\GlobalReservationController;
 use App\Http\Controllers\StationController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ Route::get('/reservation', function () {
     return inertia('reservation');
 });
 
+Route::get('reservation', [StationReservationController::class, 'show']);
 // ----- ROUTES PROTÉGÉES -----
 Route::middleware(['auth', 'role:admin,employee'])->group(function () {
 
