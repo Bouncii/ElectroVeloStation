@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed','in_progress'])->default('pending');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('pickup_station_id')->constrained('stations')->onDelete('cascade');
             $table->foreignId('return_station_id')->constrained('stations')->onDelete('cascade');
