@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Station;
 use App\Models\Reservation;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -16,6 +17,8 @@ class DashboardController extends Controller
 
     public function show(Station $station)
     {
+        $today = Carbon::today();
+
         $bikes = $station->bikes()->get();
         $allStates = ['available', 'in_use', 'transport_pending', 'return_pending', 'maintenance'];
         $bikeStats = [];
@@ -35,12 +38,14 @@ class DashboardController extends Controller
 
         $departingReservations = Reservation::where('pickup_station_id', $station->id)
             ->where('status', 'confirmed')
+            ->whereDate('start_date', '<=', $today)
             ->with($loadRelations)
             ->orderBy('start_date', 'asc')
             ->get();
 
         $arrivingReservations = Reservation::where('return_station_id', $station->id)
             ->where('status', 'confirmed')
+            ->whereDate('end_date', '<=', $today)
             ->with($loadRelations)
             ->orderBy('end_date', 'asc')
             ->get();
