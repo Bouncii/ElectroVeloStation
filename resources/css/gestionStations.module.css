@@ -1,0 +1,108 @@
+.addStationForm {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px dashed #979bff;
+    display: flex;
+    gap: 10px;
+}
+
+.addStationForm input {
+    padding: 8px;
+    flex: 1;
+}
+
+.stationsList {
+    padding: 20px;
+}
+
+.stationsCardDetails {
+    background-color: white;
+    padding: 8px;
+    width: fit-content;
+    margin: 20px;
+    border-radius: 8px;
+    min-width: 200px;
+}
+
+.stations_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    border-radius: 8px;
+    margin: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover, .back:hover{
+    background-color: rgb(163, 202, 163);
+}
+/*
+.stationCardDetails div {
+    min-width: 250px;
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+}*/
+
+
+.schedules_section {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.schedule_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.day_label {
+    width: 80px;
+    font-weight: bold;
+}
+
+.schedule_row {
+    padding: 2px 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.btn_save_mini {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 2px 6px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn_save_mini:hover {
+    background: #e0f2f1;
+}
+
+.back {
+    background-color: white;
+    text-decoration: none;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 2%;
+    margin-top: 2%;
+}
+
+.nav{
+    display: flex;
+    justify-content: center;
+}

@@ -3,11 +3,13 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Reservation extends Model
 {
     use HasFactory;
     protected $fillable = ['start_date', 'end_date', 'user_id', 'pickup_station_id', 'return_station_id', 'status'];
+    protected $appends = ['is_checkable'];
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -27,5 +29,10 @@ class Reservation extends Model
 
     public function scopePending($query){
         return $query->where('status', 'pending');
+    }
+
+    public function getIsCheckableAttribute(){
+        $targetDate = new Carbon($this->start_date);
+        return now()->diffInMinutes($targetDate, false) <= 30;
     }
 }
