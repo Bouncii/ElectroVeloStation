@@ -7,6 +7,13 @@ use App\Models\Schedule;
 
 class ScheduleController extends Controller
 {
+
+    public function index() {
+        return Inertia::render('schedules', [
+            'schedule' => Schedule::all()
+        ]);
+    }
+
     public function update(Request $request, Schedule $schedule){
         $validated = $request->validate([
             'open_time'  => 'required',

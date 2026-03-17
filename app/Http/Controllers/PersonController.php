@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Person;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PersonController extends Controller
@@ -50,4 +51,11 @@ class PersonController extends Controller
         $person->delete();
         return redirect()->back()->with('success', 'Personne supprimée de la liste.');
     }
+
+    public function index() {
+        $peopleDb = Personne::where('user_id', Auth::id())->get();
+
+        return view('peopleDb.index', compact('peopleDb'));
+    }
+
 }
