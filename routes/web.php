@@ -15,14 +15,9 @@ Route::get('/', function () {
     return inertia('home');
 });
 
-Route::get('/reservation', function () {
-    return inertia('reservation');
-});
 
-Route::get('/reservation', [ScheduleController::class, 'index']);
 Route::get('/reservation', [StationReservationController::class, 'show']);
 
-Route::get('/reservation', [PersonnControler::class, 'index'])->middleware('auth');
 
 // ----- ROUTES PROTEGEES -----
 Route::middleware(['auth', 'role:admin,employee'])

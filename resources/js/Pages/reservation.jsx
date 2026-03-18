@@ -7,12 +7,12 @@ export default function Reservation({
     schedules = [], // Horaires des stations récupérés depuis le backend
     peopleDb = [], // Cyclistes enregistrés dans la base de données
     auth = {}, // Informations d'authentification de l'utilisateur
-    stations = []// Liste des stations récupérée depuis le backend
+    allStations = [] // Liste de toutes les stations récupérée depuis le backend
  }) {
     console.log("Schedules:", schedules);
     console.log("People DB:", peopleDb);
     console.log("Auth:", auth);
-    console.log("Stations:", stations);
+    console.log("Stations:", allStations);
 
     // -----------------------------
     // STATE RESERVATION
@@ -280,7 +280,7 @@ export default function Reservation({
 
         <option value="">Choisir</option>
 
-        {stations.map(station => (
+        {allStations.map(station => (
 
             <option key={station.id} value={station.id}>
                 {station.name}
@@ -308,8 +308,8 @@ export default function Reservation({
         <input
         type="time"
         name="heureDebut"
-        min={scheduleStation?.opening_time}
-        max={scheduleStation?.closing_time}
+        min={scheduleStation?.open_time}
+        max={scheduleStation?.close_time}
         value={reservation.heureDebut}
         onChange={handleReservationChange}
         />

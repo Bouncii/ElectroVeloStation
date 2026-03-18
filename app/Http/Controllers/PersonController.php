@@ -52,10 +52,4 @@ class PersonController extends Controller
         return redirect()->back()->with('success', 'Personne supprimée de la liste.');
     }
 
-    public function index() {
-        $peopleDb = Personne::where('user_id', Auth::id())->get();
-
-        return view('peopleDb.index', compact('peopleDb'));
-    }
-
 }
