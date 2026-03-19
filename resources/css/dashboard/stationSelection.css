@@ -23,6 +23,7 @@ body{
     flex-direction:row;
     flex-wrap: wrap;
     justify-content: center;
+    margin: 25px;
 }
 
 .cards {
@@ -143,4 +144,14 @@ h3 {
     font-weight: 700 !important;
     font-size: 1.5em !important;
     line-height: 1.2;
+}
+
+.back {
+    background-color: #DDDEE3;
+    text-decoration: none;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 2%;
+    margin-top: 2%;
 }

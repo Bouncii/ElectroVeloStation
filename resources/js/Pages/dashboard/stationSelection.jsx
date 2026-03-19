@@ -5,6 +5,8 @@ function StationSelection({ stations }) {
     return (
         <>
             <h1>Veuillez choisir une station : </h1>
+            <Link href="/" className="back">Accueil</Link>
+            <Link href="/panel" className="back">Panel</Link>
             <div id='stationCardsContainer'> 
                 {stations.map((station) => (
                     <StationCard key={station.id} station={station} />
