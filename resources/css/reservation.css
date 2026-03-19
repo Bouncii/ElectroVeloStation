@@ -1,12 +1,10 @@
-body {
-    /*background-color: #5AA9E6;*/
-    background-color: 262626;
-    font-family: 'Arial Narrow Bold', sans-serif;
+.reservationPage {
+    background-color: #5AA9E6;
     text-align: center;
     color:#262626;
 }
 
-.infoReservation {
+.reservationPage .infoReservation {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -14,7 +12,7 @@ body {
     margin: 20px;
 }
 
-.infoReservation .champ {
+.reservationPage .infoReservation .champ {
     margin: 20px;
     padding: 20px;
     border: 2px solid #262626;
@@ -25,12 +23,12 @@ body {
     text-align: left;
 }
 
-.champ label {
+.reservationPage .infoReservation .champ label {
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
 }
-.champ input, .champ select {
+.reservationPage .infoReservation .champ input, .reservationPage .infoReservation .champ select {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
@@ -39,7 +37,7 @@ body {
     box-sizing: border-box;
 }
 
-.champ button {
+.reservationPage .infoReservation .champ button {
     margin: 10px;
     padding: 10px 20px;
     background-color: #0031A4;
@@ -48,11 +46,11 @@ body {
     border-radius: 5px;
 }
 
-.champ button:hover {
+.reservationPage .infoReservation .champ button:hover {
     background-color: #134fdb;
 }
 
-#bAjout {
+.reservationPage .infoReservation .champ #bAjout {
     display: block;
     position: sticky;
     bottom: 80px;
@@ -61,11 +59,11 @@ body {
     background-color: #0031A4;
     color: white;
 }
-#bAjout:hover {
+.reservationPage .infoReservation .champ #bAjout:hover {
     background-color: #134fdb;
 }
 
-footer {
+.reservationPage footer {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -78,12 +76,12 @@ footer {
     color: white;
 }
 
-footer p {
+.reservationPage footer p {
     font-size: 14px;
     margin: 0;            
 }
 
-footer button {
+.reservationPage footer button {
     padding: 10px 20px;
     background-color: #FFE45E;
     color: rgb(10, 35, 96);
@@ -92,7 +90,7 @@ footer button {
     
 }
 
-footer button:hover {
+.reservationPage footer button:hover {
     background-color: rgb(255, 255, 128);
 }
 

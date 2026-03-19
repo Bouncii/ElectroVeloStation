@@ -238,6 +238,7 @@ export default function Reservation({
     return (
 
         <>
+        <div className="reservationPage">
         <header>
             <Header/>
         </header>
@@ -481,7 +482,7 @@ export default function Reservation({
 
         </footer>
 
-        
+        </div>
 
         </>
     );
