@@ -7,6 +7,7 @@ use App\Models\Schedule;
 
 class ScheduleController extends Controller
 {
+
     public function update(Request $request, Schedule $schedule){
         $validated = $request->validate([
             'open_time'  => 'required',
