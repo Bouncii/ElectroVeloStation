@@ -56,7 +56,7 @@ class DashboardController extends Controller
             ->orderBy('start_date', 'asc')
             ->get();
 
-        return Inertia::render('home', [
+        return Inertia::render('/dashboard/dashboard', [
             'station' => $station,
             'bikeStats' => $bikeStats,
             'departingReservations' => $departingReservations,
