@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->integer('age');
             $table->integer('required_bike_size');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

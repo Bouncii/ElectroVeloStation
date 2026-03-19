@@ -13,8 +13,10 @@ class StationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('stationsdash', [
-            'stations' => Station::all()
+        return Inertia::render('gestionStations', [
+            'stations' => Station::with(['schedules' => function ($query) {
+                $query->orderBy('day_of_week', 'asc');
+            }])->latest()->get()
         ]);
     }
 

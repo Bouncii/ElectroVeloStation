@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Station;
+use App\Observers\StationObserver;
+use App\Models\Reservation;
+use App\Observers\ReservationObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Station::observe(StationObserver::class);
+        Reservation::observe(ReservationObserver::class);
     }
 }
