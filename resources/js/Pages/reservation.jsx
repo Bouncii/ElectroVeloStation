@@ -6,13 +6,10 @@ import { Header } from "../Pages/home.jsx";
 export default function Reservation({ 
     schedules = [], // Horaires des stations récupérés depuis le backend
     peopleDb = [], // Cyclistes enregistrés dans la base de données
-    auth = {}, // Informations d'authentification de l'utilisateur
     allStations = [] // Liste de toutes les stations récupérée depuis le backend
  }) {
-    console.log("Schedules:", schedules);
-    console.log("People DB:", peopleDb);
-    console.log("Auth:", auth);
-    console.log("Stations:", allStations);
+
+    const { errors, flash } = usePage().props;
 
     // -----------------------------
     // STATE RESERVATION
@@ -34,7 +31,7 @@ export default function Reservation({
     // -----------------------------
 
     const [people, setPeople] = useState([
-        { nom:"", prenom:"", age:"", taille:"", email:"" }
+        { nom:"", prenom:"", age:"", taille:"" }
     ]);
 
 
@@ -59,11 +56,11 @@ export default function Reservation({
     // -----------------------------
 
     const handlePeopleChange = (index, e) => {
-
         const newPeople = [...people];
-
-        newPeople[index][e.target.name] = e.target.value;
-
+        newPeople[index] = { 
+            ...newPeople[index], 
+            [e.target.name]: e.target.value 
+        };
         setPeople(newPeople);
     };
 
@@ -106,14 +103,19 @@ export default function Reservation({
 
         const person = peopleDb.find(p => p.id == id);
 
-        if(!person) return;
+        if(person){
 
-        const newPeople = [...people];
+            const newPeople = [...people];
 
-        newPeople[index] = person;
-
-        setPeople(newPeople);
-
+            newPeople[index] = {
+                id: person.id,
+                nom: person.last_name,
+                prenom: person.first_name,
+                age: person.age,
+                taille: person.required_bike_size
+            };
+            setPeople(newPeople);
+        }
     };
 
 
@@ -132,9 +134,9 @@ export default function Reservation({
     // STATION DEPART
     // -----------------------------
 
-    const pickup_station_id = allStations.find(
-        s => s.id == reservation.pickup_station_id
-    );
+    // const pickup_station_id = allStations.find(
+    //     s => s.id == reservation.pickup_station_id
+    // );
 
 
 
@@ -142,13 +144,13 @@ export default function Reservation({
     // VERIFICATION STOCK
     // -----------------------------
 
-    const stockDisponible = () => {
+    // const stockDisponible = () => {
 
-        if(!pickup_station_id) return false;
+    //     if(!pickup_station_id) return false;
 
-        return people.length <= pickup_station_id.bike_stock;
+    //     return people.length <= pickup_station_id.bike_stock;
 
-    };
+    // };
 
 
 
@@ -212,25 +214,13 @@ export default function Reservation({
     // -----------------------------
 
     const handleSubmit = () => {
-        /*
-        if(!stockDisponible()){
-
-            alert("Pas assez de vélos disponibles");
-
-            return;
-        }
-            */
-
-        router.post("/reservation",{
-            start_date: `${reservation.dateDebut} ${reservation.heureDebut}`,
-            end_date: `${reservation.dateFin} ${reservation.heureFin}`,
+        router.post("/reservation", {
             pickup_station_id: reservation.pickup_station_id,
             return_station_id: reservation.return_station_id,
-            user_id: auth?.user?.id ?? null,
+            start_date: `${reservation.dateDebut} ${reservation.heureDebut}:00`,
+            end_date: `${reservation.dateFin} ${reservation.heureFin}:00`,
             attributions: people,
         });
-
-
     };
 
 
@@ -242,6 +232,21 @@ export default function Reservation({
         <header>
             <Header/>
         </header>
+
+
+        <div className="messages-container" style={{ margin: "20px auto", maxWidth: "800px", textAlign: "center" }}>
+            
+            {flash?.success && (
+                <div className="success">
+                    {flash.success}
+                </div>
+            )}
+            {errors?.error && (
+                <div className="failure">
+                    {errors.error}
+                </div>
+            )}
+        </div>
 
         <h1>Réserver un vélo</h1>
 
@@ -281,7 +286,7 @@ export default function Reservation({
 
         <select
         name="return_station_id"
-        value={reservation.stationArrivee}
+        value={reservation.return_station_id}
         onChange={handleReservationChange}
         >
 
@@ -340,8 +345,8 @@ export default function Reservation({
         <input
         type="time"
         name="heureFin"
-        min={scheduleStation?.opening_time}
-        max={scheduleStation?.closing_time}
+        min={scheduleStation?.open_time}
+        max={scheduleStation?.close_time}
         value={reservation.heureFin}
         onChange={handleReservationChange}
         />
@@ -371,7 +376,7 @@ export default function Reservation({
 
         {peopleDb.map(p=>(
             <option key={p.id} value={p.id}>
-                {p.nom} {p.prenom}
+                {p.first_name} {p.last_name}
             </option>
         ))}
 
@@ -415,23 +420,6 @@ export default function Reservation({
         value={person.taille}
         onChange={(e)=>handlePeopleChange(index,e)}
         />
-
-
-        {index===0 && (
-
-        <>
-        <label>Email</label>
-
-        <input
-        type="email"
-        name="email"
-        value={person.email}
-        onChange={(e)=>handlePeopleChange(index,e)}
-        />
-        </>
-
-        )}
-
 
         {index>0 && (
 

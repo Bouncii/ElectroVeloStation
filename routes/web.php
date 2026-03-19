@@ -1,6 +1,5 @@
 <?php
-use App\Http\Controllers\StationManagementController;
-use App\Http\Controllers\StationReservationController;
+use App\Http\Controllers\UserReservationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GlobalReservationController;
@@ -13,11 +12,11 @@ use App\Http\Controllers\ScheduleController;
 // -------- ROUTES PUBLIQUES -------
 Route::get('/', function () {
     return inertia('home');
-});
+})->name('home');
 
 
-Route::get('/reservation', [StationReservationController::class, 'show']);
-Route::post('/reservation', [StationReservationController::class, 'store']);
+Route::get('/reservation', [UserReservationController::class, 'create']);
+Route::post('/reservation', [UserReservationController::class, 'store']);
 
 // ----- ROUTES PROTEGEES -----
 Route::middleware(['auth', 'role:admin,employee'])
