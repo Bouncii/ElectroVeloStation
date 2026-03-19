@@ -7,6 +7,9 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
+use App\Models\Reservation;
+use App\Models\Bike;
 
 class StationReservationController extends Controller
 {
@@ -47,6 +50,8 @@ class StationReservationController extends Controller
 
         ]);
 
+        
+        $allBikesAssigned = true;
 
         DB::transaction(function () use ($validated, &$allBikesAssigned) {
             $reservation = Reservation::create([
@@ -59,7 +64,6 @@ class StationReservationController extends Controller
             ]);
 
             $assignedBikeIds = []; 
-            $allBikesAssigned = true;
 
             foreach ($validated['attributions'] as $attr) {
                 if (!empty($attr['person_id'])) {
@@ -71,12 +75,10 @@ class StationReservationController extends Controller
 
                     // Nouvelle personne
                     $person = Person::create([
-                        'nom' => $attr['nom'],
-                        'prenom' => $attr['prenom'],
+                        'nom' => $attr['first_name'],
+                        'prenom' => $attr['last_name'],
                         'age' => $attr['age'] ?? null,
-                        'taille' => $attr['taille'] ?? null,
-                        // éventuellement user_id si connecté
-                        'user_id' => auth()->id()
+                        'taille' => $attr['required_bike_size'] ?? null,
                     ]);
                 }
                 

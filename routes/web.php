@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 
 Route::get('/reservation', [StationReservationController::class, 'show']);
-
+Route::post('/reservation', [StationReservationController::class, 'store']);
 
 // ----- ROUTES PROTEGEES -----
 Route::middleware(['auth', 'role:admin,employee'])

@@ -19,12 +19,14 @@ export default function Reservation({
     // -----------------------------
 
     const [reservation, setReservation] = useState({
-        stationDepart: "",
-        stationArrivee: "",
+        pickup_station_id: "",
+        return_station_id: "",
         dateDebut: "",
         dateFin: "",
         heureDebut: "",
-        heureFin: ""
+        heureFin: "",
+        start_date: "",
+        end_date: ""
     });
 
     // -----------------------------
@@ -121,7 +123,7 @@ export default function Reservation({
     // -----------------------------
 
     const scheduleStation = schedules.find(
-        s => s.station_id == reservation.stationDepart
+        s => s.station_id == reservation.pickup_station_id
     );
 
 
@@ -130,8 +132,8 @@ export default function Reservation({
     // STATION DEPART
     // -----------------------------
 
-    const stationDepart = stations.find(
-        s => s.id == reservation.stationDepart
+    const pickup_station_id = allStations.find(
+        s => s.id == reservation.pickup_station_id
     );
 
 
@@ -142,9 +144,9 @@ export default function Reservation({
 
     const stockDisponible = () => {
 
-        if(!stationDepart) return true;
+        if(!pickup_station_id) return false;
 
-        return people.length <= stationDepart.bike_stock;
+        return people.length <= pickup_station_id.bike_stock;
 
     };
 
@@ -210,20 +212,24 @@ export default function Reservation({
     // -----------------------------
 
     const handleSubmit = () => {
-
+        /*
         if(!stockDisponible()){
 
             alert("Pas assez de vélos disponibles");
 
             return;
         }
+            */
 
         router.post("/reservation",{
-
-            reservation: reservation,
-            people: people
-
+            start_date: `${reservation.dateDebut} ${reservation.heureDebut}`,
+            end_date: `${reservation.dateFin} ${reservation.heureFin}`,
+            pickup_station_id: reservation.pickup_station_id,
+            return_station_id: reservation.return_station_id,
+            user_id: auth?.user?.id ?? null,
+            attributions: people,
         });
+
 
     };
 
@@ -252,14 +258,14 @@ export default function Reservation({
         <label>Station départ</label>
 
         <select
-        name="stationDepart"
-        value={reservation.stationDepart}
+        name="pickup_station_id"
+        value={reservation.pickup_station_id}
         onChange={handleReservationChange}
         >
 
         <option value="">Choisir</option>
 
-        {stations.map(station => (
+        {allStations.map(station => (
 
             <option key={station.id} value={station.id}>
                 {station.name}
@@ -273,7 +279,7 @@ export default function Reservation({
         <label>Station arrivée</label>
 
         <select
-        name="stationArrivee"
+        name="return_station_id"
         value={reservation.stationArrivee}
         onChange={handleReservationChange}
         >
@@ -341,7 +347,7 @@ export default function Reservation({
 
         </div>
 
-
+    
 
         {/* ------------------ */}
         {/* PEOPLE */}
@@ -460,13 +466,13 @@ export default function Reservation({
         <p>Prix total : {calculPrix()} €</p>
 
 
-        {!stockDisponible() &&
+        {/*{!stockDisponible() &&
 
         <p style={{color:"red"}}>
         Pas assez de vélos disponibles
         </p>
 
-        }
+        }*/}
 
 
         <button onClick={handleSubmit}>
