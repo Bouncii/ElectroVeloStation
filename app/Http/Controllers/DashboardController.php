@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return Inertia::render('home', [
+        return Inertia::render('dashboard/stationSelection', [
             'stations' => Station::withCount(['bikes', 'departures', 'arrivals'])->get()
         ]);
     }

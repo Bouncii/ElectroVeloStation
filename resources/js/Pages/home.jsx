@@ -1,9 +1,10 @@
 /*Ne pas enlever*/
 /* eslint-disable react/react-in-jsx-scope */
 /* <></> */
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePage, Link } from '@inertiajs/react';
-import '@css/home.css';
+import styles from "@css/home.module.css";
+import '@css/app.css';
 
 export function Background() {
   return (
@@ -24,32 +25,33 @@ export function Header(){
 
     return (
         
-        <header className="Header">
-            <nav className={isOpen ? "Nav responsive" : "Nav"} id="topnav">
+        <header className={styles.Header}>
+            <nav className={isOpen ? `${styles.Nav} ${styles.responsive}` : styles.Nav} id="topnav">
                 
-                <div id="menu">
-                    <Link href="/" id="first_link">Accueil</Link>
+                <div className={styles.menu}>
+                    <Link href="/" className={styles.first_link}>Accueil</Link>
                     {!user && (
-                            <Link href="/login" className="nav_link">Se connecter</Link>
+                            <Link href="/login" className={styles.nav_link}>Se connecter</Link>
                     )}
                     {user && (
                         <>
-                            <Link href="/logout" method="post" as="button" type="button" id="logout" className="nav_link">Se déconnecter</Link> 
+                            <Link href="/logout" method="post" as="button" type="button" className={styles.nav_link}>Se déconnecter</Link> 
                         </>
                     )}
                     
                     {(user?.role === "admin" || user?.role === "employee") && (
-                            <Link href="/panel" className="nav_link">Panel</Link>
+                            <Link href="/panel" className={styles.nav_link}>Panel</Link>
                     )}
 
-                    <Link href = '/reservation' className="nav_link">Reserver</Link>
+                    <Link href = '/reservation' className={styles.nav_link}>Reserver</Link>
+                    <Link href = '/' className={styles.btn4}>Test</Link>
                 </div>
 
-                <button className="icon" onClick={() => setIsOpen(!isOpen)}>
+                <button className={styles.icon} onClick={() => setIsOpen(!isOpen)}>
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
-                    <path d="M4 6H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M4 12H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M4 18H20" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M4 6H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M4 12H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M4 18H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
 
                     </svg>
                 </button>
@@ -63,7 +65,7 @@ export function Header(){
 
 const Station = (props) => {
     return (
-        <div className="stationCard">
+        <div className={styles.stationCard}>
             {/*<img src="./images/imgTop.png" className="StationImage"></img>*/}
             <h2>{props.name}</h2>
             <p>{props.desc}</p>
@@ -71,7 +73,7 @@ const Station = (props) => {
             <button onClick={() => alert('Vélo réservé !')}>
             Résever
             </button>*/}
-            <Link href={'/reservation'} className="stationcard_reserver">Réserver
+            <Link href={'/reservation'} className={styles.stationcard_reserver}>Réserver
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                     <path strokeDasharray="20" d="M3 12h17.5">
@@ -90,7 +92,7 @@ const Station = (props) => {
 
 const TextOval = (props) => {
     return (
-        <div className="OvalLayout">
+        <div className={styles.OvalLayout}>
             <p>{props.text}</p>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 	            <path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8" />
@@ -102,8 +104,8 @@ const TextOval = (props) => {
 
 const LinkOval = (props) => {
     return (
-        <div className="LinkOval">
-            <Link href={props.link} target="_blank" className="LinkOval">{props.text}
+        <div className={styles.LinkOval}>
+            <Link href={props.link} target="_blank" className={styles.LinkOval}>{props.text}
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                     <path strokeDasharray="20" d="M3 12h17.5">
@@ -121,7 +123,7 @@ const LinkOval = (props) => {
 }
 const CardTuto = (props) => {
     return (
-        <div className="tuto">
+        <div className={styles.tuto}>
         <h1>{props.num}</h1>    
         <h3>{props.desc}</h3>
         <p>{props.text}</p>
@@ -131,19 +133,28 @@ const CardTuto = (props) => {
 
 
 export default function Home(){
-
+    useEffect(() => {
+                    document.body.setAttribute('data-theme','landing');
+                    document.body.classList.add('theme-landing', 'landing');
+                    return () => {
+                        document.body.removeAttribute('data-theme');
+                        document.body.classList.remove('theme-landing');
+                    };
+                },
+            );
     return (
-        <>
         
-        <div className="homePage">
+        
+        <>
+        <div className={styles.homePage}>
             
             <Header />
-            <h1 id="hide">.</h1>
-            <img src="./images/imgTop.png" id="imgTop"></img>
-            <p id="TextTop">ELECTRO VELO STATION</p>
-            <h2 id="slogan">Un slogan vraiment cool.|</h2>
+            <h1 className={styles.hide}>.</h1>
+            <img src="./images/imgTop.png" className={styles.imgTop}></img>
+            <p className={styles.TextTop}>ELECTRO VELO STATION</p>
+            <h2 className={styles.slogan}>Un slogan vraiment cool.|</h2>
 
-            <div id="Ovals">
+            <div className={styles.Ovals}>
                 <TextOval 
                     text="Simplicité"
                 />
@@ -155,13 +166,13 @@ export default function Home(){
                 />
             </div>
             
-                <LinkOval id="reserver"
+                <LinkOval className={styles.reserver}
                     link='/reservation'
                     text="Réservez votre vélo"    
                 />
             
 
-            <div id="stations">
+            <div className={styles.stations}>
                 <Station
                     name="Amusment Park"
                     desc="Voici uee description super pertinante."
@@ -179,10 +190,10 @@ export default function Home(){
                     desc="Voici uee description super pertinante."
                 />
             </div>
-            <h2 className="titreGros">Réservez votre premier vélo.</h2>
-            <p id="subText">Vous allez voir, c'est facile !</p>
+            <h2 className={styles.titreGros}>Réservez votre premier vélo.</h2>
+            <p className={styles.subText}>Vous allez voir, c'est facile !</p>
 
-            <div id="tutoCards">            
+            <div className={styles.tutoCards}>            
                 <CardTuto
                 num="1"
                 desc="Choisir votre station"
@@ -199,12 +210,12 @@ export default function Home(){
                 text="vitaes"
                 />
             </div>
-                <h2 className="titreGros" id="last_text">Simplifiez-vous la vie, créez un compte !</h2>
+                <h2 className={`${styles.titreGros} ${styles.last_text}`}>Simplifiez-vous la vie, créez un compte !</h2>
                 <LinkOval
                     link='/register'
                     text="Créer un compte"    
                 />
-                <Background />
+                
         </div>
             
         </>
