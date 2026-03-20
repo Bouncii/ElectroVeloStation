@@ -1,20 +1,19 @@
-.connexionPage {
-    text-align: center;
+.inscriptionPage {text-align: center;
     color:#262626;
     display: flex;
     flex-direction: column;
+    align-content: center;
     background-image: url('../../public/images/bikeBackground.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     min-height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+    max-height: 100vh;
 }
 
-
-.connexionPage .flou {
+.inscriptionPage .flou {
     background-color: rgba(255, 255, 255, 0.001);
     height: 100vh;
     width: 100%;
@@ -22,41 +21,26 @@
 
 }
 
-.connexionPage .blocConnexion {
-    background-color: white;
+.inscriptionPage .blocCreerCompte {
+    flex-direction: column;
     margin: 100px auto;
     padding: 20px;
     width: 30%;
-    border-radius: 30px;
-    text-align: center;
-    align-content: center;
+    background-color: white;
+    border-radius: 10px;
 }
 
-.connexionPage .blocConnexion label {
+.inscriptionPage .blocCreerCompte label {
     display: block;
     margin: 10px;
     font-weight: bold;
 }
 
-.connexionPage .blocConnexion input {
+.inscriptionPage .blocCreerCompte input {
     width: 80%;
     padding: 8px;
     margin: 10px 0 20px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
-
-.connexionPage .blocConnexion button {
-    margin-top: 20px;
-    background-color: rgb(10, 35, 96);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.connexionPage .blocConnexion button:hover {
-    background-color: #003dcb;
 }

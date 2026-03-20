@@ -1,8 +1,11 @@
 .reservationPage {
+    background-color: var(--secondary);
     text-align: center;
     color:#262626;
     scroll-behavior: smooth;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 
 .infoReservation {
     display: flex;

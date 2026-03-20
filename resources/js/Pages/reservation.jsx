@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
-import '@css/reservation.module.css';
 import { Header } from "../Pages/home.jsx";
 import styles from '@css/reservation.module.css';
 import '@css/app.css';
