@@ -1,17 +1,14 @@
-
-body{
-    background-color:#D9D9D9 ;
-}
-
 .dash {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
 }
-#liste_reservations {
+
+.liste_reservations {
     display: flex;
 }
+
 .reservation_card{
     flex-shrink: 0;
 
@@ -32,7 +29,7 @@ body{
     border-radius: 8px;
     box-sizing: border-box;
 }
-/*7B809A*/
+
 .reservation_card div {
   border: 1px solid #D9D9D9;
   border-radius: 16px;
@@ -40,7 +37,7 @@ body{
   text-align: center;
 }
 
-#containerResa {
+.containerResa {
     flex: 0 0 50vw;
     background-color: #D9D9D9;
     border-radius: 8px;
@@ -50,11 +47,11 @@ body{
     padding: 10px;
 }
 
-#containerResa::-webkit-scrollbar {
+.containerResa::-webkit-scrollbar {
     height: 8px;
 }
 
-#containerResa::-webkit-scrollbar-thumb {
+.containerResa::-webkit-scrollbar-thumb {
     background: #7B809A;
     border-radius: 10px;
 }
@@ -130,7 +127,7 @@ div.status {
     align-self: end;
 }
 
-#waitList{
+.waitList{
     background-color: white;
     width: 100%;
     margin-top: 20px;
@@ -138,7 +135,7 @@ div.status {
     border-radius: 16px;
 }
 
-#waitGrid {
+.waitGrid {
     display: grid;
     grid-template-columns: 120px 2fr 1.5fr 100px;
     border: 1px solid #D9D9D9;;
@@ -147,12 +144,12 @@ div.status {
     background-color: white;
 }
 
-#waitGrid h3, #btnTri, .wait_entry {
+.waitGrid h3, #btnTri, .wait_entry {
     padding: 15px;
     align-items: center;
 } 
 
-#waitGrid h3 {
+.waitGrid h3 {
     background-color: #f8f9fa;
     border-bottom: 2px solid #D9D9D9;
     color: #7B809A;
@@ -185,18 +182,22 @@ div.status {
     cursor: pointer;
 }
 
-#btnTri {
+.btn_details:hover{
+    background-color: var(--faintText);
+}
+
+.btnTri {
     cursor: pointer;
     height: fit-content;
     margin: auto;
 }
 
-#waitGrid div {
+.waitGrid div {
     padding: 5px 0px;
     border-bottom: 1px solid #f0f0f0;
 }
 
-#btnTri:hover{
+.btnTri:hover{
     color: #979bff;
     border-bottom-color: #979bff;
 }
@@ -215,7 +216,6 @@ div.status {
     z-index: 1000;
 }
 
-/* Animation de ma modale (et ouais) */
 @keyframes modalFade {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -274,23 +274,22 @@ div.status {
     text-decoration: none;
 }
 
-#redirecBoxes {
+.redirecBoxes {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
 
-#back {
+.back {
     background-color: white;
     display: flex;
     text-decoration: none;
     width: fit-content;
     padding: 10px;
     border-radius: 8px;
+    margin-bottom: auto;
 }
-
-
 
 .wait_liste_velos {
     list-style: none;
@@ -310,6 +309,6 @@ div.status {
     border: 1px solid #e0e0e0;
 }
 
-#titre_modale {
+.titre_modale {
     margin-left: auto;
 }

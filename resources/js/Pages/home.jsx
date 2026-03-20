@@ -39,7 +39,7 @@ export function Header(){
                     )}
                     
                     {(user?.role === "admin" || user?.role === "employee") && (
-                            <Link href="/dashboard" className="nav_link">Dashboard</Link>
+                            <Link href="/panel" className="nav_link">Panel</Link>
                     )}
 
                     <Link href = '/reservation' className="nav_link">Reserver</Link>

@@ -42,9 +42,10 @@ function FormulaireConnexion() {
                         onChange={e => setData('password', e.target.value)} 
                     />
                     {errors.password && <div className="messageErr">{errors.password}</div>}
+                    <div>
                     <button type="submit" id='btn' disabled={processing}>
                         {texteBouton}
-                    </button>
+                    </button></div>
                 </form>
                 <p>Vous n'avez pas de compte ? <Link href="/register">Créez-en un</Link></p>
             </div>

@@ -1,0 +1,18 @@
+.usersCardDetails {
+    background-color: white;
+    padding: 8px;
+    width: fit-content;
+    margin: 20px;
+    border-radius: 8px;
+    min-width: 200px;
+}
+
+.users_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.personLink{
+cursor:pointer;
+display:block;
+}
