@@ -1,10 +1,10 @@
 .reservationPage {
-    background-color: #5AA9E6;
     text-align: center;
     color:#262626;
+    scroll-behavior: smooth;
 }
 
-.reservationPage .infoReservation {
+.infoReservation {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -12,10 +12,9 @@
     margin: 20px;
 }
 
-.reservationPage .infoReservation .champ {
+.infoReservation .champ {
     margin: 20px;
     padding: 20px;
-    border: 2px solid #262626;
     border-radius: 10px;
     background-color: white;
     width: 400px;
@@ -35,6 +34,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: white;
 }
 
 .reservationPage .infoReservation .champ button {
@@ -63,6 +63,19 @@
     background-color: #134fdb;
 }
 
+.reservationPage .bAjout {
+    display: block;
+    position: sticky;
+    bottom: 80px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+}
+.reservationPage .bAjout:hover {
+    background-color: #134fdb;
+}
+
 .reservationPage footer {
     display: flex;
     flex-direction: row;
@@ -72,7 +85,7 @@
     bottom: 0;
     width: 100%;
     padding-top: 10px;
-    background-color: #0031A4;
+    background-color: var(--primary);
     color: white;
 }
 
@@ -83,7 +96,7 @@
 
 .reservationPage footer button {
     padding: 10px 20px;
-    background-color: #FFE45E;
+    background-color: var(--tertiary);
     color: rgb(10, 35, 96);
     border: none;
     border-radius: 5px;

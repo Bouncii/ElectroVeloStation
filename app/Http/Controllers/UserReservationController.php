@@ -50,11 +50,15 @@ class UserReservationController extends Controller
             'attributions.*.prenom' => 'required|string|max:255',
             'attributions.*.age' => 'required|integer|min:1|max:120',
             'attributions.*.taille' => 'required|integer|min:100|max:250',
+            //'attributions.*.email' => 'required|email|max:255',
         ]);
         try {
             DB::transaction(function () use ($validated) {
-
+                if (Auth::user() === null) {
+                    $userId = null; //à changer quand on trouve une solution pour les utilisateurs non connectés
+                }else {
                 $userId = Auth::id();
+                }
                 $reservation = Reservation::create([
                     'user_id' => $userId,
                     'pickup_station_id' => $validated['pickup_station_id'],

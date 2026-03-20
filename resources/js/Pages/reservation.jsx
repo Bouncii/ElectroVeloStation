@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
-import '@css/reservation.css';
+import '@css/reservation.module.css';
 import { Header } from "../Pages/home.jsx";
+import styles from '@css/reservation.module.css';
+import '@css/app.css';
 
 export default function Reservation({ 
     schedules = [], // Horaires des stations récupérés depuis le backend
@@ -23,7 +25,8 @@ export default function Reservation({
         heureDebut: "",
         heureFin: "",
         start_date: "",
-        end_date: ""
+        end_date: "",
+        //email: ""
     });
 
     // -----------------------------
@@ -228,21 +231,21 @@ export default function Reservation({
     return (
 
         <>
-        <div className="reservationPage">
+        <div className={styles.reservationPage}>
         <header>
             <Header/>
         </header>
 
 
-        <div className="messages-container" style={{ margin: "20px auto", maxWidth: "800px", textAlign: "center" }}>
+        <div className={styles.messagesContainer} style={{ margin: "20px auto", maxWidth: "800px", textAlign: "center" }}>
             
             {flash?.success && (
-                <div className="success">
+                <div className={styles.success}>
                     {flash.success}
                 </div>
             )}
             {errors?.error && (
-                <div className="failure">
+                <div className={styles.failure}>
                     {errors.error}
                 </div>
             )}
@@ -250,14 +253,14 @@ export default function Reservation({
 
         <h1>Réserver un vélo</h1>
 
-        <div className="infoReservation">
+        <div className={styles.infoReservation}>
 
 
         {/* ------------------ */}
         {/* FORM RESERVATION */}
         {/* ------------------ */}
 
-        <div className="champ">
+        <div className={styles.champ}>
 
         <h3>Choix de la réservation</h3>
 
@@ -323,6 +326,7 @@ export default function Reservation({
         min={scheduleStation?.open_time}
         max={scheduleStation?.close_time}
         value={reservation.heureDebut}
+        step={"1800"}
         onChange={handleReservationChange}
         />
 
@@ -348,6 +352,7 @@ export default function Reservation({
         min={scheduleStation?.open_time}
         max={scheduleStation?.close_time}
         value={reservation.heureFin}
+        step={"1800"}
         onChange={handleReservationChange}
         />
 
@@ -361,7 +366,7 @@ export default function Reservation({
 
         {people.map((person,index)=>(
 
-        <div key={index} className="champ">
+        <div key={index} className={styles.champ}>
 
         <h3>Cycliste {index+1}</h3>
 
@@ -428,6 +433,15 @@ export default function Reservation({
         </button>
 
         )}
+        {index === 0 && (<>
+            <label>Adresse mail</label>
+            <input
+            type="email"
+            name="email"
+           // onChange={(e) => handleReservationChange(e)}
+            />
+        </>
+        )}
 
         </div>
 
@@ -435,7 +449,7 @@ export default function Reservation({
 
 
 </div>
-        <button id="bAjout"onClick={addPerson}>
+        <button className={styles.bAjout} onClick={addPerson}>
         ➕ Ajouter un cycliste
         </button>
         
@@ -446,7 +460,7 @@ export default function Reservation({
         {/* FOOTER */}
         {/* ------------------ */}
 
-        <footer className="champ">
+        <footer className={styles.champ}>
 
         <p>Nombre de vélos : {people.length}</p>
 
