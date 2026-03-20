@@ -118,6 +118,16 @@ export default function Reservation({
                 taille: person.required_bike_size
             };
             setPeople(newPeople);
+        } else if (id == 0) {
+            const newPeople = [...people];
+
+            newPeople[index] = {
+                nom: "",
+                prenom: "",
+                age: "",
+                taille: ""
+            }
+            setPeople(newPeople);
         }
     };
 
