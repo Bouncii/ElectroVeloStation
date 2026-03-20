@@ -211,7 +211,7 @@ const ReservationCard = ({ reservation }) => {
 
                 <>
 
-                    <Link href="/panel/dashboard">Réservation #{reservation.id}</Link>
+                    <p>Réservation #{reservation.id}</p>
 
                     <p>User : {reservation.user?.first_name} {reservation.user?.last_name}</p>
 

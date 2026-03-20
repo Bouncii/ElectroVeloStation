@@ -198,6 +198,10 @@ export default function Panel() {
                     link = 'panel/reservations/'
                     name = "Gestion des réservations"
                     />
+                    <RedirectBox 
+                    link = 'panel/dashboard/'
+                    name = "Dashbaord"
+                    />
                 </div>
                  
             <div className={styles.waitList}>
