@@ -43,7 +43,7 @@ function StationCard({ station }) {
                     </div>
                 </div>
             </div>
-            <Link className='cardBottom' href={`/dashboard/stations/${station.id}`}>Accéder</Link>
+            <Link className='cardBottom' href={`/panel/dashboard/${station.id}`}>Accéder</Link>
         </div>
     )
 }

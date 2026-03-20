@@ -8,11 +8,9 @@
 .blocConnexion {
     margin: 100px auto;
     padding: 20px;
-    border: 2px solid #262626;
-    border-radius: 10px;
-    background-color: white;
-    width: 300px;
-    text-align: left;
+    width: 100%;
+    text-align: center;
+    align-content: center;
 }
 
 .blocConnexion label {
@@ -22,10 +20,24 @@
 }
 
 .blocConnexion input {
-    width: 100%;
+    width: 80%;
     padding: 8px;
     margin: 10px 0 20px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+button {
+    margin-top: 20px;
+    background-color: rgb(10, 35, 96);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #003dcb;
 }

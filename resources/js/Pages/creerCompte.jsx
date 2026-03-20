@@ -58,9 +58,11 @@ function FormulaireCreerCompte(){
                     />
                     {errors.password && <div className="messageErr">{errors.password}</div>}
                     {/* Le bouton utilise notre variable texteBouton calculée avec le "if" */}
+                    <div>
                     <button type="submit" disabled={processing}>
                         {texteBouton}
                     </button>
+                    </div>
                 </form>
 
                 <p>Déjà un compte ? <Link href="/login">Connectez-vous</Link></p>
