@@ -24,7 +24,7 @@ export default function Reservation({
         heureFin: "",
         start_date: "",
         end_date: "",
-        email: ""
+        email: auth?.user?.email || ""
     });
 
     // -----------------------------
@@ -319,18 +319,16 @@ export default function Reservation({
         onChange={handleReservationChange}
         />
 
-        {!auth?.user && (
-            <>
-                <label>Adresse mail du responsable</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={reservation.email}
-                    onChange={handleReservationChange}
-                />
-                {errors?.email && <div style={{color: 'red', fontSize: '12px'}}>{errors.email}</div>}
-            </>
-        )}
+
+        <label>Adresse mail du responsable</label>
+        <input
+            type="email"
+            name="email"
+            value={reservation.email}
+            onChange={handleReservationChange}
+        />
+        {errors?.email && <div style={{color: 'red', fontSize: '12px'}}>{errors.email}</div>}
+
 
         </div>
 
