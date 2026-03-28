@@ -21,6 +21,11 @@ class Bike extends Model
         return $this->belongsTo(Station::class);
     }
 
+    public function propositions()
+    {
+        return $this->belongsToMany(Proposition::class);
+    }
+
     // renvoi les vélos dispos pendant une période et à une station donnée.
     public function scopeAvailableAtStationOn(Builder $query, $stationId, $startDate, $endDate, $ignoreId = null)
     {

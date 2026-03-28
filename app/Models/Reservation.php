@@ -23,6 +23,10 @@ class Reservation extends Model
         return $this->hasMany(Attribution::class);
     }
 
+    public function propositions(){
+        return $this->hasMany(Proposition::class);
+    }
+
     public function scopePending($query){
         return $query->where('status', 'pending');
     }
