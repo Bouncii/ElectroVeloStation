@@ -1,6 +1,7 @@
 import { useForm, Link } from '@inertiajs/react';
-import '@css/connexion.css';
+import styles from '@css/connexion.module.css';
 import { Header } from "./home.jsx";
+import '@css/app.css';
 
 function FormulaireConnexion() {
     const { data, setData, post, processing, errors } = useForm({
@@ -23,25 +24,27 @@ function FormulaireConnexion() {
 
     return <>
             <Header />
-            <div className="blocConnexion">
+            <div className={styles.blocConnexion}>
                 <h3>Connexion</h3>
                 <form onSubmit={submit}>
-                    <label>Email :</label>
+                    
                     <input 
                         type="email" 
                         name="email" 
+                        placeholder='email'
                         value={data.email} 
                         onChange={e => setData('email', e.target.value)} 
                     />
-                    {errors.email && <div className="messageErr">{errors.email}</div>}
-                    <label>Mot de passe :</label>
+                    {errors.email && <div className={styles.messageErr}>{errors.email}</div>}
+                    
                     <input 
                         type="password" 
                         name="password" 
+                        placeholder='Mot de passe '
                         value={data.password} 
                         onChange={e => setData('password', e.target.value)} 
                     />
-                    {errors.password && <div className="messageErr">{errors.password}</div>}
+                    {errors.password && <div className={styles.messageErr}>{errors.password}</div>}
                     <div>
                     <button type="submit" id='btn' disabled={processing}>
                         {texteBouton}
@@ -54,5 +57,5 @@ function FormulaireConnexion() {
 
 
 export default function Connexion() {
-    return <FormulaireConnexion />;
+    return <><div className={styles.connexionPage}><div className={styles.flou}><FormulaireConnexion /></div></div></>;
 }
