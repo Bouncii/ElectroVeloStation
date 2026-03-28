@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bikes', function (Blueprint $table) {
             $table->id();
             $table->integer('size');
-            $table->enum('state', ['available', 'in_use', 'transport_pending', 'return_pending', 'maintenance'])->default('available');
+            $table->enum('state', ['available', 'maintenance'])->default('available');
             $table->foreignId('station_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
