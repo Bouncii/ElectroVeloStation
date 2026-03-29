@@ -214,7 +214,9 @@ export default function Reservation({
         });
     };
 
-
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const minDate = tomorrow.toISOString().split('T')[0];
 
     return (
 
@@ -281,6 +283,7 @@ export default function Reservation({
         <input
         type="date"
         name="dateDebut"
+        min={minDate}
         value={reservation.dateDebut}
         onChange={handleReservationChange}
         />
@@ -306,7 +309,7 @@ export default function Reservation({
         <input
         type="date"
         name="dateFin"
-        min={reservation.dateDebut}
+        min={reservation.dateDebut || minDate}
         value={reservation.dateFin}
         onChange={handleReservationChange}
         />
