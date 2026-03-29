@@ -5,8 +5,8 @@ const AddReservationForm = ({ onCancel }) => {
 
     const { data, setData, post, processing, errors } = useForm({
         user_id: '',
-        pickup_station_id: '',
-        return_station_id: '',
+        station_id: '',
+        email : '',
         start_date: '',
         end_date: '',
         attributions: [],
@@ -20,15 +20,19 @@ const AddReservationForm = ({ onCancel }) => {
         });
     };
 
-    const handleIdsChange = (e) => {
-    const input = e.target.value;
-    const ids = input.split(',')
-        .map(id => id.trim())
-        .filter(id => id !== "") // On enlève les entrées vides
-        .map(id => ({ person_id: parseInt(id) }));
+    const [idsString, setIdsString] = useState('');
 
-    setData('attributions', ids);
-};
+    const handleIdsChange = (e) => {
+        const input = e.target.value;
+        setIdsString(input);
+
+        const ids = input.split(',')
+                .map(id => id.trim())
+                .filter(id => id !== "" && !isNaN(id))
+                .map(id => ({ person_id: parseInt(id) }));
+
+            setData('attributions', ids);
+    };
 
     return (
 
@@ -45,29 +49,33 @@ const AddReservationForm = ({ onCancel }) => {
             />
 
             <input
-                type="number"
-                placeholder="Station départ ID"
-                value={data.pickup_station_id}
-                onChange={(e) => setData('pickup_station_id', e.target.value)}
+                type="email"
+                placeholder="Adresse Email"
+                value={data.email}
+                onChange={(e) => setData('email', e.target.value)}
+                required
             />
 
             <input
                 type="number"
-                placeholder="Station retour ID"
-                value={data.return_station_id}
-                onChange={(e) => setData('return_station_id', e.target.value)}
+                placeholder="Station ID"
+                value={data.station_id}
+                onChange={(e) => setData('station_id', e.target.value)}
+                required
             />
 
             <input 
                 type="datetime-local" 
                 value={data.start_date} 
                 onChange={e => setData('start_date', e.target.value)} 
+                required
             />
 
             <input 
                 type="datetime-local" 
                 value={data.end_date} 
-                onChange={e => setData('end_date', e.target.value)} 
+                onChange={e => setData('end_date', e.target.value)}
+                required
             />
             
             <div>
@@ -75,6 +83,7 @@ const AddReservationForm = ({ onCancel }) => {
                 <input 
                     type="text" 
                     placeholder="Id personne"
+                    value={idsString}
                     onChange={handleIdsChange}
                 />
                 <p>
@@ -102,19 +111,25 @@ const ReservationCard = ({ reservation }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const { data, setData, put, processing, errors } = useForm({
-        user_id: reservation.user_id,
-        pickup_station_id: reservation.pickup_station_id,
-        return_station_id: reservation.return_station_id,
+        user_id: reservation.user_id || '',
+        station_id: reservation.station_id || '',
+        email: reservation.email || '',
         start_date: reservation.start_date || '',
         end_date: reservation.end_date || '',
         attributions: reservation.attributions?.map(attr => ({ person_id: attr.person_id })) || [],
     });
 
+    const [idsString, setIdsString] = useState(
+        reservation.attributions?.map(attr => attr.person_id).join(', ') || ''
+    );
+
     const handleIdsChange = (e) => {
         const input = e.target.value;
+        setIdsString(input);
+
         const ids = input.split(',')
             .map(id => id.trim())
-            .filter(id => id !== "")
+            .filter(id => id !== "" && !isNaN(id))
             .map(id => ({ person_id: parseInt(id) }));
 
         setData('attributions', ids);
@@ -146,41 +161,50 @@ const ReservationCard = ({ reservation }) => {
 
                 <form onSubmit={handleSave}>
 
+                    <label>User ID</label>
                     <input
                         type="number"
                         value={data.user_id}
                         onChange={(e) => setData('user_id', e.target.value)}
                     />
 
+                    <label>Email</label>
                     <input
-                        type="number"
-                        value={data.pickup_station_id}
-                        onChange={(e) => setData('pickup_station_id', e.target.value)}
+                        type="email"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        required
                     />
 
+                    <label>Station ID</label>
                     <input
                         type="number"
-                        value={data.return_station_id}
-                        onChange={(e) => setData('return_station_id', e.target.value)}
+                        value={data.station_id}
+                        onChange={(e) => setData('station_id', e.target.value)}
+                        required
                     />
 
+                    <label>Début</label>
                     <input 
                         type="datetime-local" 
                         value={data.start_date} 
                         onChange={e => setData('start_date', e.target.value)} 
+                        required
                     />
 
+                    <label>Fin</label>
                     <input 
                         type="datetime-local" 
                         value={data.end_date} 
                         onChange={e => setData('end_date', e.target.value)} 
+                        required
                     />
                     
                     <div>
                         <label>IDs des personnes (séparés par des virgules) :</label>
                         <input 
                             type="text" 
-                            value={data.attributions.map(a => a.person_id).join(', ')}
+                            value={idsString}
                             onChange={handleIdsChange}
                         />
                         <p>
@@ -216,12 +240,11 @@ const ReservationCard = ({ reservation }) => {
                     <p>User : {reservation.user?.first_name} {reservation.user?.last_name}</p>
 
                     <p>
-                        Station départ : {reservation.pickup_station?.name}
+                        Station : {reservation.station?.name}
                     </p>
 
-                    <p>
-                        Station retour : {reservation.return_station?.name}
-                    </p>
+                    <p>Du : {new Date(reservation.start_date).toLocaleString()}</p>
+                    <p>Au : {new Date(reservation.end_date).toLocaleString()}</p>
 
                     <div>
                         <strong>Personnes :</strong>
