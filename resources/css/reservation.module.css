@@ -11,26 +11,53 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    margin: 20px;
+    margin: 0 auto;
 }
 
-.infoReservation .champ {
+.infoReservation div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoReservation .infosResaGlobal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.infoReservation .reservationContainer {
+    display: flex;
+    width: 80vw;
+    padding: 30px;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: white;
+    width: 80vw;
+    text-align: left;
+    align-items: stretch;
+} 
+.userInfoContainer {
+    display: flex;
+    flex-direction: column;
     margin: 20px;
     padding: 20px;
     border-radius: 10px;
     background-color: white;
     width: 400px;
-    display: inline-block;
     text-align: left;
 }
 
-.reservationPage .infoReservation .champ label {
+.reservationPage .infoReservation .reservationContainer label , .reservationPage .userInfoContainer label {
     display: block;
+    margin-top: 10px;
     margin-bottom: 10px;
     font-weight: bold;
 }
-.reservationPage .infoReservation .champ input, .reservationPage .infoReservation .champ select {
+.reservationPage .infoReservation .reservationContainer input, .reservationPage .infoReservation .reservationContainer select , .reservationPage .userInfoContainer input, .reservationPage .userInfoContainer select {
+    flex:1;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
@@ -40,7 +67,7 @@
     background-color: white;
 }
 
-.reservationPage .infoReservation .champ button {
+.reservationPage .infoReservation .reservationContainer button , .reservationPage .userInfoContainer button{
     margin: 10px;
     padding: 10px 20px;
     background-color: #0031A4;
@@ -49,11 +76,11 @@
     border-radius: 5px;
 }
 
-.reservationPage .infoReservation .champ button:hover {
+.reservationPage .infoReservation .reservationContainer button:hover , .reservationPage .userInfoContainer button:hover{
     background-color: #134fdb;
 }
 
-.reservationPage .infoReservation .champ #bAjout {
+.reservationPage .infoReservation .reservationContainer .bAjout {
     display: block;
     position: sticky;
     bottom: 80px;
@@ -61,9 +88,6 @@
     padding: 10px 20px;
     background-color: #0031A4;
     color: white;
-}
-.reservationPage .infoReservation .champ #bAjout:hover {
-    background-color: #134fdb;
 }
 
 .reservationPage .bAjout {

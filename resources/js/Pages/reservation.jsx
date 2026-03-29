@@ -42,7 +42,11 @@ export default function Reservation({
     // -----------------------------
 
     const handleReservationChange = (e) => {
-
+        if(e.target.name === "heureDebut" || e.target.name === "heureFin" ){
+            if(e.target.value < e.target.min || e.target.value > e.target.max){
+                e.target.value = "";
+            }
+        }
         setReservation({
             ...reservation,
             [e.target.name]: e.target.value
@@ -244,10 +248,12 @@ export default function Reservation({
         {/* FORM RESERVATION */}
         {/* ------------------ */}
 
-        <div className={styles.champ}>
+        <div className={styles.reservationContainer}>
+            
 
         <h3>Choix de la réservation</h3>
-
+        <div className={styles.infosResaGlobal}>
+        <div className={styles.infosResa1}>
         <label>Station</label>
 
         <select
@@ -292,8 +298,8 @@ export default function Reservation({
         step={"1800"}
         onChange={handleReservationChange}
         />
-
-
+        </div>
+        <div className={styles.infosResa2}>
 
         <label>Date fin</label>
 
@@ -329,9 +335,9 @@ export default function Reservation({
         />
         {errors?.email && <div style={{color: 'red', fontSize: '12px'}}>{errors.email}</div>}
 
-
         </div>
-
+        </div>
+        </div>
     
 
         {/* ------------------ */}
@@ -340,7 +346,7 @@ export default function Reservation({
 
         {people.map((person,index)=>(
 
-        <div key={index} className={styles.champ}>
+        <div key={index} className={styles.userInfoContainer}>
 
         <h3>Cycliste {index+1}</h3>
 
