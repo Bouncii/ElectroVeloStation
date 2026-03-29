@@ -238,7 +238,7 @@ const ReservationCard = ({ reservation }) => {
                     <h3>Réservation #{reservation.id}</h3>
 
                     <p>User : {reservation.user?.first_name} {reservation.user?.last_name}</p>
-
+                    <p>Email : {reservation.email}</p>
                     <p>
                         Station : {reservation.station?.name}
                     </p>
