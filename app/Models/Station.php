@@ -18,7 +18,7 @@ class Station extends Model
         return $this->hasMany(Bike::class);
     }
 
-    public function schedules() {
+    public function schedules() { 
         return $this->hasMany(Schedule::class);
     }
 
@@ -27,6 +27,15 @@ class Station extends Model
         return $this->hasMany(Reservation::class, 'station_id');
     }
 
+    public function departures() {
+        return $this->hasMany(Reservation::class, 'station_id')
+                    ->whereDate('start_date', now()->toDateString());
+    }
+
+    public function arrivals() {
+        return $this->hasMany(Reservation::class, 'station_id')
+                    ->whereDate('end_date', now()->toDateString());
+    }
 
      //Fonction qui renvoie le nombre de départs entre deux dates
     public function countDeparturesBetween($startDate, $endDate) {
