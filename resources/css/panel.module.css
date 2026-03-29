@@ -137,7 +137,7 @@ div.status {
 
 .waitGrid {
     display: grid;
-    grid-template-columns: 120px 2fr 1.5fr 100px;
+    grid-template-columns: 200px 2fr 1.5fr 100px;
     border: 1px solid #D9D9D9;;
     padding: 20px;
     border-radius: 8px;

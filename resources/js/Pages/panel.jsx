@@ -30,7 +30,7 @@ function AfficherWaitList({pendingReservations}){
                         </div>
 
                         <div className={styles.div3}>
-                            <p>{res.pickup_station.name}</p>
+                            <p>{res.station.name}</p>
                         </div>
 
                         <div className={styles.div4}>
@@ -60,8 +60,7 @@ const WaitDetail = ({isOpen, onClose, data}) => {
                 {/*<p><strong>Age :</strong> {data.user?.age}</p>
                 <p><strong>Taille :</strong> {data.user?.height}</p>*/}
                 <p><strong>Email :</strong> {data.user?.email}</p>
-                <p><strong>Départ :</strong> {data.pickup_station.name}</p>
-                <p><strong>Arrivée :</strong>   {data.return_station.name}</p>
+                <p><strong>Station :</strong> {data.station.name}</p>
                 <p><strong>Date :</strong> {data.created_at}</p>
                 <p><strong>Commande :</strong></p>
                 <div className={styles.WaitListCommande}>                        
@@ -115,11 +114,10 @@ function AfficherReservations({ allReservations }){
                 {allReservations.map(res => (
                     <div key={res.id} className={styles.reservation_card}>
                         <div className={styles.stations}>
-                        <p> {res.pickup_station?.name || res.pickup_station_name}</p>
+                        <p> {res.station?.name || res.station_name}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path fill="#000" d="m7.089 18.5l4.653-6.5L7.09 5.5h1.219l4.654 6.5l-4.654 6.5zm5.796 0l4.654-6.5l-4.655-6.5h1.22l4.654 6.5l-4.654 6.5z" />
                         </svg>
-                        <p> {res.return_station?.name || res.return_station_name}</p>
                         </div>
 
                         <div className={styles.hours}>
@@ -209,7 +207,7 @@ export default function Panel() {
                 <div className={styles.waitGrid}>
                     <h3>Réservation</h3>
                     <h3>Client</h3>
-                    <h3>Station départ</h3>
+                    <h3>Station </h3>
                     <button className={styles.btnTri} onClick={trierListeAttente}>  </button> {/* Boutton de tri qu'on remettra après*/ }
 
                     <AfficherWaitList pendingReservations={pendingReservations}/>
