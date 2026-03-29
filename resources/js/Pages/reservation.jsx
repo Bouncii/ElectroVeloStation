@@ -10,22 +10,21 @@ export default function Reservation({
     allStations = [] // Liste de toutes les stations récupérée depuis le backend
  }) {
 
-    const { errors, flash } = usePage().props;
+    const { errors, flash, auth } = usePage().props;
 
     // -----------------------------
     // STATE RESERVATION
     // -----------------------------
 
     const [reservation, setReservation] = useState({
-        pickup_station_id: "",
-        return_station_id: "",
+        station_id: "",
         dateDebut: "",
         dateFin: "",
         heureDebut: "",
         heureFin: "",
         start_date: "",
         end_date: "",
-        //email: ""
+        email: auth?.user?.email || ""
     });
 
     // -----------------------------
@@ -137,32 +136,8 @@ export default function Reservation({
     // -----------------------------
 
     const scheduleStation = schedules.find(
-        s => s.station_id == reservation.pickup_station_id
+        s => s.station_id == reservation.station_id
     );
-
-
-
-    // -----------------------------
-    // STATION DEPART
-    // -----------------------------
-
-    // const pickup_station_id = allStations.find(
-    //     s => s.id == reservation.pickup_station_id
-    // );
-
-
-
-    // -----------------------------
-    // VERIFICATION STOCK
-    // -----------------------------
-
-    // const stockDisponible = () => {
-
-    //     if(!pickup_station_id) return false;
-
-    //     return people.length <= pickup_station_id.bike_stock;
-
-    // };
 
 
 
@@ -227,10 +202,10 @@ export default function Reservation({
 
     const handleSubmit = () => {
         router.post("/reservation", {
-            pickup_station_id: reservation.pickup_station_id,
-            return_station_id: reservation.return_station_id,
+            station_id: reservation.station_id,
             start_date: `${reservation.dateDebut} ${reservation.heureDebut}:00`,
             end_date: `${reservation.dateFin} ${reservation.heureFin}:00`,
+            email: reservation.email,
             attributions: people,
         });
     };
@@ -273,32 +248,11 @@ export default function Reservation({
 
         <h3>Choix de la réservation</h3>
 
-        <label>Station départ</label>
+        <label>Station</label>
 
         <select
-        name="pickup_station_id"
-        value={reservation.pickup_station_id}
-        onChange={handleReservationChange}
-        >
-
-        <option value="">Choisir</option>
-
-        {allStations.map(station => (
-
-            <option key={station.id} value={station.id}>
-                {station.name}
-            </option>
-
-        ))}
-
-        </select>
-
-
-        <label>Station arrivée</label>
-
-        <select
-        name="return_station_id"
-        value={reservation.return_station_id}
+        name="station_id"
+        value={reservation.station_id}
         onChange={handleReservationChange}
         >
 
@@ -365,6 +319,17 @@ export default function Reservation({
         onChange={handleReservationChange}
         />
 
+
+        <label>Adresse mail du responsable</label>
+        <input
+            type="email"
+            name="email"
+            value={reservation.email}
+            onChange={handleReservationChange}
+        />
+        {errors?.email && <div style={{color: 'red', fontSize: '12px'}}>{errors.email}</div>}
+
+
         </div>
 
     
@@ -379,24 +344,26 @@ export default function Reservation({
 
         <h3>Cycliste {index+1}</h3>
 
+        {auth?.user && (
+            <>
 
-        <label>Cycliste enregistré</label>
+                <label>Cycliste enregistré</label>
 
-        <select
-        onChange={(e)=>selectExistingPerson(index,e.target.value)}
-        >
+                <select
+                onChange={(e)=>selectExistingPerson(index,e.target.value)}
+                >
 
-        <option value="">Nouveau</option>
+                <option value="">Nouveau</option>
 
-        {peopleDb.map(p=>(
-            <option key={p.id} value={p.id}>
-                {p.first_name} {p.last_name}
-            </option>
-        ))}
+                {peopleDb.map(p=>(
+                    <option key={p.id} value={p.id}>
+                        {p.first_name} {p.last_name}
+                    </option>
+                ))}
 
-        </select>
-
-
+                </select>
+            </>
+        )}
 
         <label>Nom</label>
 
@@ -441,15 +408,6 @@ export default function Reservation({
         ❌ Supprimer
         </button>
 
-        )}
-        {index === 0 && (<>
-            <label>Adresse mail</label>
-            <input
-            type="email"
-            name="email"
-           // onChange={(e) => handleReservationChange(e)}
-            />
-        </>
         )}
 
         </div>

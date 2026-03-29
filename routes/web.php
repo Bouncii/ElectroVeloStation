@@ -35,7 +35,3 @@ Route::middleware(['auth', 'role:admin,employee'])
     }
 );
 
-// ----- ROUTE DE DEBUG -----
-Route::get('/testConnexion', function () {
-    return inertia('testConnexion');
-})->middleware('auth');

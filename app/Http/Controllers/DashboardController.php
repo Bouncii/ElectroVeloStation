@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return Inertia::render('home', [
+        return Inertia::render('dashboard/stationSelection', [
             'stations' => Station::withCount(['bikes', 'departures', 'arrivals'])->get()
         ]);
     }
@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $today = Carbon::today();
 
         $bikes = $station->bikes()->get();
-        $allStates = ['available', 'in_use', 'transport_pending', 'return_pending', 'maintenance'];
+        $allStates = ['available', 'maintenance'];
         $bikeStats = [];
 
         foreach ($bikes as $bike) {
@@ -36,27 +36,27 @@ class DashboardController extends Controller
             'attributions.bike'
         ];
 
-        $departingReservations = Reservation::where('pickup_station_id', $station->id)
+        $departingReservations = Reservation::where('station_id', $station->id)
             ->where('status', 'confirmed')
             ->whereDate('start_date', '<=', $today)
             ->with($loadRelations)
             ->orderBy('start_date', 'asc')
             ->get();
 
-        $arrivingReservations = Reservation::where('return_station_id', $station->id)
+        $arrivingReservations = Reservation::where('station_id', $station->id)
             ->where('status', 'confirmed')
             ->whereDate('end_date', '<=', $today)
             ->with($loadRelations)
             ->orderBy('end_date', 'asc')
             ->get();
 
-        $pendingReservations = Reservation::where('pickup_station_id', $station->id)
+        $pendingReservations = Reservation::where('station_id', $station->id)
             ->where('status', 'pending')
             ->with($loadRelations)
             ->orderBy('start_date', 'asc')
             ->get();
 
-        return Inertia::render('home', [
+        return Inertia::render('dashboard/dashboard', [
             'station' => $station,
             'bikeStats' => $bikeStats,
             'departingReservations' => $departingReservations,
