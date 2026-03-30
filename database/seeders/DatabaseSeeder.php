@@ -34,11 +34,12 @@ class DatabaseSeeder extends Seeder
 
         foreach(range(1, 20) as $i) {
             $isAnonymous = ($i > 15);
+            $user = $isAnonymous ? null : $users->random();
             
             $reservation = Reservation::factory()->create([
-                'user_id' => $isAnonymous ? null : $users->random()->id,
-                'pickup_station_id' => $stations->random()->id,
-                'return_station_id' => $stations->random()->id,
+                'user_id' => $user ? $user->id : null,
+                'station_id' => $stations->random()->id,
+                'email' => $user ? $user->email : fake()->safeEmail(),
             ]);
 
             $possiblePerson = $reservation->user_id 
@@ -48,8 +49,8 @@ class DatabaseSeeder extends Seeder
             if ($possiblePerson) {
                 Attribution::factory()->create([
                     'reservation_id' => $reservation->id,
-                    'person_id'      => $possiblePerson->id,
-                    'bike_id'        => Bike::inRandomOrder()->first()->id,
+                    'person_id'=> $possiblePerson->id,
+                    'bike_id' => rand(1, 10) > 2 ? Bike::inRandomOrder()->first()->id : null,
                 ]);
             }
         }

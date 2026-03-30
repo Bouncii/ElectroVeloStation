@@ -1,0 +1,153 @@
+.reservationPage {
+    background-color: var(--secondary);
+    text-align: center;
+    color:#262626;
+    scroll-behavior: smooth;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.infoReservation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.infoReservation div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoReservation .infosResaGlobal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.infoReservation .reservationContainer {
+    display: flex;
+    width: 80vw;
+    padding: 30px;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: white;
+    width: 80vw;
+    text-align: left;
+    align-items: stretch;
+} 
+.userInfoContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    width: 400px;
+    text-align: left;
+}
+
+.reservationPage .infoReservation .reservationContainer label , .reservationPage .userInfoContainer label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.reservationPage .infoReservation .reservationContainer input, .reservationPage .infoReservation .reservationContainer select , .reservationPage .userInfoContainer input, .reservationPage .userInfoContainer select {
+    flex:1;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.reservationPage .infoReservation .reservationContainer button , .reservationPage .userInfoContainer button{
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.reservationPage .infoReservation .reservationContainer button:hover , .reservationPage .userInfoContainer button:hover{
+    background-color: #134fdb;
+}
+
+.reservationPage .infoReservation .reservationContainer .bAjout {
+    display: block;
+    position: sticky;
+    bottom: 80px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+}
+
+.reservationPage .bAjout {
+    display: block;
+    position: sticky;
+    bottom: 80px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0031A4;
+    color: white;
+}
+.reservationPage .bAjout:hover {
+    background-color: #134fdb;
+}
+
+.reservationPage footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding-top: 10px;
+    background-color: var(--primary);
+    color: white;
+}
+
+.reservationPage footer p {
+    font-size: 14px;
+    margin: 0;            
+}
+
+.reservationPage footer button {
+    padding: 10px 20px;
+    background-color: var(--tertiary);
+    color: rgb(10, 35, 96);
+    border: none;
+    border-radius: 5px;
+    
+}
+
+.reservationPage footer button:hover {
+    background-color: rgb(255, 255, 128);
+}
+
+.success {
+    padding: 15px;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 5px; 
+    margin: 80px auto 10px auto;
+    width: 80%;
+}
+
+.failure {
+    padding: 15px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px; 
+    margin: 80px auto 10px auto;
+    width: 80%;
+}

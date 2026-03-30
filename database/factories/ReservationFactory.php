@@ -22,9 +22,9 @@ class ReservationFactory extends Factory
             'start_date' => $start,
             'end_date' => $end,
             'user_id' => \App\Models\User::factory(),
-            'pickup_station_id' => \App\Models\Station::factory(),
-            'return_station_id' => \App\Models\Station::factory(),
+            'station_id' => \App\Models\Station::factory(),
             'status' => 'pending', 
+            'email' => $this->faker->safeEmail(),
         ];
     }
 }

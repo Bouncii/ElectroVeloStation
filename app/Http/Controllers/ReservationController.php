@@ -22,8 +22,7 @@ class ReservationController extends Controller
         return Inertia::render('gestionReservations', [
             'reservations' => Reservation::with([
                 'user', 
-                'pickupStation', 
-                'returnStation', 
+                'station',
                 'attributions.person',
                 'attributions.bike'
             ])
@@ -53,8 +52,8 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'start_date'=> 'required|date|after:now',
             'end_date' => 'required|date|after:start_date',
-            'pickup_station_id' => 'required|exists:stations,id',
-            'return_station_id' => 'required|exists:stations,id',
+            'station_id' => 'required|exists:stations,id',
+            'email' => 'required|email|max:255',
             'user_id'=> 'nullable|exists:users,id',
             'attributions'=> 'required|array|min:1',
             'attributions.*.person_id' => 'required|exists:people,id',
@@ -65,8 +64,8 @@ class ReservationController extends Controller
             $reservation = Reservation::create([
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
-                'pickup_station_id' => $validated['pickup_station_id'],
-                'return_station_id' => $validated['return_station_id'],
+                'station_id' => $validated['station_id'],
+                'email' => $validated['email'],
                 'user_id' => $validated['user_id'],
                 'status' => 'confirmed',
             ]);
@@ -80,7 +79,7 @@ class ReservationController extends Controller
                 $bike = Bike::where('size', $person->bike_size)
                     ->whereNotIn('id', $assignedBikeIds) 
                     ->availableAtStationOn(
-                        $validated['pickup_station_id'], 
+                        $validated['station_id'], 
                         $validated['start_date'], 
                         $validated['end_date']
                     )
@@ -118,8 +117,8 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'start_date'=> 'required|date',
             'end_date' => 'required|date|after:start_date',
-            'pickup_station_id' => 'required|exists:stations,id',
-            'return_station_id' => 'required|exists:stations,id',
+            'station_id' => 'required|exists:stations,id',
+            'email' => 'required|email|max:255',
             'user_id' => 'nullable|exists:users,id',
             'attributions' => 'required|array|min:1',
             'attributions.*.person_id' => 'required|exists:people,id',
@@ -129,8 +128,8 @@ class ReservationController extends Controller
             $reservation->update([
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
-                'pickup_station_id' => $validated['pickup_station_id'],
-                'return_station_id' => $validated['return_station_id'],
+                'station_id' => $validated['station_id'],
+                'email' => $validated['email'],
                 'user_id' => $validated['user_id'],
                 'status' => 'confirmed',
             ]);
@@ -146,7 +145,7 @@ class ReservationController extends Controller
                 $bike = Bike::where('size', $person->bike_size)
                     ->whereNotIn('id', $assignedBikeIds) 
                     ->availableAtStationOn(
-                        $validated['pickup_station_id'], 
+                        $validated['station_id'], 
                         $validated['start_date'], 
                         $validated['end_date'],
                         $reservation->id

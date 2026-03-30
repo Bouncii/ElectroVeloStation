@@ -39,11 +39,13 @@ class UserReservationController extends Controller
      */
     public function store(Request $request)
     {
+
+        $isGuest = Auth::guest();
         $validated = $request->validate([
-            'pickup_station_id' => 'required|exists:stations,id',
-            'return_station_id' => 'required|exists:stations,id',
+            'station_id' => 'required|exists:stations,id',
             'start_date' => 'required|date|after_or_equal:now',
             'end_date' => 'required|date|after:start_date',
+            'email' => 'required|email|max:255',
             'attributions'=> 'required|array|min:1',
             'attributions.*.id' => 'nullable|exists:people,id',
             'attributions.*.nom' => 'required|string|max:255',
@@ -53,14 +55,13 @@ class UserReservationController extends Controller
         ]);
         try {
             DB::transaction(function () use ($validated) {
-
                 $userId = Auth::id();
                 $reservation = Reservation::create([
                     'user_id' => $userId,
-                    'pickup_station_id' => $validated['pickup_station_id'],
-                    'return_station_id' => $validated['return_station_id'],
+                    'station_id' => $validated['station_id'],
                     'start_date' => $validated['start_date'],
                     'end_date' => $validated['end_date'],
+                    'email' => $validated['email'],
                     'status' => 'pending',
                 ]);
 

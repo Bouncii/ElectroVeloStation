@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
-import '@css/reservation.css';
 import { Header } from "../Pages/home.jsx";
+import styles from '@css/reservation.module.css';
+import '@css/app.css';
 
 export default function Reservation({ 
     schedules = [], // Horaires des stations récupérés depuis le backend
@@ -9,21 +10,21 @@ export default function Reservation({
     allStations = [] // Liste de toutes les stations récupérée depuis le backend
  }) {
 
-    const { errors, flash } = usePage().props;
+    const { errors, flash, auth } = usePage().props;
 
     // -----------------------------
     // STATE RESERVATION
     // -----------------------------
 
     const [reservation, setReservation] = useState({
-        pickup_station_id: "",
-        return_station_id: "",
+        station_id: "",
         dateDebut: "",
         dateFin: "",
         heureDebut: "",
         heureFin: "",
         start_date: "",
-        end_date: ""
+        end_date: "",
+        email: auth?.user?.email || ""
     });
 
     // -----------------------------
@@ -74,7 +75,11 @@ function Formulaire() {
     
 }
     const handleReservationChange = (e) => {
-
+        if(e.target.name === "heureDebut" || e.target.name === "heureFin" ){
+            if(e.target.value < e.target.min || e.target.value > e.target.max){
+                e.target.value = "";
+            }
+        }
         setReservation({
             ...reservation,
             [e.target.name]: e.target.value
@@ -148,6 +153,16 @@ function Formulaire() {
                 taille: person.required_bike_size
             };
             setPeople(newPeople);
+        } else if (id == 0) {
+            const newPeople = [...people];
+
+            newPeople[index] = {
+                nom: "",
+                prenom: "",
+                age: "",
+                taille: ""
+            }
+            setPeople(newPeople);
         }
     };
 
@@ -158,32 +173,8 @@ function Formulaire() {
     // -----------------------------
 
     const scheduleStation = schedules.find(
-        s => s.station_id == reservation.pickup_station_id
+        s => s.station_id == reservation.station_id
     );
-
-
-
-    // -----------------------------
-    // STATION DEPART
-    // -----------------------------
-
-    // const pickup_station_id = allStations.find(
-    //     s => s.id == reservation.pickup_station_id
-    // );
-
-
-
-    // -----------------------------
-    // VERIFICATION STOCK
-    // -----------------------------
-
-    // const stockDisponible = () => {
-
-    //     if(!pickup_station_id) return false;
-
-    //     return people.length <= pickup_station_id.bike_stock;
-
-    // };
 
 
 
@@ -248,34 +239,36 @@ function Formulaire() {
 
     const handleSubmit = () => {
         router.post("/reservation", {
-            pickup_station_id: reservation.pickup_station_id,
-            return_station_id: reservation.return_station_id,
+            station_id: reservation.station_id,
             start_date: `${reservation.dateDebut} ${reservation.heureDebut}:00`,
             end_date: `${reservation.dateFin} ${reservation.heureFin}:00`,
+            email: reservation.email,
             attributions: people,
         });
     };
 
-
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const minDate = tomorrow.toISOString().split('T')[0];
 
     return (
 
         <>
-        <div className="reservationPage">
+        <div className={styles.reservationPage}>
         <header>
             <Header/>
         </header>
 
 
-        <div className="messages-container" style={{ margin: "20px auto", maxWidth: "800px", textAlign: "center" }}>
+        <div className={styles.messagesContainer} style={{ margin: "20px auto", maxWidth: "800px", textAlign: "center" }}>
             
             {flash?.success && (
-                <div className="success">
+                <div className={styles.success}>
                     {flash.success}
                 </div>
             )}
             {errors?.error && (
-                <div className="failure">
+                <div className={styles.failure}>
                     {errors.error}
                 </div>
             )}
@@ -283,43 +276,24 @@ function Formulaire() {
 
         <h1>Réserver un vélo</h1>
 
-        <div className="infoReservation">
+        <div className={styles.infoReservation}>
 
 
         {/* ------------------ */}
         {/* FORM RESERVATION */}
         {/* ------------------ */}
 
-        <div className="champ">
+        <div className={styles.reservationContainer}>
+            
 
         <h3>Choix de la réservation</h3>
-
-        <label>Station départ</label>
-
-        <select
-        name="pickup_station_id"
-        value={reservation.pickup_station_id}
-        onChange={handleReservationChange}
-        >
-
-        <option value="">Choisir</option>
-
-        {allStations.map(station => (
-
-            <option key={station.id} value={station.id}>
-                {station.name}
-            </option>
-
-        ))}
-
-        </select>
-
-
-        <label>Station arrivée</label>
+        <div className={styles.infosResaGlobal}>
+        <div className={styles.infosResa1}>
+        <label>Station</label>
 
         <select
-        name="return_station_id"
-        value={reservation.return_station_id}
+        name="station_id"
+        value={reservation.station_id}
         onChange={handleReservationChange}
         >
 
@@ -342,6 +316,7 @@ function Formulaire() {
         <input
         type="date"
         name="dateDebut"
+        min={minDate}
         value={reservation.dateDebut}
         onChange={handleReservationChange}
         />
@@ -356,17 +331,18 @@ function Formulaire() {
         min={scheduleStation?.open_time}
         max={scheduleStation?.close_time}
         value={reservation.heureDebut}
+        step={"1800"}
         onChange={handleReservationChange}
         />
-
-
+        </div>
+        <div className={styles.infosResa2}>
 
         <label>Date fin</label>
 
         <input
         type="date"
         name="dateFin"
-        min={reservation.dateDebut}
+        min={reservation.dateDebut || minDate}
         value={reservation.dateFin}
         onChange={handleReservationChange}
         />
@@ -381,11 +357,23 @@ function Formulaire() {
         min={scheduleStation?.open_time}
         max={scheduleStation?.close_time}
         value={reservation.heureFin}
+        step={"1800"}
         onChange={handleReservationChange}
         />
 
-        </div>
 
+        <label>Adresse mail du responsable</label>
+        <input
+            type="email"
+            name="email"
+            value={reservation.email}
+            onChange={handleReservationChange}
+        />
+        {errors?.email && <div style={{color: 'red', fontSize: '12px'}}>{errors.email}</div>}
+
+        </div>
+        </div>
+        </div>
     
 
         {/* ------------------ */}
@@ -394,28 +382,30 @@ function Formulaire() {
 
         {people.map((person,index)=>(
 
-        <div key={index} className="champ">
+        <div key={index} className={styles.userInfoContainer}>
 
         <h3>Cycliste {index+1}</h3>
 
+        {auth?.user && (
+            <>
 
-        <label>Cycliste enregistré</label>
+                <label>Cycliste enregistré</label>
 
-        <select
-        onChange={(e)=>selectExistingPerson(index,e.target.value)}
-        >
+                <select
+                onChange={(e)=>selectExistingPerson(index,e.target.value)}
+                >
 
-        <option value="">Nouveau</option>
+                <option value="">Nouveau</option>
 
-        {peopleDb.map(p=>(
-            <option key={p.id} value={p.id}>
-                {p.first_name} {p.last_name}
-            </option>
-        ))}
+                {peopleDb.map(p=>(
+                    <option key={p.id} value={p.id}>
+                        {p.first_name} {p.last_name}
+                    </option>
+                ))}
 
-        </select>
-
-
+                </select>
+            </>
+        )}
 
         <label>Nom</label>
 
@@ -468,7 +458,7 @@ function Formulaire() {
 
 
 </div>
-        <button id="bAjout"onClick={addPerson}>
+        <button className={styles.bAjout} onClick={addPerson}>
         ➕ Ajouter un cycliste
         </button>
         
@@ -479,7 +469,7 @@ function Formulaire() {
         {/* FOOTER */}
         {/* ------------------ */}
 
-        <footer className="champ">
+        <footer className={styles.champ}>
 
         <p>Nombre de vélos : {people.length}</p>
 
