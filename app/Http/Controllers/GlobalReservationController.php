@@ -10,8 +10,7 @@ class GlobalReservationController extends Controller
     public function index(){
         $relations = [
             'user',
-            'pickupStation',
-            'returnStation',
+            'station',
             'attributions.bike',
             'attributions.person'
         ];

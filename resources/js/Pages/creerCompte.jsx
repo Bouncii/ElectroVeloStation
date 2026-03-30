@@ -1,6 +1,7 @@
 import { useForm, Link } from '@inertiajs/react';
-import '@css/creerCompte.css';
 import { Header } from "./home.jsx";
+import styles from '@css/inscription.module.css';
+import '@css/app.css';
 
 function FormulaireCreerCompte(){
     const { data, setData, post, processing, errors } = useForm({
@@ -25,38 +26,40 @@ function FormulaireCreerCompte(){
 
     return <>
             <Header />
-            <div className="blocCreerCompte">
+            <div className={styles.blocCreerCompte}>
                 <h3>Création de compte</h3>    
                 <form onSubmit={submit}>
-                    <label>Nom :</label>
+                    
                     <input 
                         type="text" 
+                        placeholder='Nom'
                         value={data.last_name} 
                         onChange={e => setData('last_name', e.target.value)} 
                     />
-                    {errors.last_name && <div className="messageErr">{errors.last_name}</div>}
-                    <label>Prénom :</label>
+                    {errors.last_name && <div className={styles.messageErr}>{errors.last_name}</div>}
+                    
                     <input 
                         type="text" 
+                        placeholder='Prénom'
                         value={data.first_name} 
                         onChange={e => setData('first_name', e.target.value)} 
                     />
-                    {errors.first_name && <div className="messageErr">{errors.first_name}</div>}
-                    <label>Email :</label>
+                    {errors.first_name && <div className={styles.messageErr}>{errors.first_name}</div>}
+                    
                     <input 
                         type="email" 
+                        placeholder='email'
                         value={data.email} 
                         onChange={e => setData('email', e.target.value)} 
                     />
-                    {errors.email && <div className="messageErr">{errors.email}</div>}
-
-                    <label>Mot de passe :</label>
+                    {errors.email && <div className={styles.messageErr}>{errors.email}</div>}
                     <input 
                         type="password" 
+                        placeholder="Mot de passe "
                         value={data.password} 
                         onChange={e => setData('password', e.target.value)} 
                     />
-                    {errors.password && <div className="messageErr">{errors.password}</div>}
+                    {errors.password && <div className={styles.messageErr}>{errors.password}</div>}
                     {/* Le bouton utilise notre variable texteBouton calculée avec le "if" */}
                     <div>
                     <button type="submit" disabled={processing}>
@@ -73,5 +76,5 @@ function FormulaireCreerCompte(){
 
 
 export default function CreerCompte(){
-    return <><FormulaireCreerCompte/></>
+    return <><div className={styles.inscriptionPage}><div className={styles.flou}><FormulaireCreerCompte /></div></div></>;
 }

@@ -17,7 +17,7 @@ class BikeFactory extends Factory
     public function definition(): array {
         return [
             'size' => $this->faker->randomElement([140, 160, 180]),
-            'state' => $this->faker->randomElement(['available', 'in_use', 'maintenance']),
+            'state' => $this->faker->randomElement(['available', 'maintenance']),
             'station_id' => \App\Models\Station::factory(),
         ];
     }

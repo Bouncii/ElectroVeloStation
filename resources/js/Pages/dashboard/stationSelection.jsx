@@ -3,7 +3,7 @@ import '@css/dashboard/stationSelection.css';
 
 function StationSelection({ stations }) {
     return (
-        <>
+        <section id='pageContainer'>
             <h1>Veuillez choisir une station : </h1>
             <Link href="/" className="back">Accueil</Link>
             <Link href="/panel" className="back">Panel</Link>
@@ -12,7 +12,7 @@ function StationSelection({ stations }) {
                     <StationCard key={station.id} station={station} />
                 ))}
             </div>
-        </>
+        </section>
     );
 }
 

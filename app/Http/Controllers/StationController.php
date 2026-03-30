@@ -25,8 +25,10 @@ class StationController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request-> validate([
-            'name' => 'required|string|max:255'
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ]);
         Station::create($validated);
         return redirect()->back()->with('success', 'Station créée !');
@@ -37,8 +39,10 @@ class StationController extends Controller
      */
     public function update(Request $request, Station $station) // Dans cette fonction normalement on reçoit que l'id mais si on met un objet station en parametre laravel va le chercher tt seul
     {
-        $validated = $request -> validate([
-            'name' => 'required|string|max:255'
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ]);
         $station -> update($validated);
         return redirect()->back()->with('success', 'Station modifiée !');

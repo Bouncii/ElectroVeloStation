@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bikes', function (Blueprint $table) {
+        Schema::create('propositions', function (Blueprint $table) {
             $table->id();
-            $table->integer('size');
-            $table->enum('state', ['available', 'maintenance'])->default('available');
-            $table->foreignId('station_id')->constrained()->onDelete('cascade');
+            $table->foreignId('reservation_id')->constrained()->onDelete('cascade');
+            $table->enum('status', ['pending', 'accepted', 'declined', 'expired'])->default('pending');
+            $table->dateTime('expires_at');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bikes');
+        Schema::dropIfExists('propositions');
     }
 };

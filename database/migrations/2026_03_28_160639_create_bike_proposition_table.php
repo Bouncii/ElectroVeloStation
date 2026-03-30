@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bikes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('size');
-            $table->enum('state', ['available', 'maintenance'])->default('available');
-            $table->foreignId('station_id')->constrained()->onDelete('cascade');
+        Schema::create('bike_proposition', function (Blueprint $table) {
+            $table->foreignId('bike_id')->constrained()->onDelete('cascade');
+            $table->foreignId('proposition_id')->constrained()->onDelete('cascade');
+            $table->primary(['bike_id', 'proposition_id']); 
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bikes');
+        Schema::dropIfExists('bike_proposition');
     }
 };
