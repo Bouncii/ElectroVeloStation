@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ProfileController;
 
 // -------- ROUTES PUBLIQUES -------
 Route::get('/', function () {
@@ -17,6 +18,16 @@ Route::get('/', function () {
 
 Route::get('/reservation', [UserReservationController::class, 'create']);
 Route::post('/reservation', [UserReservationController::class, 'store']);
+
+// ---------- ROUTES SI CONNECTE -------------
+Route::middleware(['auth','role:admin,employee,client'])
+    ->prefix('profile')
+    ->group(function () {
+        Route::get('/', [ProfileController::class, "index"]);
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::post('/profile', [ProfileController::class, 'store']);
+    });
+
 
 // ----- ROUTES PROTEGEES -----
 Route::middleware(['auth', 'role:admin,employee'])

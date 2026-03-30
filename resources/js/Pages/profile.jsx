@@ -5,13 +5,14 @@ import { Header } from "../Pages/home.jsx";
 import styles from '@css/profile.module.css';
 import '@css/app.css';
 
-function infosProfil() {
-    const { user } = usePage().props;
+function InfosProfil() {
+    const { user } = usePage().props.auth;
+    console.log(user);
     const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState({
         last_name: user.last_name,
         first_name: user.first_name,
-        heigth: user.heigth,
+        required_bike_size: user.required_bike_size,
         email: user.email,
         peoples: [],
         reservations: []
@@ -62,7 +63,7 @@ function infosProfil() {
         )}
         </div></>
         }
-function infosPeople(){
+function InfosPeople(){
     const { peoples } = usePage().props;
     const [editing, setEditing] = useState(false);
     return <><div className={styles.blocPeople}>
@@ -108,7 +109,7 @@ function infosPeople(){
     }
     </>
 }
-function afficheReservations() {
+function AfficheReservations() {
     
     const { reservations } = usePage().props;
 
@@ -133,5 +134,10 @@ function afficheReservations() {
 };
 
 export default function Profile() {
-    return <><div className={styles.profilePage}><infosProfil /><infosPeople /><afficheReservations /></div></>;
+    return <>
+    <Header/>
+    <p>Ceci est un test</p>
+    <h1>AAAAAAAAAAAAAAAAAAAAA</h1>
+    <h1>AJDIJZFOIJIZJDLJLK?DLJK</h1>
+    <div className={styles.profilePage}><InfosProfil /><InfosPeople /><AfficheReservations /></div></>;
 }
