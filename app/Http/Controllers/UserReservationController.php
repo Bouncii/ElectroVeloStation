@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Bike;
 
 class UserReservationController extends Controller
 {
@@ -46,12 +47,12 @@ class UserReservationController extends Controller
             'start_date' => 'required|date|after_or_equal:now',
             'end_date' => 'required|date|after:start_date',
             'email' => 'required|email|max:255',
-            'attributions'=> 'required|array|min:1',
-            'attributions.*.id' => 'nullable|exists:people,id',
-            'attributions.*.nom' => 'required|string|max:255',
-            'attributions.*.prenom' => 'required|string|max:255',
-            'attributions.*.age' => 'required|integer|min:1|max:120',
-            'attributions.*.taille' => 'required|integer|min:100|max:250',
+            'persons'=> 'required|array|min:1',
+            'persons.*.id' => 'nullable|exists:people,id',
+            'persons.*.nom' => 'required|string|max:255',
+            'persons.*.prenom' => 'required|string|max:255',
+            'persons.*.age' => 'required|integer|min:1|max:120',
+            'persons.*.taille' => 'required|integer|min:100|max:250',
         ]);
         try {
             DB::transaction(function () use ($validated) {
@@ -65,17 +66,20 @@ class UserReservationController extends Controller
                     'status' => 'pending',
                 ]);
 
-                foreach ($validated['attributions'] as $personData) {
-                    $personId = null;
+                $assignedBikeIds = []; 
+                $allBikesAssigned = true;
+
+                foreach ($validated['persons'] as $personData) {
+                    $person = null;
                     if (isset($personData['id'])) {
                         $existingPerson = Person::where('id', $personData['id'])
                                                 ->where('user_id', $userId)
                                                 ->first();
                         if ($existingPerson) {
-                            $personId = $existingPerson->id;
+                            $person = $existingPerson;
                         }
                     }
-                    if (!$personId) {
+                    if (!$person) {
                         $newPerson = Person::create([
                             'user_id' => $userId,
                             'first_name' => $personData['prenom'],
@@ -83,14 +87,39 @@ class UserReservationController extends Controller
                             'age' => $personData['age'],
                             'required_bike_size' => $personData['taille'],
                         ]);
-                        $personId = $newPerson->id;
+                        $person = $newPerson;
                     }
+
+                    
+                    $bike = Bike::where('size', $person->required_bike_size)
+                        ->whereNotIn('id', $assignedBikeIds) 
+                        ->availableAtStationOn(
+                            $validated['station_id'], 
+                            $validated['start_date'], 
+                            $validated['end_date'],
+                            $reservation->id
+                        )
+                        ->first();
+
+                    if ($bike) {
+                        $assignedBikeIds[] = $bike->id;
+                        $bikeId = $bike->id;
+                    } else {
+                        $allBikesAssigned = false;
+                        $bikeId = null;
+                    }
+
                     Attribution::create([
                         'reservation_id' => $reservation->id,
-                        'person_id' => $personId,
-                        'bike_id' => null,
+                        'person_id' => $person->id,
+                        'bike_id' => $bikeId,
                     ]);
                 }
+
+                if ($allBikesAssigned) {
+                    $reservation->update(['status' => 'confirmed']);
+                }
+
 
             });
             return redirect()->route('home')->with('success', 'Réservation créée avec succès !');
