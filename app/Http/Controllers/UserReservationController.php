@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Services\Mail\ReservationConfirmation;
 
 class UserReservationController extends Controller
 {
@@ -38,67 +40,81 @@ class UserReservationController extends Controller
      * Traite la soumission d'une reservation
      */
     public function store(Request $request)
-    {
+{
+    $userId = Auth::id();
 
-        $isGuest = Auth::guest();
-        $validated = $request->validate([
-            'station_id' => 'required|exists:stations,id',
-            'start_date' => 'required|date|after_or_equal:now',
-            'end_date' => 'required|date|after:start_date',
-            'email' => 'required|email|max:255',
-            'attributions'=> 'required|array|min:1',
-            'attributions.*.id' => 'nullable|exists:people,id',
-            'attributions.*.nom' => 'required|string|max:255',
-            'attributions.*.prenom' => 'required|string|max:255',
-            'attributions.*.age' => 'required|integer|min:1|max:120',
-            'attributions.*.taille' => 'required|integer|min:100|max:250',
-        ]);
-        try {
-            DB::transaction(function () use ($validated) {
-                $userId = Auth::id();
-                $reservation = Reservation::create([
-                    'user_id' => $userId,
-                    'station_id' => $validated['station_id'],
-                    'start_date' => $validated['start_date'],
-                    'end_date' => $validated['end_date'],
-                    'email' => $validated['email'],
-                    'status' => 'pending',
-                ]);
+    $validated = $request->validate([
+        'station_id' => 'required|exists:stations,id',
+        'start_date' => 'required|date|after_or_equal:now',
+        'end_date' => 'required|date|after:start_date',
+        'email' => 'required|email|max:255',
+        'attributions'=> 'required|array|min:1',
+        'attributions.*.id' => 'nullable|exists:people,id',
+        'attributions.*.nom' => 'required|string|max:255',
+        'attributions.*.prenom' => 'required|string|max:255',
+        'attributions.*.age' => 'required|integer|min:1|max:120',
+        'attributions.*.taille' => 'required|integer|min:100|max:250',
+    ]);
 
-                foreach ($validated['attributions'] as $personData) {
-                    $personId = null;
-                    if (isset($personData['id'])) {
-                        $existingPerson = Person::where('id', $personData['id'])
-                                                ->where('user_id', $userId)
-                                                ->first();
-                        if ($existingPerson) {
-                            $personId = $existingPerson->id;
-                        }
+    try {
+
+        $reservation = DB::transaction(function () use ($validated, $userId) {
+
+            $reservation = Reservation::create([
+                'user_id' => $userId,
+                'station_id' => $validated['station_id'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'email' => $validated['email'],
+                'status' => 'pending',
+            ]);
+
+            foreach ($validated['attributions'] as $personData) {
+                $personId = null;
+
+                if (isset($personData['id'])) {
+                    $existingPerson = Person::where('id', $personData['id'])
+                        ->where('user_id', $userId)
+                        ->first();
+
+                    if ($existingPerson) {
+                        $personId = $existingPerson->id;
                     }
-                    if (!$personId) {
-                        $newPerson = Person::create([
-                            'user_id' => $userId,
-                            'first_name' => $personData['prenom'],
-                            'last_name' => $personData['nom'],
-                            'age' => $personData['age'],
-                            'required_bike_size' => $personData['taille'],
-                        ]);
-                        $personId = $newPerson->id;
-                    }
-                    Attribution::create([
-                        'reservation_id' => $reservation->id,
-                        'person_id' => $personId,
-                        'bike_id' => null,
-                    ]);
                 }
 
-            });
-            Mail::to($validated->email)
-                ->send(new ReservationConfirmation($validated));
-            return redirect()->route('home')->with('success', 'Réservation créée avec succès ! + mail envoyé');
+                if (!$personId) {
+                    $newPerson = Person::create([
+                        'user_id' => $userId,
+                        'first_name' => $personData['prenom'],
+                        'last_name' => $personData['nom'],
+                        'age' => $personData['age'],
+                        'required_bike_size' => $personData['taille'],
+                    ]);
 
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Une erreur est survenue lors de la réservation : ' . $e->getMessage()]);
-        }
+                    $personId = $newPerson->id;
+                }
+
+                Attribution::create([
+                    'reservation_id' => $reservation->id,
+                    'person_id' => $personId,
+                    'bike_id' => null,
+                ]);
+            }
+
+            return $reservation; // 
+        });
+
+        // Maintenant tu as un vrai objet
+        Mail::to($reservation->email)
+            ->send(new ReservationConfirmation($reservation));
+
+        return redirect()->route('home')
+            ->with('success', 'Réservation créée avec succès ! + mail envoyé');
+
+    } catch (\Exception $e) {
+        return back()->withErrors([
+            'error' => 'Une erreur est survenue : ' . $e->getMessage()
+        ]);
     }
+}
 }
