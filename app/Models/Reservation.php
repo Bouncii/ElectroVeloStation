@@ -8,23 +8,23 @@ use Carbon\Carbon;
 class Reservation extends Model
 {
     use HasFactory;
-    protected $fillable = ['start_date', 'end_date', 'user_id', 'pickup_station_id', 'return_station_id', 'status'];
+    protected $fillable = ['start_date', 'end_date', 'email','user_id', 'station_id', 'status'];
     protected $appends = ['is_checkable'];
 
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function pickupStation() {
-        return $this->belongsTo(Station::class, 'pickup_station_id');
-    }
-
-    public function returnStation() {
-        return $this->belongsTo(Station::class, 'return_station_id');
+    public function station() {
+        return $this->belongsTo(Station::class, 'station_id');
     }
 
     public function attributions() {
         return $this->hasMany(Attribution::class);
+    }
+
+    public function propositions(){
+        return $this->hasMany(Proposition::class);
     }
 
     public function scopePending($query){

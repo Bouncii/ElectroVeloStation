@@ -1,8 +1,10 @@
-body{
+#pageContainer{
     background-color: #CED2DD;
     width: 100%;
     font-family: 'Montserrat', sans-serif !important;
     color: #2D3748;
+    width: 100%;
+    height: 100%;
 }
 
 .green{

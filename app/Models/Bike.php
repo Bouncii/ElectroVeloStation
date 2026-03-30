@@ -21,54 +21,35 @@ class Bike extends Model
         return $this->belongsTo(Station::class);
     }
 
-    // renvoi les vélos dispos pendant une période et à une station donnée.
-    public function scopeAvailableAtStationOn(Builder $query, $stationId, $startDate, $endDate, $ignoreId = null)
+    public function propositions()
     {
-        return $query
-            ->whereDoesntHave('attributions.reservation', function ($q) use ($startDate, $endDate, $ignoreId) {
-                $q->where('start_date', '<', $endDate)
-                    ->where('end_date', '>', $startDate)
-                    ->where('status', '!=', 'cancelled');
+        return $this->belongsToMany(Proposition::class);
+    }
 
-                if ($ignoreId) {
-                    $q->where('id', '!=', $ignoreId);
+    // renvoi les vélos dispos pendant une période et à une station donnée.
+    public function scopeAvailableAtStationOn($query, $stationId, $startDate, $endDate, $ignoreReservationId = null)
+    {
+        return $query->where('station_id', $stationId)
+            ->where('state', '!=', 'maintenance')
+            
+            ->whereDoesntHave('attributions.reservation', function ($q) use ($startDate, $endDate, $ignoreReservationId) {
+                $q->where('start_date', '<', $endDate)
+                  ->where('end_date', '>', $startDate) 
+                  ->whereIn('status', ['confirmed', 'in_progress', 'pending']);
+                if ($ignoreReservationId) {
+                    $q->where('id', '!=', $ignoreReservationId);
                 }
             })
-            ->where(function ($query) use ($stationId, $startDate, $ignoreId) {
-
-                $query->where(function ($q) use ($stationId, $startDate, $ignoreId) {
-                    $q->whereDoesntHave('attributions.reservation', function ($res) use ($startDate, $ignoreId) {
-                        $res->where('end_date', '<=', $startDate)
-                            ->where('status', '!=', 'cancelled');
-
-                        if ($ignoreId) {
-                            $res->where('id', '!=', $ignoreId);
-                        }
-                    })->where('station_id', $stationId);
-                })
-
-                    ->orWhereHas('attributions.reservation', function ($q) use ($stationId, $startDate, $ignoreId) {
-                        $q->where('end_date', '<=', $startDate)
-                            ->where('return_station_id', $stationId)
-                            ->where('status', '!=', 'cancelled');
-
-                        if ($ignoreId) {
-                            $q->where('id', '!=', $ignoreId);
-                        }
-                        $sql = "reservations.end_date = (
-                        SELECT MAX(r.end_date) 
-                        FROM reservations r
-                        JOIN attributions a ON r.id = a.reservation_id
-                        WHERE a.bike_id = bikes.id 
-                        AND r.end_date <= '$startDate'
-                        AND r.status != 'cancelled'";
-
-                        if ($ignoreId) {
-                            $sql .= " AND r.id != $ignoreId";
-                        }
-                        $sql .= ")";
-                        $q->whereRaw($sql);
-                    });
+            
+            ->whereDoesntHave('propositions', function ($q) use ($startDate, $endDate, $ignoreReservationId) {
+                $q->whereIn('status', ['pending', 'accepted'])
+                  ->whereHas('reservation', function ($resQuery) use ($startDate, $endDate, $ignoreReservationId) {
+                      $resQuery->where('start_date', '<', $endDate)
+                               ->where('end_date', '>', $startDate); 
+                      if ($ignoreReservationId) {
+                          $resQuery->where('id', '!=', $ignoreReservationId);
+                      }
+                  });
             });
     }
 }

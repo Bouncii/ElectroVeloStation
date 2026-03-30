@@ -17,10 +17,10 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
-            'open_time'   => '08:00:00',
-            'close_time'  => '19:00:00',
+            'open_time'=> '08:00:00',
+            'close_time'=> '19:00:00',
             'day_of_week' => 0,
-            'station_id'  => \App\Models\Station::factory(),
+            'station_id'=> \App\Models\Station::factory(),
         ];
     }
 }
