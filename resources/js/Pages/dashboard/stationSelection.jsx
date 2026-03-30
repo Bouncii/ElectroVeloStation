@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import '@css/dashboard/stationSelection.css';
+import '@css/app.css';
 
 function StationSelection({ stations }) {
     return (

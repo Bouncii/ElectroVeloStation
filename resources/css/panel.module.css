@@ -312,3 +312,30 @@ div.status {
 .titre_modale {
     margin-left: auto;
 }
+
+.redirectBoxes{
+    display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "Boxsta Boxuse" 
+    "Boxres Boxdas";
+  gap: 10px;
+  position: absolute;
+  margin-left: 58%; /*Change cette horreur !*/
+}
+
+.boxSta {
+    grid-area: Boxsta;
+}
+
+.boxUser {
+    grid-area: Boxuse;
+}
+
+.boxRes {
+    grid-area: Boxres;
+}
+
+.boxDash {
+    grid-area: Boxdas;
+}
