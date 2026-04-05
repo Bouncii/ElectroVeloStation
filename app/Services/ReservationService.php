@@ -15,9 +15,10 @@ class ReservationService
         $this->propositionService = $propositionService;
     }
 
-    public function checkPendingsForResolutions()
+    public function checkPendingsForResolutions($stationId)
     {
         $pendings = Reservation::where('status', 'pending')
+            ->where('station_id',$stationId)
             ->whereDoesntHave('propositions', function ($query) {
                 $query->active();
             })
