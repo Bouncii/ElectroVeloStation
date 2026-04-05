@@ -7,6 +7,8 @@ use App\Models\Station;
 use App\Observers\StationObserver;
 use App\Models\Reservation;
 use App\Observers\ReservationObserver;
+use App\Models\Bike;
+use App\Observers\BikeObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Station::observe(StationObserver::class);
         Reservation::observe(ReservationObserver::class);
+        Bike::observe(BikeObserver::class);
     }
 }

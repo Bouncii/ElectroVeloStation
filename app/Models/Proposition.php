@@ -27,4 +27,10 @@ class Proposition extends Model
     {
         return $this->belongsToMany(Bike::class);
     }
+
+    //Renvoi les scope considérés comme "actifs" 
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['pending', 'accepted']);
+    }
 }
