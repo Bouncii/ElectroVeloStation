@@ -172,7 +172,8 @@ export default function Panel() {
         document.body.classList.add('theme-admin', 'admin');
         return () => {
             document.body.removeAttribute('data-theme');
-            document.body.classList.remove('theme-admin');
+            document.body.classList.remove('theme-admin', 'admin');
+            document.body.classList.remove('theme-landing', 'landing');
         };
     },
     []);

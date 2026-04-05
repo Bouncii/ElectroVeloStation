@@ -138,14 +138,14 @@ export default function Home(){
                     document.body.classList.add('theme-landing', 'landing');
                     return () => {
                         document.body.removeAttribute('data-theme');
-                        document.body.classList.remove('theme-landing');
+                        document.body.classList.remove('theme-landing', 'landing');
+                        document.body.classList.remove('theme-admin', 'admin');
                     };
-                },
-            );
+                }, []);
     return (
         
-        
         <>
+        console.log(document.body.classList)
         <div className={styles.homePage}>
             
             <Header />
