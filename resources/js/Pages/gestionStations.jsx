@@ -149,14 +149,15 @@ export default function gestionStations({ stations }){
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
-            document.body.setAttribute('data-theme','admin');
-            document.body.classList.add('theme-admin', 'admin');
-            return () => {
-                document.body.removeAttribute('data-theme');
-                document.body.classList.remove('theme-admin');
-            };
-        },
-        []);
+        document.body.setAttribute('data-theme','admin');
+        document.body.classList.add('theme-admin', 'admin');
+        return () => {
+            document.body.removeAttribute('data-theme');
+            document.body.classList.remove('theme-admin', 'admin');
+            document.body.classList.remove('theme-landing', 'landing');
+        };
+    },
+    []);
     return (
         <> 
         <div className={styles.nav}>
