@@ -1,6 +1,68 @@
 .profilePage {
+    padding-left: 5vh;
+    background-color: var(--secondary);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    text-align: center;
+    min-height: 120vh;
+    min-width: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.profilePage button {
+    background-color: var(--primary);
+    border-radius: 0%;
+    color: white;
+    padding: 5px;
+}
+
+.blocProfile {
+    margin-top: 20vh;
+    width: 80vw;
+    text-align: center;
+    background-color: white;
+    border-radius: 30px;
+    padding: 5px 10px 5px 10px;
+
+}
+
+.tabs {
+    margin-top: 10vh;
+    width: 80vw;
+    text-align: center;
+    background-color: white;
+    border-radius: 30px;
+    padding: 10px;
+    margin-bottom: 20vh;
+}
+
+.tabs button {
+    width: 35vw;
+}
+
+.tabs ul {
+    padding: 5px 0 5px 0;
+    list-style-type: none;
+}
+
+.tabs ul li{
+    margin: 2px;
+    padding: 2px;
+}
+
+.pending{
+    background-color: rgb(255, 255, 124);
+}
+
+.confirmed {
+    background-color: rgb(103, 255, 97);
+}
+
+.cancelled {
+    background-color: rgb(255, 116, 116);
+}
+
+.completed {
+    background-color: rgb(176, 176, 176);
 }
