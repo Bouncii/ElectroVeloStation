@@ -1,0 +1,32 @@
+.pageContainer{
+    display: grid;
+    min-height: 100vh;
+    background-color: chartreuse;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+        "men win win win";
+}
+
+.menu{
+    grid-area: men;
+    background-color: blue;
+    color: white;
+}
+
+.menu li{
+    border-right: 1px solid black;
+    padding : 20px;
+}
+
+.menu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.changingWindow{
+    grid-area: win;
+    background-color: brown;
+}
