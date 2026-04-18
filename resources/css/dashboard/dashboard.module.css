@@ -1,32 +1,98 @@
-.pageContainer{
+.pageContainer {
     display: grid;
     min-height: 100vh;
-    background-color: chartreuse;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-areas: 
-        "men win win win";
+    background-color: var(--primary);
+    grid-template-columns: 280px 1fr;
+    grid-template-areas: "men win";
+    color: var(--text);
 }
 
-.menu{
+.menu {
     grid-area: men;
-    background-color: blue;
-    color: white;
+    background-color: var(--light);
+    color: var(--dark);
+    padding-top: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
 }
 
-.menu li{
-    border-right: 1px solid black;
-    padding : 20px;
-}
-
-.menu ul{
+.menu ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
 }
-.changingWindow{
+
+.menu li {
+    padding: 15px 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.menu li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--accent);
+}
+
+.stationTitle {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--accent);
+    padding: 30px 25px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.changingWindow {
     grid-area: win;
-    background-color: brown;
+    padding: 40px;
+    border-top-left-radius: 30px;
+    margin-top: 10px;
+}
+
+.statWinContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.bikeContainer, .resaContainer {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+h3 {
+    color: var(--text);
+    margin-top: 0;
+    border-left: 4px solid var(--accent);
+    padding-left: 15px;
+}
+
+.statsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.statsTable th {
+    text-align: left;
+    color: var(--faintText);
+    font-size: 0.85rem;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--primary);
+}
+
+.statsTable td {
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.back a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
 }
