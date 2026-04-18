@@ -17,6 +17,7 @@
 
 .theme-admin[data-theme='admin'] {
   --primary: #D9D9D9;
+  --accent: #006aff;
   --text: #344767;
   --faintText: #7B809A;
 }
