@@ -59,12 +59,12 @@ const StatWindow = ({bikeData, resaData}) => {
         <div className={styles.statWinContainer}>
 
             <div className={styles.bikeContainer}>
-                <h3>Vélos</h3>
+                <h3 className={styles.subTitle}>Vélos</h3>
                 <BikeStatsTable data={bikeData} />
             </div>
 
             <div className={styles.resaContainer}>
-                <h3>Réservations du jour</h3>
+                <h3 className={styles.subTitle}>Réservations du jour</h3>
                  <ResaStatsTable data={resaData} />
             </div>
 
@@ -80,7 +80,7 @@ const DepartWindow = ({data}) => {
         <>
         <div className={styles.departWinContainer}>
 
-                <h3>Les vélos qui se taillent</h3>
+                <h3 className={styles.subTitle}>Les vélos qui se taillent</h3>
         </div>
         </>
     )
@@ -93,7 +93,7 @@ const WaitWindow = ({data}) => {
         <>
         <div className={styles.waitWinContainer}>
 
-                <h3>La liste d'attente</h3>
+                <h3 className={styles.subTitle}>La liste d'attente</h3>
         </div>
         </>
     )
@@ -106,7 +106,7 @@ const ArriveWindow = ({data}) => {
         <>
         <div className={styles.arriveWinContainer}>
 
-                <h3>Les vélos qui viennent squater</h3>
+                <h3 className={styles.subTitle}>Les vélos qui viennent squater</h3>
         </div>
         </>
     )
@@ -119,7 +119,7 @@ const OpeWindow = ({data}) => {
         <>
         <div className={styles.opeWinContainer}>
 
-                <h3>Opération de monétisation (si seulement)</h3>
+                <h3 className={styles.subTitle}>Opération de monétisation (si seulement)</h3>
         </div>
         </>
     )
