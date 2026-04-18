@@ -10,11 +10,35 @@
 }
 
 
-.profilePage button {
+.infosProfile button {
     background-color: var(--primary);
     border-radius: 0%;
     color: white;
     padding: 5px;
+}
+
+.infosProfile button:hover{
+    background-color: rgb(36, 0, 129);
+}
+
+.submitButton {
+    background-color: var(--primary);
+    border-radius: 0%;
+    color: white;
+    padding: 5px;
+}
+.submitButton:hover{
+    background-color: rgb(36, 0, 129);
+}
+
+.updateButton {
+    background-color: var(--primary);
+    border-radius: 0%;
+    color: white;
+    padding: 5px;
+}
+.updateButton:hover{
+    background-color: rgb(36, 0, 129);
 }
 
 .blocProfile {
@@ -65,4 +89,16 @@
 
 .completed {
     background-color: rgb(176, 176, 176);
+}
+
+.active{
+    background-color: rgb(139, 159, 211);
+}
+
+.active:hover{
+    background-color: rgb(139, 159, 211);
+}
+
+.inactive{
+    background-color: rgb(255, 255, 255);
 }

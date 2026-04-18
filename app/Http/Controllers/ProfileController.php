@@ -47,4 +47,15 @@ class ProfileController extends Controller{
             'reservations' => $reservations,
         ]);
     }
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        $user->last_name = $request->input('last_name');
+        $user->first_name = $request->input('first_name');
+        $user->email = $request->input('email');
+        $user->heigth = $request->input('heigth');
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profil mis à jour avec succès.');
+    }
 }

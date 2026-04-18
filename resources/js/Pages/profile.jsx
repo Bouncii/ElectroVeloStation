@@ -7,6 +7,15 @@ import '@css/app.css';
 
 
 
+
+function handleSubmit(formData) {
+    router.post('/profile', 
+        {last_name: formData.last_name,
+        first_name: formData.first_name,
+        email: formData.email,heigth: formData.heigth}
+    );
+}
+
 function InfosProfil() {
     const [editing, setEditing] = useState(false);
     const { user } = usePage().props.auth;
@@ -18,7 +27,7 @@ function InfosProfil() {
         email: user.email,
         //people: [],
         //reservations: []
-});
+    });
     
     return <>
     <div className={styles.blocProfile}>
@@ -30,7 +39,7 @@ function InfosProfil() {
             <p><strong>Email :</strong> {user.email}</p>
             <p><strong>Taille :</strong> {user.heigth} cm</p>
         </div>
-        <button onClick={() => setEditing(true)}>Modifier mes informations</button>
+        <button onClick={() => setEditing(true)} className={styles.updateButton}>Modifier mes informations</button>
         {editing && (
             <form onSubmit={(e) => {
                 e.preventDefault();
@@ -60,7 +69,7 @@ function InfosProfil() {
                     value={formData.heigth}
                     onChange={(e) => setFormData({...formData, heigth: e.target.value})}
                 />
-                <button type="submit">Enregistrer</button>
+                <button type="submit" onSubmit={handleSubmit(formData)} className={styles.submitButton}>Enregistrer</button>
             </form>
         )}
         </div></>
@@ -108,10 +117,10 @@ export function InfosPeople(){
                                     value={p.heigth} 
                                     onChange={(e) => p.heigth = e.target.value} 
                                 />
-                                <button type="submit">Enregistrer</button>
+                                <button type="submit" className={styles.submitButton}>Enregistrer</button>
                             </form>
                         )}
-                        <button type="button" onClick={() => setEditing(true)}>Modifier</button>
+                        <button type="button" onClick={() => setEditing(true)}className={styles.updateButton}>Modifier</button>
                     </li>
                 ))}
             </ul>
@@ -149,11 +158,11 @@ function Tabinfos(){
     const [activeTab, setActiveTab] = useState("people");
     return <>
     <div className={styles.tabs}>
-    <button onClick={() => setActiveTab("people")}>
+    <button onClick={() => setActiveTab("people")} className={activeTab === "people" ? styles.active : styles.inactive}>
         Mes cyclistes
     </button>
 
-    <button onClick={() => setActiveTab("reservations")}>
+    <button onClick={() => setActiveTab("reservations")} className={activeTab === "reservations" ? styles.active : styles.inactive}>
         Mes réservations
     </button>
     
