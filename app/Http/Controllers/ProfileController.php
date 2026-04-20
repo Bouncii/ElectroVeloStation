@@ -49,9 +49,9 @@ class ProfileController extends Controller{
 
 
 
-    public function updatePerson(Request $request, Person $person)
+    public function updatePerson(Request $request, $id)
     {
-        // ✅ Vérification que la personne appartient bien à l'utilisateur connecté
+        $person = Person::find($id);
         if ($person->user_id !== Auth::id()) {
             abort(403);
         }

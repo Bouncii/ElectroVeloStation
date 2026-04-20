@@ -84,7 +84,7 @@ export function InfosPeople() {
 
     function handleSave(e, id) {
         e.preventDefault();
-        router.post(`/profile/${id}/update`, editData, {
+        router.post(`/profile/people/${id}/update`, editData, {
             onSuccess: () => {
                 setEditingId(null);
                 setEditData({});
@@ -102,6 +102,13 @@ export function InfosPeople() {
                 <ul>
                     {people.map((p) => (
                         <li key={p.id}>
+                            <span>
+                            {p.first_name} {p.last_name} — {p.age} ans — taille(cm) : {p.required_bike_size}
+                            </span>
+                            <button
+                            type="button" onClick={() => handleEdit(p)} className={styles.updateButton} >
+                            Modifier
+                            </button>
                             {editingId === p.id ? (
                                 <form onSubmit={(e) => handleSave(e, p.id)}>
                                     <input
@@ -124,27 +131,15 @@ export function InfosPeople() {
                                     />
                                     <input
                                         type="number"
-                                        placeholder="Taille de vélo"
+                                        placeholder="Taille(cm)"
                                         value={editData.required_bike_size}
                                         onChange={(e) => setEditData({ ...editData, required_bike_size: e.target.value })}
                                     />
                                     <button type="submit" className={styles.submitButton}>Enregistrer</button>
                                     <button type="button" onClick={handleCancel}>Annuler</button>
                                 </form>
-                            ) : (
-                                <>
-                                    <span>
-                                        {p.first_name} {p.last_name} — {p.age} ans — taille vélo : {p.required_bike_size}
-                                    </span>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleEdit(p)}
-                                        className={styles.updateButton}
-                                    >
-                                        Modifier
-                                    </button>
-                                </>
-                            )}
+                            ) : null
+                        }
                         </li>
                     ))}
                 </ul>
