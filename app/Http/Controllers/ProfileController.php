@@ -32,30 +32,39 @@ class ProfileController extends Controller{
     }
 
 
-    public function show()
-    {
-        $user = Auth::user();
-        $people = Person::where('user_id', $user->id)->get();
-
-        $reservations = Reservation::where('user_id', $user->id)
-            ->with(['attributions.person', 'attributions.bike'])
-            ->get();
-
-        return Inertia::render('profile', [
-            'user' => $user,
-            'people' => $people,
-            'reservations' => $reservations,
-        ]);
-    }
     public function update(Request $request)
     {
         $user = Auth::user();
-        $user->last_name = $request->input('last_name');
-        $user->first_name = $request->input('first_name');
-        $user->email = $request->input('email');
-        $user->heigth = $request->input('heigth');
-        $user->save();
 
-        return redirect()->back()->with('success', 'Profil mis à jour avec succès.');
+        $request->validate([
+            'first_name'         => 'required|string|max:255',
+            'last_name'          => 'required|string|max:255',
+            'email'                => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update($request->only(['first_name', 'last_name', 'email']));
+
+        return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
+    }
+
+
+
+    public function updatePerson(Request $request, Person $person)
+    {
+        // ✅ Vérification que la personne appartient bien à l'utilisateur connecté
+        if ($person->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'first_name'         => 'required|string|max:255',
+            'last_name'          => 'required|string|max:255',
+            'age'                => 'required|integer|min:0|max:120',
+            'required_bike_size' => 'nullable|integer',
+        ]);
+
+        $person->update($request->only(['first_name', 'last_name', 'age', 'required_bike_size']));
+
+        return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
     }
 }

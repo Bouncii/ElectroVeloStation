@@ -24,7 +24,8 @@ Route::middleware(['auth','role:admin,employee,client'])
     ->prefix('profile')
     ->group(function () {
         Route::get('/', [ProfileController::class, "index"]);
-        Route::post('/', [ProfileController::class, 'store']);
+         Route::post('/update', [ProfileController::class, "update"]);
+        Route::post('/{id}/update', [ProfileController::class, "updatePerson"]);
     });
 
 

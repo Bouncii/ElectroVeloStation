@@ -8,127 +8,152 @@ import '@css/app.css';
 
 
 
-function handleSubmit(formData) {
-    router.post('/profile', 
-        {last_name: formData.last_name,
-        first_name: formData.first_name,
-        email: formData.email,heigth: formData.heigth}
-    );
-}
 
 function InfosProfil() {
     const [editing, setEditing] = useState(false);
     const { user } = usePage().props.auth;
-    console.log(user);
+
     const [formData, setFormData] = useState({
         last_name: user.last_name,
         first_name: user.first_name,
         required_bike_size: user.required_bike_size,
         email: user.email,
-        //people: [],
-        //reservations: []
     });
-    
-    return <>
-    <div className={styles.blocProfile}>
-        <h1>Bienvenue {user.first_name} {user.last_name}</h1>
-        <h2>Vos informations : </h2>
-        <div className={styles.infosProfile}>
-            <p><strong>Nom :</strong> {user.last_name}</p>
-            <p><strong>Prénom :</strong> {user.first_name}</p>
-            <p><strong>Email :</strong> {user.email}</p>
-            <p><strong>Taille :</strong> {user.heigth} cm</p>
-        </div>
-        <button onClick={() => setEditing(true)} className={styles.updateButton}>Modifier mes informations</button>
-        {editing && (
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                // Handle form submission
-            }}>
-                <input
-                    type="text"
-                    placeholder="Nom"
-                    value={formData.last_name}
-                    onChange={(e) => setFormData({...formData, last_name: e.target.value})}
-                />
-                <input
-                    type="text"
-                    placeholder="Prénom"
-                    value={formData.first_name}
-                    onChange={(e) => setFormData({...formData, first_name: e.target.value})}
-                />
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                />
-                <input
-                    type="number"
-                    placeholder="Taille (cm)"
-                    value={formData.heigth}
-                    onChange={(e) => setFormData({...formData, heigth: e.target.value})}
-                />
-                <button type="submit" onSubmit={handleSubmit(formData)} className={styles.submitButton}>Enregistrer</button>
-            </form>
-        )}
-        </div></>
-        }
 
-export function InfosPeople(){
+    function handleSubmit(e) {
+        e.preventDefault();
+        router.post('/profile/update', formData, {
+            onSuccess: () => setEditing(false),
+        });
+    }
+
+    return (
+        <div className={styles.blocProfile}>
+            <h1>Bienvenue {user.first_name} {user.last_name}</h1>
+            <h2>Vos informations :</h2>
+            <div className={styles.infosProfile}>
+                        <p><strong>Nom :</strong> {user.last_name}</p>
+                        <p><strong>Prénom :</strong> {user.first_name}</p>
+                        <p><strong>Email :</strong> {user.email}</p>
+                    </div>
+                    <button onClick={() => setEditing(true)} className={styles.updateButton}>
+                        Modifier mes informations
+                    </button>
+            { editing ? (
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Nom"
+                        value={formData.last_name}
+                        onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Prénom"
+                        value={formData.first_name}
+                        onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    />
+                    <button type="submit" className={styles.submitButton}>Enregistrer</button>
+                    <button type="button" onClick={() => setEditing(false)}>Annuler</button>
+                </form>
+            ) : null}
+            </div> 
+        );
+    }
+
+export function InfosPeople() {
     const { people } = usePage().props;
-    console.log(people);
-    const [editing, setEditing] = useState(false);
-    return <><div className={styles.blocPeople}>
-        <h2>Vos personnes associées : </h2>
-        {people.length == 0 ? (
-            <p>Aucune personne associée.</p>
-        ) : (
-            <ul>
-                {people.map((p) => (
-                    <li key={p.id}>
-                        {p.first_name} {p.last_name} - {p.age} ans - {p.heigth} cm
-                        {editing && (
-                            <form onSubmit={(e) => {
-                                e.preventDefault();
-                                // Handle form submission
-                            }}>
-                                <input
-                                    type="text"
-                                    placeholder="Nom"
-                                    value={p.last_name}
-                                    onChange={(e) => p.last_name = e.target.value}
-                                /> 
-                                <input
-                                    type="text"
-                                    placeholder="Prénom"
-                                    value={p.first_name}
-                                    onChange={(e) => p.first_name = e.target.value}
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Âge"
-                                    value={p.age}
-                                    onChange={(e) => p.age = e.target.value}
-                                />
-                                <input 
-                                    type="number" 
-                                    placeholder="Taille (cm)" 
-                                    value={p.heigth} 
-                                    onChange={(e) => p.heigth = e.target.value} 
-                                />
-                                <button type="submit" className={styles.submitButton}>Enregistrer</button>
-                            </form>
-                        )}
-                        <button type="button" onClick={() => setEditing(true)}className={styles.updateButton}>Modifier</button>
-                    </li>
-                ))}
-            </ul>
-        )}
-    </div>
-    
-    </>
+    const [editingId, setEditingId] = useState(null);
+    const [editData, setEditData] = useState({});
+
+    function handleEdit(person) {
+        setEditingId(person.id);
+        setEditData({ ...person });
+    }
+
+    function handleCancel() {
+        setEditingId(null);
+        setEditData({});
+    }
+
+    function handleSave(e, id) {
+        e.preventDefault();
+        router.post(`/profile/${id}/update`, editData, {
+            onSuccess: () => {
+                setEditingId(null);
+                setEditData({});
+            },
+        });
+    }
+
+    return (
+        <div className={styles.blocPeople}>
+            <h2>Vos personnes associées :</h2>
+
+            {people.length === 0 ? (
+                <p>Aucune personne associée.</p>
+            ) : (
+                <ul>
+                    {people.map((p) => (
+                        <li key={p.id}>
+                            {editingId === p.id ? (
+                                <form onSubmit={(e) => handleSave(e, p.id)}>
+                                    <input
+                                        type="text"
+                                        placeholder="Nom"
+                                        value={editData.last_name}
+                                        onChange={(e) => setEditData({ ...editData, last_name: e.target.value })}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Prénom"
+                                        value={editData.first_name}
+                                        onChange={(e) => setEditData({ ...editData, first_name: e.target.value })}
+                                    />
+                                    <input
+                                        type="number"
+                                        placeholder="Âge"
+                                        value={editData.age}
+                                        onChange={(e) => setEditData({ ...editData, age: e.target.value })}
+                                    />
+                                    <input
+                                        type="number"
+                                        placeholder="Taille de vélo"
+                                        value={editData.required_bike_size}
+                                        onChange={(e) => setEditData({ ...editData, required_bike_size: e.target.value })}
+                                    />
+                                    <button type="submit" className={styles.submitButton}>Enregistrer</button>
+                                    <button type="button" onClick={handleCancel}>Annuler</button>
+                                </form>
+                            ) : (
+                                <>
+                                    <span>
+                                        {p.first_name} {p.last_name} — {p.age} ans — taille vélo : {p.required_bike_size}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEdit(p)}
+                                        className={styles.updateButton}
+                                    >
+                                        Modifier
+                                    </button>
+                                </>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
 }
+
+
 export function AfficheReservations() {
     const { reservations } = usePage().props;
     console.log(reservations);
