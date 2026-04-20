@@ -20,6 +20,7 @@ class ReservationObserver
     public function updated(Reservation $reservation): void
     {
         if ($reservation->wasChanged('status') && $reservation->status === 'cancelled') {
+            $reservation->attributions()->update(['bike_id' => null]);
             $this->reservationService->checkPendingsForResolutions($reservation->station_id);
         }
     }
