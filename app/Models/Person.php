@@ -10,6 +10,10 @@ class Person extends Model
     use HasFactory;
     protected $fillable = ['first_name', 'last_name', 'age', 'required_bike_size', 'user_id'];
 
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
