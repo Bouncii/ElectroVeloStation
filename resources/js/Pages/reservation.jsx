@@ -41,6 +41,39 @@ export default function Reservation({
     // CHANGE RESERVATION
     // -----------------------------
 
+function Formulaire() {
+    return <>
+        <h3>Nouveau cycliste : </h3>
+        // Ajouter un if pour l'afficher ou non 
+        <select name="enregistres" onChange={(e) => {
+            if(e.target.value != ""){
+                e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "none";
+            } else {
+                e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "block";
+            }
+        }}>
+            <option value="">Pas encore enregistré</option>
+            //Faire en sorte de récupérer et créer les options automatiquement
+            <option value="1">M. Oui</option>
+            <option value="2">Mme Oui</option>
+            //TODO : ajouter les utilisateurs déjà enregistrés dans la base de données
+        </select>
+        <form className="formulaire" action="" method="post">
+        <label>Nom :</label>
+        <input type="text" name="nom" />
+        <label>Prénom :</label>
+        <input type="text" name="prenom" />
+        <label>Âge :</label>
+        <input type="number" name="age" />
+        <label>Taille (cm) :</label>
+        <input type="number" name="taille" />
+        <button className="boutonRegister">Enregistrer</button>
+        </form>
+        
+        
+    </>
+    
+}
     const handleReservationChange = (e) => {
         if(e.target.name === "heureDebut" || e.target.name === "heureFin" ){
             if(e.target.value < e.target.min || e.target.value > e.target.max){
