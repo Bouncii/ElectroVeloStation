@@ -36,7 +36,7 @@ function InfosProfil() {
                         <p><strong>Prénom :</strong> {user.first_name}</p>
                         <p><strong>Email :</strong> {user.email}</p>
                     </div>
-                    <button onClick={() => setEditing(true)} className={styles.updateButton}>
+                    <button onClick={() => setEditing(true)} className={styles.bnt}>
                         Modifier mes informations
                     </button>
             { editing ? (
@@ -59,8 +59,10 @@ function InfosProfil() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
-                    <button type="submit" className={styles.submitButton}>Enregistrer</button>
-                    <button type="button" onClick={() => setEditing(false)}>Annuler</button>
+                    <div className={styles.formActions}>
+                        <button type="submit" className={styles.bnt}>Enregistrer</button>
+                        <button type="button" onClick={() => setEditing(false)} className={styles.bnt}>Annuler</button>
+                    </div>
                 </form>
             ) : null}
             </div> 
@@ -106,7 +108,7 @@ export function InfosPeople() {
                             {p.first_name} {p.last_name} — {p.age} ans — taille(cm) : {p.required_bike_size}
                             </span>
                             <button
-                            type="button" onClick={() => handleEdit(p)} className={styles.updateButton} >
+                            type="button" onClick={() => handleEdit(p)} className={styles.bnt} >
                             Modifier
                             </button>
                             {editingId === p.id ? (
@@ -135,8 +137,10 @@ export function InfosPeople() {
                                         value={editData.required_bike_size}
                                         onChange={(e) => setEditData({ ...editData, required_bike_size: e.target.value })}
                                     />
-                                    <button type="submit" className={styles.submitButton}>Enregistrer</button>
-                                    <button type="button" onClick={handleCancel}>Annuler</button>
+                                    <div className={styles.formActions}>
+                                        <button type="submit" className={styles.bnt}>Enregistrer</button>
+                                        <button type="button" onClick={handleCancel} className={styles.bnt}>Annuler</button>
+                                    </div>
                                 </form>
                             ) : null
                         }
@@ -178,11 +182,12 @@ function Tabinfos(){
     const [activeTab, setActiveTab] = useState("people");
     return <>
     <div className={styles.tabs}>
-    <button onClick={() => setActiveTab("people")} className={activeTab === "people" ? styles.active : styles.inactive}>
+    
+    <button onClick={() => setActiveTab("people")} className={[styles.bnt, activeTab === "people" ? styles.active : styles.inactive].join(' ')}>
         Mes cyclistes
     </button>
 
-    <button onClick={() => setActiveTab("reservations")} className={activeTab === "reservations" ? styles.active : styles.inactive}>
+    <button onClick={() => setActiveTab("reservations")} className={[styles.bnt, activeTab === "reservations" ? styles.active : styles.inactive].join(' ')}>
         Mes réservations
     </button>
     

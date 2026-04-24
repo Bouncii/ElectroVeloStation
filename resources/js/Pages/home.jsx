@@ -44,7 +44,8 @@ export function Header(){
                     )}
 
                     <Link href = '/reservation' className={styles.nav_link}>Reserver</Link>
-                    <Link href = '/' className={styles.btn4}>Test</Link>
+                    
+                    <Link href = '/profile' className={styles.btn4}>Profile</Link>
                 </div>
 
                 <button className={styles.icon} onClick={() => setIsOpen(!isOpen)}>
@@ -145,14 +146,12 @@ export default function Home(){
     return (
         
         <>
-        console.log(document.body.classList)
         <div className={styles.homePage}>
             
             <Header />
+            <main className={styles.sectionContainer}>
             <h1 className={styles.hide}>.</h1>
-            <img src="./images/imgTop.png" className={styles.imgTop}></img>
             <p className={styles.TextTop}>ELECTRO VELO STATION</p>
-            <h2 className={styles.slogan}>Un slogan vraiment cool.|</h2>
 
             <div className={styles.Ovals}>
                 <TextOval 
@@ -191,33 +190,32 @@ export default function Home(){
                 />
             </div>
             <h2 className={styles.titreGros}>Réservez votre premier vélo.</h2>
-            <p className={styles.subText}>Vous allez voir, c'est facile !</p>
 
             <div className={styles.tutoCards}>            
                 <CardTuto
-                num="1"
+                num="1 ."
                 desc="Choisir votre station"
-                text="lorem"
+                text=""
                 />
                 <CardTuto
-                num="2"
+                num="2 ."
                 desc="Validez votre réservation"
-                text="ipsum"
+                text=""
                 />
                 <CardTuto
-                num="3"
+                num="3 ."
                 desc="Partez à l'aventure avec votre vélo !"
-                text="vitaes"
+                text=""
                 />
             </div>
+            
                 <h2 className={`${styles.titreGros} ${styles.last_text}`}>Simplifiez-vous la vie, créez un compte !</h2>
                 <LinkOval
                     link='/register'
                     text="Créer un compte"    
                 />
-                
+        </main>        
         </div>
-            
         </>
     );
 }
