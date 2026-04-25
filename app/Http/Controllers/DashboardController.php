@@ -248,4 +248,28 @@ class DashboardController extends Controller
 
         return back()->with('success', "Réapprovisionnement terminé : $transferredCount vélos rapatriés.");
     }
+
+    // Fonction qui permet de confirmer le départ d'une réservation
+    public function checkIn(Reservation $reservation)
+    {
+        if ($reservation->status == 'confirmed') {
+            $reservation->update(['status' => 'in_progress']);
+            $res = back()->with('success', "checkIn réussit !");
+        }else{
+            $res = back()->with('error', "checkIn impossible car la réservation est soit déjà partie, soit annulée, soit en attente");
+        }
+        return $res;
+    }
+
+    // Fonction qui permet de confirmer la reception des vélos
+    public function checkOut(Reservation $reservation)
+    {
+        if ($reservation->status == 'in_progress') {
+            $reservation->update(['status' => 'completed']);
+            $res = back()->with('success', "checkOut réussit !");
+        }else{
+            $res = back()->with('error', "checkOut impossible car la scéance n'est pas en cours");
+        }
+        return $res;
+    }
 };
