@@ -11,6 +11,49 @@ use App\Models\Bike;
 
 class DashboardController extends Controller
 {
+
+    // Fonction qui trouve les vélos avec le moins d'impact sur les réservations futures.
+    private function getBikesWithLeastImpact(Station $station, $size, $count)
+    {
+        $bikes = Bike::where('station_id', $station->id)
+            ->where('size', $size)
+            ->where('state', 'available')
+            ->with(['attributions.reservation' => function ($query) {
+                $query->where('start_date', '>=', now())
+                      ->where('status', '!=', 'cancelled');
+            }])
+            ->get();
+
+        if ($bikes->count() < $count) {
+            $res = collect();
+        }else{
+            $res =  $bikes->sortByDesc(function ($bike) {
+                $futureReservations = $bike->attributions->pluck('reservation')->filter();
+                if ($futureReservations->isEmpty()) {
+                    return Carbon::now()->addYears(100)->timestamp;
+                }
+                return Carbon::parse($futureReservations->min('start_date'))->timestamp;
+            })->values()->take($count);
+        }
+        return $res;
+    }
+
+    private function clearFutureAttributions($bikes)
+    {
+        foreach ($bikes as $bike) {
+            $futureAttributions = $bike->attributions()->whereHas('reservation', function($q) {
+                $q->where('start_date', '>=', now())
+                  ->whereIn('status', ['confirmed', 'pending']);
+            })->get();
+
+            foreach ($futureAttributions as $attr) {
+                $attr->update(['bike_id' => null]);
+                $attr->reservation->update(['status' => 'pending']); 
+                // Envoyer mail ici
+            }
+        }
+    }
+
     public function index()
     {
         return Inertia::render('dashboard/stationSelection', [
@@ -76,45 +119,15 @@ class DashboardController extends Controller
             'count' => 'required|integer|min:1'
         ]);
 
-        $bikes = Bike::where('station_id', $station->id)
-            ->where('size', $validated['size'])
-            ->where('state', 'available')
-            ->with(['attributions.reservation' => function ($query) {
-                // on ne prends que les résa futurs
-                $query->where('start_date', '>=', now())
-                      ->where('status', '!=', 'cancelled');
-            }])
-            ->get();
-
-        if ($bikes->count() < $validated['count']) {
-            return back()->withErrors(['error' => 'Pas assez de vélos disponibles']);
+        $bikesToMaintain = $this->getBikesWithLeastImpact($station, $validated['size'], $validated['count']);
+        if ($bikesToMaintain->isEmpty()) {
+            return back()->withErrors(['error' => 'Pas assez de vélos disponibles.']);
         }
-        // On choisit les vélos qui auront le moin d'impact sur les réservations
-        $sortedBikes = $bikes->sortByDesc(function ($bike) {
-            $futureReservations = $bike->attributions->pluck('reservation')->filter();
-            if ($futureReservations->isEmpty()) {
-                return Carbon::now()->addYears(100)->timestamp; // si aucune résa rattaché alors on fait en sorte que le velo soit parmis les premiers à être sélectionné
-            }
-            $earliestReservationDate = $futureReservations->min('start_date');
-            return Carbon::parse($earliestReservationDate)->timestamp;
-        })->values();
-
-        $bikesToMaintain = $sortedBikes->take($validated['count']);
 
         DB::transaction(function () use ($bikesToMaintain) {
+            $this->clearFutureAttributions($bikesToMaintain);
             foreach ($bikesToMaintain as $bike) {
                 $bike->update(['state' => 'maintenance']);
-                $futureAttributions = $bike->attributions()->whereHas('reservation', function($q) {
-                    $q->where('start_date', '>=', now())
-                      ->whereIn('status', ['confirmed', 'pending']);
-                })->get();
-
-                foreach ($futureAttributions as $attr) {
-                    $attr->update(['bike_id' => null]);
-                    $attr->reservation->update(['status' => 'pending']); 
-                }
-
-                // Il faut envoyer mail 
             }
         });
         return back()->with('success', $validated['count'] . ' vélos mis en maintenance.');
@@ -141,5 +154,48 @@ class DashboardController extends Controller
             $bike->update(['state' => 'available']);
         }
         return back()->with('success', $validated['count'] . ' vélos remis en service.');
+    }
+
+    // Fonction qui ajoute un vélo dans une station
+    public function addBike(Request $request, Station $station)
+    {
+        $validated = $request->validate([
+            'size' => 'required',
+            'count' => 'required|integer|min:1|max:100'
+        ]);
+
+        DB::transaction(function () use ($validated, $station) {
+            for ($i=0; $i < $validated['count']; $i++) { 
+                Bike::create(
+                    [
+                        'size' => $validated['size'],
+                        'state' => 'available',
+                        'station_id' => $station->id
+                    ]
+                );
+            }
+        });
+
+        return back()->with('success', $validated['count'] . ' vélos créés');
+    }
+
+    // Fonction qui supprime un vélo dans une station
+    public function removeBike(Request $request, Station $station)
+    {
+        $validated = $request->validate([
+            'size' => 'required',
+            'count' => 'required|integer|min:1'
+        ]);
+        $bikesToDelete = $this->getBikesWithLeastImpact($station, $validated['size'], $validated['count']);
+        if ($bikesToDelete->isEmpty()) {
+            return back()->withErrors(['error' => 'Pas assez de vélos disponibles pour la suppression.']);
+        }
+        DB::transaction(function () use ($bikesToDelete) {
+            $this->clearFutureAttributions($bikesToDelete); 
+            foreach ($bikesToDelete as $bike) {
+                $bike->delete();
+            }
+        });
+        return back()->with('success', $validated['count'] . ' vélos supprimés de la flotte.');
     }
 };
