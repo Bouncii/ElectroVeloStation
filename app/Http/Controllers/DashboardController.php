@@ -30,9 +30,12 @@ class DashboardController extends Controller
             $res =  $bikes->sortByDesc(function ($bike) {
                 $futureReservations = $bike->attributions->pluck('reservation')->filter();
                 if ($futureReservations->isEmpty()) {
-                    return Carbon::now()->addYears(100)->timestamp;
+                    $value =  Carbon::now()->addYears(100)->timestamp;
+                }else{
+                    $value =  Carbon::parse($futureReservations->min('start_date'))->timestamp;
                 }
-                return Carbon::parse($futureReservations->min('start_date'))->timestamp;
+                return $value;
+                
             })->values()->take($count);
         }
         return $res;
@@ -197,5 +200,52 @@ class DashboardController extends Controller
             }
         });
         return back()->with('success', $validated['count'] . ' vélos supprimés de la flotte.');
+    }
+
+
+    // Fonction qui lance une operation d'equilibrage, elle va scanner les besoins de la station actuelle, chercher des vélos inutilisés dans d'autres stations, et les rapatrier
+    public function rebalanceBikes(Station $station)
+    {
+        $pendingReservations = Reservation::where('station_id', $station->id)
+            ->where('status', 'pending')
+            ->with('attributions.person')
+            ->get();
+
+        $neededSizes = [];
+        foreach ($pendingReservations as $reservation) {
+            foreach ($reservation->attributions->whereNull('bike_id') as $attr) {
+                $size = $attr->person->required_bike_size;
+                if (!array_key_exists($size,$neededSizes)) {
+                    $neededSizes[$size] = 0;
+                }
+                $neededSizes[$size]++;
+            }
+        }
+
+        if (empty($neededSizes)) {
+            return back()->with('success', 'Aucun réapprovisionnement nécessaire, toutes les réservations sont gérées.');
+        }
+
+        $transferredCount = 0;
+        DB::transaction(function () use ($station, $neededSizes, &$transferredCount) {
+            foreach ($neededSizes as $size => $count) {
+                $availableBikes = Bike::where('size', $size)
+                    ->where('state', 'available')
+                    ->where('station_id', '!=', $station->id)
+                    ->whereDoesntHave('attributions.reservation', function ($query) {
+                        $query->where('start_date', '>=', now())
+                              ->where('status', '!=', 'cancelled');
+                    })
+                    ->take($count)
+                    ->get();
+
+                foreach ($availableBikes as $bike) {
+                    $bike->update(['station_id' => $station->id]);
+                    $transferredCount++;
+                }
+            }
+        });
+
+        return back()->with('success', "Réapprovisionnement terminé : $transferredCount vélos rapatriés.");
     }
 };
