@@ -32,6 +32,8 @@ Route::middleware(['auth', 'role:admin,employee'])
 
         Route::get('/dashboard', [DashboardController::class, "index"]);
         Route::get('/dashboard/{station}', [DashboardController::class, "show"]);
+        Route::post('/dashboard/stations/{station}/maintenance', [DashboardController::class, 'putInMaintenance']);
+        Route::post('/dashboard/stations/{station}/available', [DashboardController::class, 'makeAvailable']);
     }
 );
 
