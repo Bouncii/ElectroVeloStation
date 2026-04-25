@@ -39,8 +39,8 @@ Route::middleware(['auth', 'role:admin,employee'])
 
                 Route::get('/', [DashboardController::class, "show"])->name('show');
                 
-                Route::post('/bikes/maintenance', [DashboardController::class, 'putInMaintenance'])->name('maintenance');
-                Route::post('/bikes/available', [DashboardController::class, 'makeAvailable'])->name('available');
+                Route::post('/bikes/maintenance', [DashboardController::class, 'putInMaintenance'])->name('bikes.maintenance');
+                Route::post('/bikes/available', [DashboardController::class, 'makeAvailable'])->name('bikes.available');
                 Route::post('/bikes/add', [DashboardController::class, 'addBike'])->name('bikes.add');
                 Route::post('/bikes/remove', [DashboardController::class, 'removeBike'])->name('bikes.remove');
 
