@@ -30,10 +30,26 @@ Route::middleware(['auth', 'role:admin,employee'])
         Route::resource('/schedules', ScheduleController::class)->only(['update']);
         Route::resource('/reservations', ReservationController::class);
 
-        Route::get('/dashboard', [DashboardController::class, "index"]);
-        Route::get('/dashboard/{station}', [DashboardController::class, "show"]);
-        Route::post('/dashboard/stations/{station}/maintenance', [DashboardController::class, 'putInMaintenance']);
-        Route::post('/dashboard/stations/{station}/available', [DashboardController::class, 'makeAvailable']);
+
+        Route::prefix('dashboard')->group(function () {
+            
+            Route::get('/', [DashboardController::class, "index"])->name('index');
+            
+            Route::prefix('{station}')->group(function () {
+
+                Route::get('/', [DashboardController::class, "show"])->name('show');
+                
+                Route::post('/bikes/maintenance', [DashboardController::class, 'putInMaintenance'])->name('maintenance');
+                Route::post('/bikes/available', [DashboardController::class, 'makeAvailable'])->name('available');
+                Route::post('/bikes/add', [DashboardController::class, 'addBike'])->name('bikes.add');
+                Route::post('/bikes/remove', [DashboardController::class, 'removeBike'])->name('bikes.remove');
+
+                Route::post('/rebalance', [DashboardController::class, 'rebalanceBikes'])->name('rebalance');
+
+                Route::patch('/reservations/{reservation}/checkin', [DashboardController::class, 'checkIn'])->name('checkin');
+                Route::patch('/reservations/{reservation}/checkout', [DashboardController::class, 'checkOut'])->name('checkout');
+            });
+        });
     }
 );
 
