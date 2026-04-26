@@ -76,8 +76,6 @@ const StatWindow = ({bikeData, resaData}) => {
 const DepartWindow = ({data, stationId}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
 
-    const { flash } = usePage().props;
-
     const handleCheckIn = (reservationId) => {
         if (confirm("Confirmer le départ de cette réservation ?")) {
             router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkin`, {}, {
@@ -205,27 +203,75 @@ const ArriveWindow = ({data, stationId}) => {
 
 const OpeWindow = ({stationId}) => {
     if (!stationId) return null;
-    const {flash} = usePage().props;
+
+    const [size, setSize] = useState('');
+    const [count, setCount] = useState(1);
+
     const handleRebalance = () => {
         router.post(`/panel/dashboard/${stationId}/rebalance`, {}, {
            onSuccess: (page) => alert(page.props.flash.success),
             onError: () => alert("Erreur lors du rééquillibrage.")
         });
     };
+
+    const handleMaintenance = () => {
+        if (!size) {
+            alert("Veuillez sélectionner une taille.");
+            return;
+        }
+        if (count < 1) {
+            alert("Le nombre doit être supérieur à 0.");
+            return;
+        }
+        router.post(`/panel/dashboard/${stationId}/bikes/maintenance`, 
+            { size, count },
+            {
+                onSuccess: (page) => alert(page.props.flash.success),
+                onError: (errors) => alert(errors.error || "Erreur technique"),
+            }
+        );
+    };
     
     return(
         
         <div className={styles.opeWinContainer}>
-            <h3 className={styles.subTitle}>Opération de réapprovisionnement</h3>
-            <p className={styles.description}>
-                Cette action va scanner les besoins de la station et rapatrier les vélos disponibles depuis d'autres stations.
-            </p>
-            
-            <button 
-                onClick={handleRebalance} 
-                className={styles.btn_admin}>
-                Lancer le rééquilibrage
-            </button>
+            <div className={styles.containerReequi}>
+                <h3 className={styles.subTitle}>Opération de réapprovisionnement</h3>
+                <p className={styles.description}>
+                    Cette action va scanner les besoins de la station et rapatrier les vélos disponibles depuis d'autres stations.
+                </p>
+                
+                <button 
+                    onClick={handleRebalance} 
+                    className={styles.btn_admin}>
+                    Lancer le rééquilibrage
+                </button>
+            </div>
+
+            <div className={styles.containerMaintenance}>
+                <h3 className={styles.subTitle}>Opération de maintenance</h3>
+                <p className={styles.description}>
+                    Permet de mettre es vélos en maintenance.
+                </p>
+                <select value={size} onChange={(e) => setSize(e.target.value)}>
+                    <option value="">-- Taille --</option>
+                    <option value="140">140</option>
+                    <option value="160">160</option>
+                    <option value="180">180</option>
+                </select>
+
+                
+                <input 
+                    type="number" 
+                    min="1" 
+                    value={count} 
+                    onChange={(e) => setCount(e.target.value)} 
+                />
+
+                <button onClick={handleMaintenance}>
+                    Mettre en maintenance
+                </button>
+            </div>
         </div>
         
     );
