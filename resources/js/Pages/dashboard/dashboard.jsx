@@ -74,19 +74,74 @@ const StatWindow = ({bikeData, resaData}) => {
 }
 
 const DepartWindow = ({data}) => {
-    if (!data) return null;
-
+    if (!data) return <p> Pas d'informations sur la station.</p>;
     return(
         <>
         <div className={styles.departWinContainer}>
 
-                <h3 className={styles.subTitle}>Les vélos qui se taillent</h3>
+                <h3 className={styles.subTitle}>Vélos sortants</h3>
+                {!(data && data.length > 0) ? (
+                    <p>Aucune résa</p>
+                ): (<ul>
+                    {data.map((resa) => (
+                    <li>
+                        Vélo #{resa.bike_id} - User : {resa.user_name}
+                    </li>
+                ))}
+               </ul>)}
+
+                
         </div>
         </>
     )
 }
 
-const WaitWindow = ({data}) => {
+function WaitWindow({data}){
+
+    if (!data) {
+        return <p>Chargement des réservations...</p>;
+    }
+        return (
+            <>
+                {data.map(res => (
+                    <div key={res.id} className={styles.wait_entry}>
+                        <div className={styles.div1}>
+                        <p> {res.id}</p>
+                        <p>{res.created_at}</p>
+                        </div>
+
+                    <h2 className={styles.titre_modale}>Détails de la demande</h2>
+                <p><strong>ID :</strong> {res.id}</p>
+                <p><strong>Client :</strong> {res.user?.first_name} {res.user?.last_name}</p>
+                <p><strong>Email :</strong> {res.user?.email}</p>
+                <p><strong>Station :</strong> {res.station?.name}</p>
+                <p><strong>Date :</strong> {res.created_at}</p>
+                <p><strong>Commande :</strong></p>
+                <div className={styles.WaitListCommande}>                        
+                        {res.attributions && res.attributions.length > 0 ? (
+                            <ul className={styles.wait_liste_velos}>
+                                {res.attributions.map((attr, index ) => (
+                                    <li key={attr.id || index}>
+                                        Vélo n°{attr.bike?.id}
+                                        {attr.person && ` (Attribué à : ${attr.person.first_name})`}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <span>Aucun vélo pour le moment...</span>
+                        )}
+                        </div> 
+
+
+                    </div>
+                ))}
+                
+            </>  
+        );
+}
+
+
+const WaitWindow2 = ({data}) => {
     if (!data) return null;
 
     return(
@@ -100,13 +155,23 @@ const WaitWindow = ({data}) => {
 }
 
 const ArriveWindow = ({data}) => {
-    if (!data) return null;
-
+    if (!data) return <p> Pas d'informations sur la station.</p>;
     return(
         <>
-        <div className={styles.arriveWinContainer}>
+        <div className={styles.departWinContainer}>
 
-                <h3 className={styles.subTitle}>Les vélos qui viennent squater</h3>
+                <h3 className={styles.subTitle}>Vélos entrants</h3>
+                {!(data && data.length > 0) ? (
+                    <p>Aucune résa</p>
+                ): (
+                <ul>
+                    {data.map((resa) => (
+                    <li>
+                        Vélo #{resa.bike_id} - User : {resa.user_name}
+                    </li>
+                ))}
+               </ul>
+            )}
         </div>
         </>
     )
@@ -164,9 +229,9 @@ export default function DashboardTest() {
         </div>
         <div className={styles.changingWindow}>
                 {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} />}
-                {activeWindow === 'departing' && <DepartWindow data={bikeStats} />}
-                {activeWindow === 'waitlist' && <WaitWindow data={bikeStats} />}
-                {activeWindow === 'arriving' && <ArriveWindow data={bikeStats} />}
+                {activeWindow === 'departing' && <DepartWindow data={departingReservations} />}
+                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} />}
+                {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} />}
                 {activeWindow === 'operation' && <OpeWindow data={bikeStats} />}
         </div>
     </div>    
