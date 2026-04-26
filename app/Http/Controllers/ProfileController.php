@@ -1,0 +1,78 @@
+<?php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Station;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Person;
+use App\Models\Reservation;
+use App\Models\Attribution;
+use App\Models\Schedule;
+
+
+class ProfileController extends Controller{
+    public function index()
+    {
+        $reservations = [];
+        $people = [];
+        $attributions = [];
+        $stations = [];
+        $scheduleStation = null;
+
+        if (Auth::check()) {
+            $people = Person::where('user_id', Auth::id())->get();
+            $reservations = Reservation::where('user_id', Auth::id())->get();
+            $attributions = Attribution::whereIn('reservation_id', $reservations->pluck('id'))->get();
+            $stations = Station::all();
+            $schedules = Schedule::all();
+        }
+        
+
+
+        return Inertia::render('profile', [
+            'reservations' => $reservations,
+            'people' => $people,
+            'attributions' => $attributions,
+            'stations' => $stations,
+            'schedules' => $schedules,
+        ]); 
+    }
+
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'first_name'         => 'required|string|max:255',
+            'last_name'          => 'required|string|max:255',
+            'email'                => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update($request->only(['first_name', 'last_name', 'email']));
+
+        return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
+    }
+
+
+
+    public function updatePerson(Request $request, $id)
+    {
+        $person = Person::find($id);
+        if ($person->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'first_name'         => 'required|string|max:255',
+            'last_name'          => 'required|string|max:255',
+            'age'                => 'required|integer|min:0|max:120',
+            'required_bike_size' => 'nullable|integer',
+        ]);
+
+        $person->update($request->only(['first_name', 'last_name', 'age', 'required_bike_size']));
+
+        return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
+    }
+}
