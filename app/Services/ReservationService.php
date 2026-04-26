@@ -22,6 +22,8 @@ class ReservationService
             ->whereDoesntHave('propositions', function ($query) {
                 $query->active();
             })
+            ->orderBy('start_date', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         foreach ($pendings as $reservation) {
@@ -40,7 +42,7 @@ class ReservationService
             $attribution = $uncompleteAttributions[$i]; 
             $reservation = $attribution->reservation;
             $bike = Bike::where('size', $attribution->person->required_bike_size)
-                ->whereNotIn('id', $assignedBikeIds) 
+                ->whereNotIn('id', array_values($assignedBikeIds)) 
                 ->availableAtStationOn(
                     $reservation->station_id, 
                     $reservation->start_date, 

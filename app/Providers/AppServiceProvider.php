@@ -9,6 +9,8 @@ use App\Models\Reservation;
 use App\Observers\ReservationObserver;
 use App\Models\Bike;
 use App\Observers\BikeObserver;
+use App\Models\Proposition;
+use App\Observers\PropositionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
         Station::observe(StationObserver::class);
         Reservation::observe(ReservationObserver::class);
         Bike::observe(BikeObserver::class);
+        Proposition::observe(PropositionObserver::class);
     }
 }

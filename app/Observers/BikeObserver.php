@@ -26,8 +26,8 @@ class BikeObserver
      */
     public function updated(Bike $bike): void
     {
-        $updateStation = $bike->isDirty('station_id');
-        $statusAvailable = $bike->isDirty('status') && $bike->status === 'available';
+        $updateStation = $bike->wasChanged('station_id');
+        $statusAvailable = $bike->wasChanged('state') && $bike->status === 'available';
 
         if ($updateStation || $statusAvailable) {
             $this->reservationService->checkPendingsForResolutions($bike->station_id);
