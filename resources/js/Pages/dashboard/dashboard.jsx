@@ -200,13 +200,39 @@ const ArriveWindow = ({data, stationId}) => {
     )
 }
 
-
-const OpeWindow = ({stationId}) => {
-    if (!stationId) return null;
-
+const OperationForm = ({ title, description, buttonText, onSubmit }) => {
     const [size, setSize] = useState('');
     const [count, setCount] = useState(1);
 
+    const handleSubmit = () => {
+        if (!size) return alert("Sélectionnez une taille");
+        onSubmit(size, count);
+    };
+
+    return (
+        <div className={styles.containerGeneric}>
+            <h3 className={styles.subTitle}>{title}</h3>
+            <p className={styles.description}>{description}</p>
+            <select value={size} onChange={(e) => setSize(e.target.value)}>
+                <option value="">-- Taille --</option>
+                <option value="140">140</option>
+                <option value="160">160</option>
+                <option value="180">180</option>
+            </select>
+            <input 
+                type="number" 
+                min="1" 
+                value={count} 
+                onChange={(e) => setCount(e.target.value)} 
+            />
+            <button onClick={handleSubmit}>{buttonText}</button>
+        </div>
+    );
+};
+
+const OpeWindow = ({stationId}) => {
+    if (!stationId) return null;
+    
     const handleRebalance = () => {
         router.post(`/panel/dashboard/${stationId}/rebalance`, {}, {
            onSuccess: (page) => alert(page.props.flash.success),
@@ -214,42 +240,27 @@ const OpeWindow = ({stationId}) => {
         });
     };
 
-    const handleMaintenance = () => {
-        if (!size) {
-            alert("Veuillez sélectionner une taille.");
-            return;
-        }
-        if (count < 1) {
-            alert("Le nombre doit être supérieur à 0.");
-            return;
-        }
-        router.post(`/panel/dashboard/${stationId}/bikes/maintenance`, 
-            { size, count },
+
+    const sendRequest = (endpoint, size, count) => {
+        router.post(`/panel/dashboard/${stationId}/bikes/${endpoint}`, 
+            {size, count},
             {
-                onSuccess: (page) => alert(page.props.flash.success),
-                onError: (errors) => alert(errors.error || "Erreur technique"),
+            onSuccess: (page) => {
+                if (page.props.flash.success) {
+                    alert(page.props.flash.success);
+                }
+            },
+            onError: (errors) => {
+                if (errors.error) {
+                    alert(errors.error);
+                } else {
+                    alert("Une erreur est survenue lors de l'opération.");
+                }
             }
+        }
         );
     };
 
-    const handleAvailable= () => {
-        if (!size) {
-            alert("Veuillez sélectionner une taille.");
-            return;
-        }
-        if (count < 1) {
-            alert("Le nombre doit être supérieur à 0.");
-            return;
-        }
-        router.post(`/panel/dashboard/${stationId}/bikes/available`, 
-            { size, count },
-            {
-                onSuccess: (page) => alert(page.props.flash.success),
-                onError: (errors) => alert(errors.error || "Erreur technique"),
-            }
-        );
-    };
-    
     return(
         
         <div className={styles.opeWinContainer}>
@@ -266,55 +277,33 @@ const OpeWindow = ({stationId}) => {
                 </button>
             </div>
 
-            <div className={styles.containerMaintenance}>
-                <h3 className={styles.subTitle}>Opération de maintenance</h3>
-                <p className={styles.description}>
-                    Permet de mettre es vélos en maintenance.
-                </p>
-                <select value={size} onChange={(e) => setSize(e.target.value)}>
-                    <option value="">-- Taille --</option>
-                    <option value="140">140</option>
-                    <option value="160">160</option>
-                    <option value="180">180</option>
-                </select>
+            <OperationForm 
+                title="Maintenance"
+                description="Mettre les vélos en maintenance."
+                buttonText="Mettre en maintenance"
+                onSubmit={(s, c) => sendRequest('maintenance', s, c)}
+            />
 
-                
-                <input 
-                    type="number" 
-                    min="1" 
-                    value={count} 
-                    onChange={(e) => setCount(e.target.value)} 
-                />
+            <OperationForm 
+                title="Disponibilité"
+                description="Rendre des vélos disponibles."
+                buttonText="Rendre disponible"
+                onSubmit={(s, c) => sendRequest('available', s, c)}
+            />
 
-                <button onClick={handleMaintenance}>
-                    Mettre en maintenance
-                </button>
-            </div>
+            <OperationForm 
+                title="Ajout"
+                description="Ajouter des vélos à la station."
+                buttonText="Ajouter"
+                onSubmit={(s, c) => sendRequest('add', s, c)}
+            />
 
-            <div className={styles.containerAvailable}>
-                <h3 className={styles.subTitle}>Opération de Disponibilité</h3>
-                <p className={styles.description}>
-                    Permet de rendre des vélos disponibles.
-                </p>
-                <select value={size} onChange={(e) => setSize(e.target.value)}>
-                    <option value="">-- Taille --</option>
-                    <option value="140">140</option>
-                    <option value="160">160</option>
-                    <option value="180">180</option>
-                </select>
-
-                
-                <input 
-                    type="number" 
-                    min="1" 
-                    value={count} 
-                    onChange={(e) => setCount(e.target.value)} 
-                />
-
-                <button onClick={handleAvailable}>
-                    Rendre disponible
-                </button>
-            </div>
+            <OperationForm 
+                title="Supression"
+                description="Supprimer des vélos d'une station."
+                buttonText="Supprimer"
+                onSubmit={(s, c) => sendRequest('remove', s, c)}
+            />
         </div>
         
     );
