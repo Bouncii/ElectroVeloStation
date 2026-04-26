@@ -50,26 +50,4 @@ class Station extends Model
                     ->whereBetween('end_date', [$startDate, $endDate])
                     ->count();
     }
-
-    // Fonction qui calcule la distance en km entre deux stations
-    public function distanceTo(Station $otherStation, $precision = 1){
-        if (!$this->latitude || !$this->longitude || !$otherStation->latitude || !$otherStation->longitude) {
-            return 0;
-        }
-        $terreRadius = 6371;
-        $lat1 = deg2rad($this->latitude);
-        $lon1 = deg2rad($this->longitude);
-        $lat2 = deg2rad($otherStation->latitude);
-        $lon2 = deg2rad($otherStation->longitude);
-        $latDelta = $lat2 - $lat1;
-        $lonDelta = $lon2 - $lon1;
-        $a = sin($latDelta / 2) * sin($latDelta / 2) +
-             cos($lat1) * cos($lat2) *
-             sin($lonDelta / 2) * sin($lonDelta / 2);
-             
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        $distance = $terreRadius * $c;
-        return round($distance, $precision);
-    }
-
 }
