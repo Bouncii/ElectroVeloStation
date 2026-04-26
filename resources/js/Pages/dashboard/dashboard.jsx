@@ -78,23 +78,10 @@ const DepartWindow = ({data, stationId}) => {
 
     const { flash } = usePage().props;
 
-    useEffect(() => {
-        if (flash?.success) {
-            alert(flash.success);
-        }
-        if (flash?.error) {
-            alert(flash.error);
-        }
-    }, [flash]);
-
     const handleCheckIn = (reservationId) => {
         if (confirm("Confirmer le départ de cette réservation ?")) {
             router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkin`, {}, {
-                onSuccess: (page) => {
-                    if (page.props.flash.success) {
-                        alert(page.props.flash.success);
-                    }
-                },
+                onSuccess: (page) => alert(page.props.flash.success),
                 onError: () => alert("Erreur lors du check-in.")
             });
         }
@@ -221,16 +208,8 @@ const OpeWindow = ({stationId}) => {
     const {flash} = usePage().props;
     const handleRebalance = () => {
         router.post(`/panel/dashboard/${stationId}/rebalance`, {}, {
-            onSuccess: (page) => {
-                const successMsg = page.props.flash.success;
-                if (successMsg) {
-                    alert(successMsg);
-                }
-                
-            },
-            onError: () => {
-                alert("Erreur lors du rééquilibrage.");
-            }
+           onSuccess: (page) => alert(page.props.flash.success),
+            onError: () => alert("Erreur lors du rééquillibrage.")
         });
     };
     
@@ -255,26 +234,11 @@ const OpeWindow = ({stationId}) => {
 const InProgressWindow = ({ data, stationId }) => {
     if (!data) return <p>Pas d'informations sur la station.</p>;
 
-    const { flash } = usePage().props;
-
-    useEffect(() => {
-        if (flash?.success) {
-            alert(flash.success);
-        }
-        if (flash?.error) {
-            alert(flash.error);
-        }
-    }, [flash]);
-
     const handleCheckOut = (reservationId) => {
         if (confirm("Confirmer la réception de cette réservation ?")) {
             router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkout`, {}, {
-                onSuccess: (page) => {
-                    if (page.props.flash.success) {
-                        alert(page.props.flash.success);
-                    }
-                },
-                onError: () => alert("Erreur lors du check-out.")
+                onSuccess: (page) => alert(page.props.flash.success),
+            onError: () => alert("Erreur lors du check-out.")
             });
         }
     };
