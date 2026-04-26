@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { usePage, Link } from '@inertiajs/react';
+import { usePage, Link, router } from '@inertiajs/react';
 import styles from "@css/dashboard/dashboard.module.css";
 import '@css/app.css';
 
@@ -140,20 +140,6 @@ function WaitWindow({data}){
         );
 }
 
-
-const WaitWindow2 = ({data}) => {
-    if (!data) return null;
-
-    return(
-        <>
-        <div className={styles.waitWinContainer}>
-
-                <h3 className={styles.subTitle}>La liste d'attente</h3>
-        </div>
-        </>
-    )
-}
-
 const ArriveWindow = ({data}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
     return(
@@ -177,20 +163,45 @@ const ArriveWindow = ({data}) => {
     )
 }
 
-const OpeWindow = ({data}) => {
-    if (!data) return null;
 
+const OpeWindow = ({stationId}) => {
+    if (!stationId) return null;
+    const {flash} = usePage().props;
+    const handleRebalance = () => {
+        router.post(`/panel/dashboard/${stationId}/rebalance`, {}, {
+            onSuccess: (page) => {
+                const successMsg = page.props.flash.success;
+                if (successMsg) {
+                    alert(successMsg);
+                }
+                
+            },
+            onError: () => {
+                alert("Erreur lors du rééquilibrage.");
+            }
+        });
+    };
+    
     return(
-        <>
+        
         <div className={styles.opeWinContainer}>
-
-                <h3 className={styles.subTitle}>Opération de monétisation (si seulement)</h3>
+            <h3 className={styles.subTitle}>Opération de réapprovisionnement</h3>
+            <p className={styles.description}>
+                Cette action va scanner les besoins de la station et rapatrier les vélos disponibles depuis d'autres stations.
+            </p>
+            
+            <button 
+                onClick={handleRebalance} 
+                className={styles.btn_admin}>
+                Lancer le rééquilibrage
+            </button>
         </div>
-        </>
-    )
+        
+    );
 }
 
 export default function DashboardTest() {
+
     const [activeWindow, setActiveWindow] = useState('none');
     const {station, bikeStats, 
         departingReservations, arrivingReservations, 
@@ -232,7 +243,7 @@ export default function DashboardTest() {
                 {activeWindow === 'departing' && <DepartWindow data={departingReservations} />}
                 {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} />}
                 {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} />}
-                {activeWindow === 'operation' && <OpeWindow data={bikeStats} />}
+                {activeWindow === 'operation' && <OpeWindow stationId={station.id} />}
         </div>
     </div>    
         </>
