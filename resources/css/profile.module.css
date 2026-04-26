@@ -1,9 +1,8 @@
 .profilePage {
-    padding-left: 5vh;
     background-color: var(--secondary);
     display: flex;
     flex-direction: column;
-    text-align: center;
+    align-items: center;
     min-height: 120vh;
     min-width: 100vh;
     font-family: Arial, Helvetica, sans-serif;
