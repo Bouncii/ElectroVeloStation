@@ -1,4 +1,5 @@
 .profilePage {
+    background-color: var(--secondary);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -113,4 +114,11 @@
     .tabs form {
         max-width: 400px;
     }
+}
+
+.updateFormResa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }

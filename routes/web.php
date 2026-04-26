@@ -16,16 +16,30 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::get('/reservation', [UserReservationController::class, 'create']);
+Route::get('/reservation', [UserReservationController::class, 'index']);
 Route::post('/reservation', [UserReservationController::class, 'store']);
+
+Route::get('/confirmation', function () {return inertia('confirmationReservation');}
+)->name('confirmation');
 
 // ---------- ROUTES SI CONNECTE -------------
 Route::middleware(['auth','role:admin,employee,client'])
     ->prefix('profile')
     ->group(function () {
+    
         Route::get('/', [ProfileController::class, "index"]);
-         Route::post('/update', [ProfileController::class, "update"]);
-        Route::post('/people/{id}/update', [ProfileController::class, "updatePerson"]);
+        Route::patch('/update', [ProfileController::class, "update"]);
+
+        // --- GESTION DES PERSONNES ---
+        Route::post('/persons', [ProfileController::class, 'storePerson']);
+        Route::patch('/persons/{person}', [ProfileController::class, 'updatePerson']);
+        Route::delete('/persons/{person}', [ProfileController::class, 'destroyPerson']);
+
+        Route::patch('/propositions/{proposition}/accept', [ProfileController::class, 'acceptProposition']);
+        Route::patch('/propositions/{proposition}/reject', [ProfileController::class, 'rejectProposition']);
+
+        Route::patch('/reservations/{reservation}/cancel', [ProfileController::class, 'cancelReservation']);
+        Route::post('/reservations/{reservation}/transfer', [ProfileController::class, 'transferReservation']);  
     });
 
 
@@ -35,7 +49,7 @@ Route::middleware(['auth', 'role:admin,employee'])
     ->group(function () {
 
         Route::get('/', [GlobalReservationController::class, "index"]);
-        Route::resource('/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud 
+        Route::resource('/stations', StationController::class); // laravel associe les routes aux méthodes tt seul car il comprends que c'est un crud grace à ressource
         Route::resource('/users', UserController::class);
         Route::resource('/persons', PersonController::class)->only(['update', 'store', 'destroy', 'show']);
         Route::resource('/schedules', ScheduleController::class)->only(['update']);
@@ -44,21 +58,21 @@ Route::middleware(['auth', 'role:admin,employee'])
 
         Route::prefix('dashboard')->group(function () {
             
-            Route::get('/', [DashboardController::class, "index"])->name('index');
+            Route::get('/', [DashboardController::class, "index"]);
             
             Route::prefix('{station}')->group(function () {
 
-                Route::get('/', [DashboardController::class, "show"])->name('show');
+                Route::get('/', [DashboardController::class, "show"]);
                 
-                Route::post('/bikes/maintenance', [DashboardController::class, 'putInMaintenance'])->name('bikes.maintenance');
-                Route::post('/bikes/available', [DashboardController::class, 'makeAvailable'])->name('bikes.available');
-                Route::post('/bikes/add', [DashboardController::class, 'addBike'])->name('bikes.add');
-                Route::post('/bikes/remove', [DashboardController::class, 'removeBike'])->name('bikes.remove');
+                Route::post('/bikes/maintenance', [DashboardController::class, 'putInMaintenance']);
+                Route::post('/bikes/available', [DashboardController::class, 'makeAvailable']);
+                Route::post('/bikes/add', [DashboardController::class, 'addBike']);
+                Route::post('/bikes/remove', [DashboardController::class, 'removeBike']);
 
-                Route::post('/rebalance', [DashboardController::class, 'rebalanceBikes'])->name('rebalance');
+                Route::post('/rebalance', [DashboardController::class, 'rebalanceBikes']);
 
-                Route::patch('/reservations/{reservation}/checkin', [DashboardController::class, 'checkIn'])->name('checkin');
-                Route::patch('/reservations/{reservation}/checkout', [DashboardController::class, 'checkOut'])->name('checkout');
+                Route::patch('/reservations/{reservation}/checkin', [DashboardController::class, 'checkIn']);
+                Route::patch('/reservations/{reservation}/checkout', [DashboardController::class, 'checkOut']);
             });
         });
     }
