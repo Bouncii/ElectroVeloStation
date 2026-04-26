@@ -16,7 +16,7 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::get('/reservation', [UserReservationController::class, 'create']);
+Route::get('/reservation', [UserReservationController::class, 'index']);
 Route::post('/reservation', [UserReservationController::class, 'store']);
 
 // ---------- ROUTES SI CONNECTE -------------

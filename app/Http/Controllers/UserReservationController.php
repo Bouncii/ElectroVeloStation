@@ -18,7 +18,7 @@ class UserReservationController extends Controller
     /**
      * Affiche le formulaire de réservation
      */
-    public function create()
+    public function index()
     {
         $allStations = Station::all();
         $schedules = Schedule::all(); 
