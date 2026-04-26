@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Person;
 use App\Models\Reservation;
 use App\Models\Attribution;
+use App\Models\Schedule;
 
 
 class ProfileController extends Controller{
@@ -16,18 +17,25 @@ class ProfileController extends Controller{
         $reservations = [];
         $people = [];
         $attributions = [];
-        
+        $stations = [];
+        $scheduleStation = null;
+
         if (Auth::check()) {
             $people = Person::where('user_id', Auth::id())->get();
             $reservations = Reservation::where('user_id', Auth::id())->get();
             $attributions = Attribution::whereIn('reservation_id', $reservations->pluck('id'))->get();
-            }
+            $stations = Station::all();
+            $schedules = Schedule::all();
+        }
+        
 
 
         return Inertia::render('profile', [
             'reservations' => $reservations,
             'people' => $people,
             'attributions' => $attributions,
+            'stations' => $stations,
+            'schedules' => $schedules,
         ]); 
     }
 

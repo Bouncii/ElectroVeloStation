@@ -150,9 +150,36 @@ export function InfosPeople() {
 
 
 export function AfficheReservations() {
+
+    const [editingId, setEditingId] = useState(null);
+    const [editData, setEditData] = useState({});
+
+    function handleEditReservation(reservation) {
+        setEditingId(reservation.id);
+        setEditData({ ...reservation });
+    }
+
+    function handleCancelReservation() {
+        setEditingId(null);
+        setEditData({});
+    }
+
+    function handleSaveReservation(e, id) {
+        e.preventDefault();
+        router.post(`/profile/reservations/${id}/update`, editData, {
+            onSuccess: () => {
+                setEditingId(null);
+                setEditData({});
+            },
+        });
+    }
+
+
     const { reservations } = usePage().props;
     console.log(reservations);
-    const { attributions } = usePage().props;
+    const { attributions, stations, schedules } = usePage().props;
+    var scheduleStation = null;
+    
     return <><div className={styles.blocReservations}>
         <div className={styles.historiqueReservations}>
             <h2>Historique de vos réservations :</h2>
@@ -163,7 +190,78 @@ export function AfficheReservations() {
                     {reservations.map((reservation) => (
                         <li className={styles[reservation.status]} key={reservation.id}>
                             Réservation du {reservation.start_date} au {reservation.end_date} pour {attributions.length} personne(s)
-                            
+                            <button className={styles.updateButton} onClick={() => handleEditReservation(reservation)}>
+                                Modifier
+                            </button>
+
+                            {editingId === reservation.id ? (
+                                scheduleStation = schedules.find(
+                                s => s.station_id == reservation.station_id
+                                ),
+
+                                <form className={styles.updateFormResa} onSubmit={(e) => handleSaveReservation(e, reservation.id)}>
+                                    <label htmlFor="station">Station :</label>
+                                    <select
+                                        type="select"
+                                        placeholder="Station"
+                                        value={editData.station_id}
+                                        onChange={(e) => setEditData({ ...editData, station_id: e.target.value })}
+                                    >
+                                        <option value="">Sélectionnez une station</option>
+                                        {stations.map((station) => (
+                                            <option key={station.id} value={station.id}>
+                                                {station.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <label htmlFor="start_date">Date de début :</label>
+                                    <input
+                                        type="date"
+                                        placeholder="Date de début"
+                                        value={editData.start_date}
+                                        onChange={(e) => setEditData({ ...editData, start_date: e.target.value })}
+                                    />
+                                    <label htmlFor="heureDebut">Heure de début :</label>
+                                    <input
+                                    type="time"
+                                    name="heureDebut"
+                                    min={scheduleStation?.open_time}
+                                    max={scheduleStation?.close_time}
+                                    value={editData.heureDebut}
+                                    step={"1800"}
+                                    />
+                                    <label htmlFor="end_date">Date de fin :</label>
+                                    <input
+                                        type="date"
+                                        placeholder="Date de fin"
+                                        value={editData.end_date}
+                                        onChange={(e) => setEditData({ ...editData, end_date: e.target.value })}
+                                    />
+                                    
+                                    <label htmlFor="heureFin">Heure de fin :</label>
+                                    <input
+                                    type="time"
+                                    name="heureFin"
+                                    min={scheduleStation?.open_time}
+                                    max={scheduleStation?.close_time}
+                                    value={editData.heureFin}
+                                    step={"1800"}
+                                    />
+
+                                    <button type="submit" className={styles.submitButton} onClick={handleSaveReservation}>
+                                        Enregistrer
+                                    </button>
+                                    <button type="button" onClick={handleCancelReservation}>
+                                        Annuler
+                                    </button>
+                                    <button type="button" className={styles.cancelButton}>Annuler la réservation</button>
+                                </form>
+                            ) : null
+                        }
+
+
+
+
                         </li>
                     ))}
                 </ul>
