@@ -243,7 +243,7 @@ function Formulaire() {
             start_date: `${reservation.dateDebut} ${reservation.heureDebut}:00`,
             end_date: `${reservation.dateFin} ${reservation.heureFin}:00`,
             email: reservation.email,
-            attributions: people,
+            persons: people,
         });
     };
 

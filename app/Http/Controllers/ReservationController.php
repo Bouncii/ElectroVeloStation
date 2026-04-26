@@ -76,7 +76,7 @@ class ReservationController extends Controller
             foreach ($validated['attributions'] as $attr) {
                 $person = Person::findOrFail($attr['person_id']);
                 
-                $bike = Bike::where('size', $person->bike_size)
+                $bike = Bike::where('size', $person->required_bike_size)
                     ->whereNotIn('id', $assignedBikeIds) 
                     ->availableAtStationOn(
                         $validated['station_id'], 
@@ -142,7 +142,7 @@ class ReservationController extends Controller
             foreach ($validated['attributions'] as $attr) {
                 $person = Person::findOrFail($attr['person_id']);
                 
-                $bike = Bike::where('size', $person->bike_size)
+                $bike = Bike::where('size', $person->required_bike_size)
                     ->whereNotIn('id', $assignedBikeIds) 
                     ->availableAtStationOn(
                         $validated['station_id'], 
