@@ -106,11 +106,11 @@ class DashboardController extends Controller
             ->get();
 
         $inProgressReservations = Reservation::where('station_id', $station->id)
-        ->where('status', 'in_progress')
-        ->whereDate('end_date', '<=', $today)
-        ->with($loadRelations)
-        ->orderBy('start_date', 'asc')
-        ->get();
+            ->where('status', 'in_progress')
+            ->whereDate('end_date', '<=', $today)
+            ->with($loadRelations)
+            ->orderBy('end_date', 'asc')
+            ->get();
 
         return Inertia::render('dashboard/dashboard', [
             'station' => $station,

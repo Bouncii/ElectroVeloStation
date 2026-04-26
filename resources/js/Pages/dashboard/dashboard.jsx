@@ -73,8 +73,33 @@ const StatWindow = ({bikeData, resaData}) => {
     )
 }
 
-const DepartWindow = ({data}) => {
+const DepartWindow = ({data, stationId}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
+
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.success) {
+            alert(flash.success);
+        }
+        if (flash?.error) {
+            alert(flash.error);
+        }
+    }, [flash]);
+
+    const handleCheckIn = (reservationId) => {
+        if (confirm("Confirmer le départ de cette réservation ?")) {
+            router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkin`, {}, {
+                onSuccess: (page) => {
+                    if (page.props.flash.success) {
+                        alert(page.props.flash.success);
+                    }
+                },
+                onError: () => alert("Erreur lors du check-in.")
+            });
+        }
+    };
+
     return(
         <>
         <div className={styles.departWinContainer}>
@@ -84,13 +109,26 @@ const DepartWindow = ({data}) => {
                     <p>Aucune résa</p>
                 ): (<ul>
                     {data.map((resa) => (
-                    <li>
-                        Vélo #{resa.bike_id} - User : {resa.user_name}
-                    </li>
-                ))}
+                        <li key={resa.id}>
+                            Résa #{resa.id} - {resa.user?.first_name} {resa.user?.last_name}
+                            <ul>
+                                {resa.attributions.map((attr) => (
+                                    <li key={attr.id}>
+                                        Vélo #{attr.bike?.id} — {attr.person?.first_name} {attr.person?.last_name}
+                                    </li>
+                                ))}
+                            </ul>
 
-                
-               </ul>
+                            <div className={styles.actions}>
+                                <button
+                                    className={styles.btn_checkin}
+                                    onClick={() => handleCheckIn(resa.id)}>
+                                    Confirmer le retour (Check-In)
+                                </button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
                 
             )}
 
@@ -146,7 +184,7 @@ function WaitWindow({data, stationId}){
         );
 }
 
-const ArriveWindow = ({data}) => {
+const ArriveWindow = ({data, stationId}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
     return(
         <>
@@ -158,11 +196,19 @@ const ArriveWindow = ({data}) => {
                 ): (
                 <ul>
                     {data.map((resa) => (
-                    <li>
-                        Vélo #{resa.bike_id} - User : {resa.user_name}
-                    </li>
-                ))}
-               </ul>
+                        <li key={resa.id}>
+                            Résa #{resa.id} - {resa.user?.first_name} {resa.user?.last_name}
+                            <ul>
+                                {resa.attributions.map((attr) => (
+                                    <li key={attr.id}>
+                                        Vélo #{attr.bike?.id} — {attr.person?.first_name} {attr.person?.last_name}
+                                    </li>
+                                ))}
+                            </ul>
+                            
+                        </li>
+                    ))}
+                </ul>
             )}
         </div>
         </>
@@ -221,7 +267,7 @@ const InProgressWindow = ({ data, stationId }) => {
     }, [flash]);
 
     const handleCheckOut = (reservationId) => {
-        if (confirm("Confirmer le départ de cette réservation ?")) {
+        if (confirm("Confirmer la réception de cette réservation ?")) {
             router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkout`, {}, {
                 onSuccess: (page) => {
                     if (page.props.flash.success) {
@@ -245,9 +291,9 @@ const InProgressWindow = ({ data, stationId }) => {
                         <li key={resa.id}>
                             Résa #{resa.id} - {resa.user?.first_name} {resa.user?.last_name}
                         
-                        <div className={styles.actions}>
+                    <div className={styles.actions}>
                         <button 
-                            className={styles.btn_checkin}
+                            className={styles.btn_checkout}
                             onClick={() => handleCheckOut(resa.id)}>
                             Confirmer le départ (Check-Out)
                         </button>
@@ -304,9 +350,9 @@ export default function DashboardTest() {
         </div>
         <div className={styles.changingWindow}>
                 {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} />}
-                {activeWindow === 'departing' && <DepartWindow data={departingReservations} />}
+                {activeWindow === 'departing' && <DepartWindow data={departingReservations} stationId={station.id} />}
                 {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} stationId={station.id}/>}
-                {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} />}
+                {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} stationId={station.id}/>}
                 {activeWindow === 'operation' && <OpeWindow stationId={station.id} />}
                 {activeWindow === 'inprogress' && <InProgressWindow data={inProgressReservations} stationId={station.id}  />}
         </div>
