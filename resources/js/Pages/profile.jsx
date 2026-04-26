@@ -54,8 +54,10 @@ function InfosProfil() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
-                    <button type="submit" className={styles.submitButton}>Enregistrer</button>
-                    <button type="button" onClick={() => setEditing(false)}>Annuler</button>
+                    <div className={styles.formActions}>
+                        <button type="submit" className={styles.bnt}>Enregistrer</button>
+                        <button type="button" onClick={() => setEditing(false)} className={styles.bnt}>Annuler</button>
+                    </div>
                 </form>
             ) : null}
         </div>
@@ -105,8 +107,9 @@ export function InfosPeople() {
                             <span>
                                 {p.first_name} {p.last_name} — {p.age} ans — taille(cm) : {p.required_bike_size}
                             </span>
-                            <button type="button" onClick={() => handleEdit(p)} className={styles.updateButton}>
-                                Modifier
+                            <button
+                            type="button" onClick={() => handleEdit(p)} className={styles.bnt} >
+                            Modifier
                             </button>
                             <button type="button" onClick={() => handleDelete(p.id)} className={styles.cancelButton}>
                                 Supprimer
@@ -137,8 +140,10 @@ export function InfosPeople() {
                                         value={editData.required_bike_size}
                                         onChange={(e) => setEditData({ ...editData, required_bike_size: e.target.value })}
                                     />
-                                    <button type="submit" className={styles.submitButton}>Enregistrer</button>
-                                    <button type="button" onClick={handleCancel}>Annuler</button>
+                                    <div className={styles.formActions}>
+                                        <button type="submit" className={styles.bnt}>Enregistrer</button>
+                                        <button type="button" onClick={handleCancel} className={styles.bnt}>Annuler</button>
+                                    </div>
                                 </form>
                             ) : null}
                         </li>

@@ -172,7 +172,8 @@ export default function Panel() {
         document.body.classList.add('theme-admin', 'admin');
         return () => {
             document.body.removeAttribute('data-theme');
-            document.body.classList.remove('theme-admin');
+            document.body.classList.remove('theme-admin', 'admin');
+            document.body.classList.remove('theme-landing', 'landing');
         };
     },
     []);
@@ -184,23 +185,27 @@ export default function Panel() {
                 <AfficherReservations allReservations={allReservations}/>
             </div> 
                 
-                <div className={styles.redirectBoxes}>
-                    <RedirectBox 
-                    link = 'panel/stations'
-                    name = "Gestion des stations"/>
-                    <RedirectBox 
-                    link = '/panel/users'
-                    name = "Gestion des users"
-                    />
-                    <RedirectBox 
-                    link = 'panel/reservations/'
-                    name = "Gestion des réservations"
-                    />
-                    <RedirectBox 
-                    link = 'panel/dashboard/'
-                    name = "Dashboard"
-                    />
-                </div>
+            <div className={styles.redirectBoxes}>
+                <RedirectBox 
+                className={styles.boxSta}
+                link = 'panel/stations'
+                name = "Gestion des stations"/>
+                <RedirectBox
+                className={styles.boxUser}
+                link = '/panel/users'
+                name = "Gestion des users"
+                />
+                <RedirectBox
+                className={styles.boxRes}
+                link = 'panel/reservations/'
+                name = "Gestion des réservations"
+                />
+                <RedirectBox
+                className={styles.BoxDash}
+                link = 'panel/dashboard/'
+                name = "Dashbaord"
+                />
+            </div>
                  
             <div className={styles.waitList}>
                 <h2>Liste d'attente</h2>

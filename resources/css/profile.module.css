@@ -3,103 +3,117 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 120vh;
-    min-width: 100vh;
+    padding: 4rem 2rem;
+    background-color: var(--secondary);
+    min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
 }
 
-
-.infosProfile button {
-    background-color: var(--primary);
-    border-radius: 0%;
-    color: white;
-    padding: 5px;
-}
-
-.infosProfile button:hover{
-    background-color: rgb(36, 0, 129);
-}
-
-.submitButton {
-    background-color: var(--primary);
-    border-radius: 0%;
-    color: white;
-    padding: 5px;
-}
-.submitButton:hover{
-    background-color: rgb(36, 0, 129);
-}
-
-.updateButton {
-    background-color: var(--primary);
-    border-radius: 0%;
-    color: white;
-    padding: 5px;
-}
-.updateButton:hover{
-    background-color: rgb(36, 0, 129);
+.blocProfile,
+.tabs {
+    width: 100%;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    margin-bottom: 2rem;
 }
 
 .blocProfile {
-    margin-top: 20vh;
-    width: 80vw;
-    text-align: center;
-    background-color: white;
-    border-radius: 30px;
-    padding: 5px 10px 5px 10px;
-
+    margin-top: 2rem;
 }
 
-.tabs {
-    margin-top: 10vh;
-    width: 80vw;
-    text-align: center;
-    background-color: white;
-    border-radius: 30px;
-    padding: 10px;
-    margin-bottom: 20vh;
+.infosProfile {
+    margin-bottom: 1rem;
 }
 
-.tabs button {
-    width: 35vw;
+.pending, .confirmed, .cancelled, .completed {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: inline-block;
 }
 
-.tabs ul {
-    padding: 5px 0 5px 0;
-    list-style-type: none;
-}
-
-.tabs ul li{
-    margin: 2px;
-    padding: 2px;
-}
-
-.pending{
-    background-color: rgb(255, 255, 124);
+.pending {
+    background-color: #fef9c3;
+    color: #854d0e;
 }
 
 .confirmed {
-    background-color: rgb(103, 255, 97);
+    background-color: #dcfce7;
+    color: #166534;
 }
 
 .cancelled {
-    background-color: rgb(255, 116, 116);
+    background-color: #fee2e2;
+    color: #991b1b;
 }
 
 .completed {
-    background-color: rgb(176, 176, 176);
+    background-color: #f3f4f6;
+    color: #4b5563;
 }
 
-.active{
-    background-color: rgb(139, 159, 211);
+.blocProfile form,
+.tabs form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
 
-.active:hover{
-    background-color: rgb(139, 159, 211);
+.blocProfile form input,
+.tabs form input {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.inactive{
-    background-color: rgb(255, 255, 255);
+.blocProfile form input:focus,
+.tabs form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.bnt {
+    margin-top: 20px;
+    background-color: rgb(10, 35, 96);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bnt:hover {
+    background-color: #003dcb;
+}
+
+
+@media (min-width: 768px) {
+    .tabs ul {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .tabs > button {
+        width: auto;
+        min-width: 150px;
+    }
+
+    .blocProfile form,
+    .tabs form {
+        max-width: 400px;
+    }
 }
 
 .updateFormResa {

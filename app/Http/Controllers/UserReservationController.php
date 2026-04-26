@@ -12,6 +12,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Bike;
+use Illuminate\Support\Facades\Mail;
+use App\Services\Mail\ReservationConfirmation;
 
 class UserReservationController extends Controller
 {
@@ -39,32 +41,34 @@ class UserReservationController extends Controller
      * Traite la soumission d'une reservation
      */
     public function store(Request $request)
-    {
+{
+    $userId = Auth::id();
 
-        $isGuest = Auth::guest();
-        $validated = $request->validate([
-            'station_id' => 'required|exists:stations,id',
-            'start_date' => 'required|date|after_or_equal:now',
-            'end_date' => 'required|date|after:start_date',
-            'email' => 'required|email|max:255',
-            'persons'=> 'required|array|min:1',
-            'persons.*.id' => 'nullable|exists:people,id',
-            'persons.*.nom' => 'required|string|max:255',
-            'persons.*.prenom' => 'required|string|max:255',
-            'persons.*.age' => 'required|integer|min:1|max:120',
-            'persons.*.taille' => 'required|integer|min:100|max:250',
-        ]);
-        try {
-            DB::transaction(function () use ($validated) {
-                $userId = Auth::id();
-                $reservation = Reservation::create([
-                    'user_id' => $userId,
-                    'station_id' => $validated['station_id'],
-                    'start_date' => $validated['start_date'],
-                    'end_date' => $validated['end_date'],
-                    'email' => $validated['email'],
-                    'status' => 'pending',
-                ]);
+    $validated = $request->validate([
+        'station_id' => 'required|exists:stations,id',
+        'start_date' => 'required|date|after_or_equal:now',
+        'end_date' => 'required|date|after:start_date',
+        'email' => 'required|email|max:255',
+        'attributions'=> 'required|array|min:1',
+        'attributions.*.id' => 'nullable|exists:people,id',
+        'attributions.*.nom' => 'required|string|max:255',
+        'attributions.*.prenom' => 'required|string|max:255',
+        'attributions.*.age' => 'required|integer|min:1|max:120',
+        'attributions.*.taille' => 'required|integer|min:100|max:250',
+    ]);
+
+    try {
+
+        $reservation = DB::transaction(function () use ($validated, $userId) {
+
+            $reservation = Reservation::create([
+                'user_id' => $userId,
+                'station_id' => $validated['station_id'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'email' => $validated['email'],
+                'status' => 'pending',
+            ]);
 
                 $assignedBikeIds = []; 
                 $allBikesAssigned = true;
@@ -121,11 +125,20 @@ class UserReservationController extends Controller
                 }
 
 
-            });
-            return redirect()->route('confirmation')->with('success', 'Réservation créée avec succès !');
+            return $reservation; // 
+        });
 
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Une erreur est survenue lors de la réservation : ' . $e->getMessage()]);
-        }
+        // Maintenant tu as un vrai objet
+        Mail::to($reservation->email)
+            ->send(new ReservationConfirmation($reservation));
+
+        return redirect()->route('home')
+            ->with('success', 'Réservation créée avec succès ! + mail envoyé');
+
+    } catch (\Exception $e) {
+        return back()->withErrors([
+            'error' => 'Une erreur est survenue : ' . $e->getMessage()
+        ]);
     }
+}
 }

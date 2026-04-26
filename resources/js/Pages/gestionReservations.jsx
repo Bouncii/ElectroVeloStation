@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, Link } from '@inertiajs/react';
 
 const AddReservationForm = ({ onCancel }) => {
 
@@ -235,7 +235,7 @@ const ReservationCard = ({ reservation }) => {
 
                 <>
 
-                    <h3>Réservation #{reservation.id}</h3>
+                    <p>Réservation #{reservation.id}</p>
 
                     <p>User : {reservation.user?.first_name} {reservation.user?.last_name}</p>
                     <p>Email : {reservation.email}</p>
