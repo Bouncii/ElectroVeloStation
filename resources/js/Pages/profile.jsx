@@ -158,7 +158,12 @@ export function AfficheReservations() {
 
     function handleEdit(reservation) {
         setEditingId(reservation.id);
-        setEditData({ ...reservation });
+        setEditData({ ...reservation,
+            start_date: reservation.start_date?.split('T')[0] ?? reservation.start_date?.split(' ')[0],
+            start_time: reservation.start_date?.split('T')[1]?.slice(0, 5) ?? reservation.start_date?.split(' ')[1]?.slice(0, 5),
+            end_date: reservation.end_date?.split('T')[0] ?? reservation.end_date?.split(' ')[0],
+            end_time: reservation.end_date?.split('T')[1]?.slice(0, 5) ?? reservation.end_date?.split(' ')[1]?.slice(0, 5),
+        });
     }
 
     function handleCancel() {
@@ -235,13 +240,17 @@ export function AfficheReservations() {
                                         ))}
                                     </ul>
                                 )}
-
-                                <button className={styles.updateButton} onClick={() => handleEdit(reservation)}>
-                                    Modifier
+                                {reservation.status !== 'cancelled' && reservation.status !== 'completed' && (
+                                 <>
+                                 <button className={styles.updateButton} onClick={() => handleEdit(reservation)}>
+                                      Modifier
                                 </button>
                                 <button className={styles.cancelButton} onClick={() => handleCancelReservation(reservation.id)}>
                                     Annuler la réservation
                                 </button>
+                                  </>
+                                 )}
+
 
                                 {editingId === reservation.id ? (
                                     <form className={styles.updateFormResa} onSubmit={(e) => handleSave(e, reservation.id)}>
