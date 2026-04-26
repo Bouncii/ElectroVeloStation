@@ -231,6 +231,24 @@ const OpeWindow = ({stationId}) => {
             }
         );
     };
+
+    const handleAvailable= () => {
+        if (!size) {
+            alert("Veuillez sélectionner une taille.");
+            return;
+        }
+        if (count < 1) {
+            alert("Le nombre doit être supérieur à 0.");
+            return;
+        }
+        router.post(`/panel/dashboard/${stationId}/bikes/available`, 
+            { size, count },
+            {
+                onSuccess: (page) => alert(page.props.flash.success),
+                onError: (errors) => alert(errors.error || "Erreur technique"),
+            }
+        );
+    };
     
     return(
         
@@ -270,6 +288,31 @@ const OpeWindow = ({stationId}) => {
 
                 <button onClick={handleMaintenance}>
                     Mettre en maintenance
+                </button>
+            </div>
+
+            <div className={styles.containerAvailable}>
+                <h3 className={styles.subTitle}>Opération de Disponibilité</h3>
+                <p className={styles.description}>
+                    Permet de rendre des vélos disponibles.
+                </p>
+                <select value={size} onChange={(e) => setSize(e.target.value)}>
+                    <option value="">-- Taille --</option>
+                    <option value="140">140</option>
+                    <option value="160">160</option>
+                    <option value="180">180</option>
+                </select>
+
+                
+                <input 
+                    type="number" 
+                    min="1" 
+                    value={count} 
+                    onChange={(e) => setCount(e.target.value)} 
+                />
+
+                <button onClick={handleAvailable}>
+                    Rendre disponible
                 </button>
             </div>
         </div>
