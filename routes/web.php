@@ -19,7 +19,8 @@ Route::get('/', function () {
 Route::get('/reservation', [UserReservationController::class, 'index']);
 Route::post('/reservation', [UserReservationController::class, 'store']);
 
-Route::get('/confirmation', function () {return inertia('confirmationReservation');});
+Route::get('/confirmation', function () {return inertia('confirmationReservation');}
+)->name('confirmation');
 
 // ---------- ROUTES SI CONNECTE -------------
 Route::middleware(['auth','role:admin,employee,client'])
