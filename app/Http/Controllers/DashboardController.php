@@ -107,6 +107,7 @@ class DashboardController extends Controller
 
         $inProgressReservations = Reservation::where('station_id', $station->id)
         ->where('status', 'in_progress')
+        ->whereDate('end_date', '<=', $today)
         ->with($loadRelations)
         ->orderBy('start_date', 'asc')
         ->get();
