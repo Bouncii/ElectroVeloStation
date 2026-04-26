@@ -122,7 +122,7 @@ class UserReservationController extends Controller
 
 
             });
-            return redirect()->route('home')->with('success', 'Réservation créée avec succès !');
+            return redirect()->route('confirmation')->with('success', 'Réservation créée avec succès !');
 
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Une erreur est survenue lors de la réservation : ' . $e->getMessage()]);
