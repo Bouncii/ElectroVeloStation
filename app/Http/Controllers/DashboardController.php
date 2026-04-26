@@ -105,12 +105,19 @@ class DashboardController extends Controller
             ->orderBy('start_date', 'asc')
             ->get();
 
+        $inProgressReservations = Reservation::where('station_id', $station->id)
+        ->where('status', 'in_progress')
+        ->with($loadRelations)
+        ->orderBy('start_date', 'asc')
+        ->get();
+
         return Inertia::render('dashboard/dashboard', [
             'station' => $station,
             'bikeStats' => $bikeStats,
             'departingReservations' => $departingReservations,
             'arrivingReservations' => $arrivingReservations,
             'pendingReservations' => $pendingReservations,
+            'inProgressReservations' => $inProgressReservations,
         ]);
     }
     
@@ -250,7 +257,7 @@ class DashboardController extends Controller
     }
 
     // Fonction qui permet de confirmer le départ d'une réservation
-    public function checkIn(Reservation $reservation)
+    public function checkIn(Station $station, Reservation $reservation)
     {
         if ($reservation->status == 'confirmed') {
             $reservation->update(['status' => 'in_progress']);
@@ -262,7 +269,7 @@ class DashboardController extends Controller
     }
 
     // Fonction qui permet de confirmer la reception des vélos
-    public function checkOut(Reservation $reservation)
+    public function checkOut(Station $station, Reservation $reservation)
     {
         if ($reservation->status == 'in_progress') {
             $reservation->update(['status' => 'completed']);

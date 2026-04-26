@@ -88,7 +88,11 @@ const DepartWindow = ({data}) => {
                         Vélo #{resa.bike_id} - User : {resa.user_name}
                     </li>
                 ))}
-               </ul>)}
+
+                
+               </ul>
+                
+            )}
 
                 
         </div>
@@ -96,7 +100,8 @@ const DepartWindow = ({data}) => {
     )
 }
 
-function WaitWindow({data}){
+function WaitWindow({data, stationId}){
+    
 
     if (!data) {
         return <p>Chargement des réservations...</p>;
@@ -130,7 +135,8 @@ function WaitWindow({data}){
                         ) : (
                             <span>Aucun vélo pour le moment...</span>
                         )}
-                        </div> 
+                </div> 
+                
 
 
                     </div>
@@ -200,17 +206,74 @@ const OpeWindow = ({stationId}) => {
     );
 }
 
+const InProgressWindow = ({ data, stationId }) => {
+    if (!data) return <p>Pas d'informations sur la station.</p>;
+
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.success) {
+            alert(flash.success);
+        }
+        if (flash?.error) {
+            alert(flash.error);
+        }
+    }, [flash]);
+
+    const handleCheckOut = (reservationId) => {
+        if (confirm("Confirmer le départ de cette réservation ?")) {
+            router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkout`, {}, {
+                onSuccess: (page) => {
+                    if (page.props.flash.success) {
+                        alert(page.props.flash.success);
+                    }
+                },
+                onError: () => alert("Erreur lors du check-out.")
+            });
+        }
+    };
+
+
+    return (
+        <div className={styles.departWinContainer}>
+            <h3 className={styles.subTitle}>Réservations en cours</h3>
+            {!(data && data.length > 0) ? (
+                <p>Aucune réservation en cours</p>
+            ) : (
+                <ul>
+                    {data.map((resa) => (
+                        <li key={resa.id}>
+                            Résa #{resa.id} - {resa.user?.first_name} {resa.user?.last_name}
+                        
+                        <div className={styles.actions}>
+                        <button 
+                            className={styles.btn_checkin}
+                            onClick={() => handleCheckOut(resa.id)}>
+                            Confirmer le départ (Check-Out)
+                        </button>
+                    </div>
+                        </li>
+                        
+                    ))}
+                    
+                </ul>
+            )}
+        </div>
+    );
+};
+
 export default function DashboardTest() {
 
     const [activeWindow, setActiveWindow] = useState('none');
     const {station, bikeStats, 
         departingReservations, arrivingReservations, 
-        pendingReservations} = usePage().props;
+        pendingReservations, inProgressReservations} = usePage().props;
 
     const resaStats = {
         "Départs prévus": departingReservations.length,
         "Arrivées prévues": arrivingReservations.length,
-        "En attente": pendingReservations.length
+        "En attente": pendingReservations.length,
+        "En cours": inProgressReservations.length,
     };
 
     useEffect(() => {
@@ -231,19 +294,21 @@ export default function DashboardTest() {
         <ul>
             <li className={styles.stationTitle}>{station?.name}</li>
             <li onClick={() => setActiveWindow('stats')}>Statistiques</li>
-            <li onClick={() => setActiveWindow('departing')}>Departing</li>
+            <li onClick={() => setActiveWindow('departing')}>Départs</li>
             <li onClick={() => setActiveWindow('waitlist')}>Liste d'attente</li>
-            <li onClick={() => setActiveWindow('arriving')}>Arriving + détails</li>
+            <li onClick={() => setActiveWindow('arriving')}>Arrivées</li>
             <li onClick={() => setActiveWindow('operation')}>Opération de réaprovisionnement</li>
+            <li onClick={() => setActiveWindow('inprogress')}>En cours</li>
             <li className={styles.back}> <Link href="./">Retour</Link></li>
         </ul>
         </div>
         <div className={styles.changingWindow}>
                 {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} />}
                 {activeWindow === 'departing' && <DepartWindow data={departingReservations} />}
-                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} />}
+                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} stationId={station.id}/>}
                 {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} />}
                 {activeWindow === 'operation' && <OpeWindow stationId={station.id} />}
+                {activeWindow === 'inprogress' && <InProgressWindow data={inProgressReservations} stationId={station.id}  />}
         </div>
     </div>    
         </>
