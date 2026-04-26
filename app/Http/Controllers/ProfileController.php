@@ -7,36 +7,33 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Person;
 use App\Models\Reservation;
-use App\Models\Attribution;
+use App\Models\Proposition;
 use App\Models\Schedule;
+use App\Services\ReservationService;
+use Illuminate\Support\Facades\DB;
 
 
 class ProfileController extends Controller{
+
+    protected $reservationService;
+    public function __construct(ReservationService $reservationService)
+    {
+        $this->reservationService = $reservationService;
+    }
+
     public function index()
     {
-        $reservations = [];
-        $people = [];
-        $attributions = [];
-        $stations = [];
-        $scheduleStation = null;
-
-        if (Auth::check()) {
-            $people = Person::where('user_id', Auth::id())->get();
-            $reservations = Reservation::where('user_id', Auth::id())->get();
-            $attributions = Attribution::whereIn('reservation_id', $reservations->pluck('id'))->get();
-            $stations = Station::all();
-            $schedules = Schedule::all();
-        }
-        
-
-
+        $user = Auth::user()->load([
+            'people',
+            'reservations.attributions.bike',
+            'reservations.propositions'
+        ]);
+    
         return Inertia::render('profile', [
-            'reservations' => $reservations,
-            'people' => $people,
-            'attributions' => $attributions,
-            'stations' => $stations,
-            'schedules' => $schedules,
-        ]); 
+            'user' => $user,
+            'stations' => Station::all(), 
+            'schedules' => Schedule::all(),
+        ]);
     }
 
 
@@ -44,35 +41,113 @@ class ProfileController extends Controller{
     {
         $user = Auth::user();
 
-        $request->validate([
-            'first_name'         => 'required|string|max:255',
-            'last_name'          => 'required|string|max:255',
-            'email'                => 'required|email|max:255|unique:users,email,' . $user->id,
+        $validated = $request->validate([
+            'first_name'=>'required|string|max:255',
+            'last_name'=> 'required|string|max:255',
+            'email'=> 'required|email|max:255|unique:users,email,'.$user->id,
         ]);
 
-        $user->update($request->only(['first_name', 'last_name', 'email']));
+        $user->update($validated);
 
-        return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
+        return redirect()->back()->with('success', 'Vos informations ont été mises à jour.');
     }
 
 
-
-    public function updatePerson(Request $request, $id)
+    public function storePerson(Request $request)
     {
-        $person = Person::find($id);
-        if ($person->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        $request->validate([
-            'first_name'         => 'required|string|max:255',
-            'last_name'          => 'required|string|max:255',
-            'age'                => 'required|integer|min:0|max:120',
-            'required_bike_size' => 'nullable|integer',
+        $validated = $request->validate([
+            'first_name'=> 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'age'=>'required|integer|min:0|max:120',
+            'required_bike_size' => 'required|int',
         ]);
+        Auth::user()->people()->create($validated);
+        return redirect()->back()->with('success', 'Personne ajoutée avec succès.');
+    }
 
-        $person->update($request->only(['first_name', 'last_name', 'age', 'required_bike_size']));
+    public function updatePerson(Request $request, Person $person)
+    {
 
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'age' => 'required|integer|min:0|max:120',
+            'required_bike_size' => 'required|integer',
+        ]);
+        $person->update($validated);
         return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
+    }
+
+    public function destroyPerson(Person $person)
+    {
+        $person->delete();
+        return redirect()->back()->with('success', 'Personne supprimée.');
+    }
+
+    public function acceptProposition(Proposition $proposition)
+    {
+        DB::transaction(function () use ($proposition) {
+            $reservation = $proposition->reservation;
+        
+            foreach ($proposition->bikes as $attributionId => $bikeId) {
+                $reservation->attributions()
+                    ->where('id', $attributionId)
+                    ->update(['bike_id' => $bikeId]);
+            }
+
+            $reservation->update(['status' => 'confirmed']);
+            $proposition->update(['status' => 'accepted']);
+
+            $reservation->propositions()
+                ->where('status', 'pending')
+                ->where('id', '!=', $proposition->id)
+                ->update(['status' => 'rejected']);
+        });
+        return redirect()->back()->with('success', 'Proposition acceptée !');
+    }
+
+    public function rejectProposition(Proposition $proposition)
+    {
+        $proposition->update(['status' => 'rejected']);
+        return redirect()->back()->with('success', 'Proposition refusée.');
+    }
+
+    public function cancelReservation(Reservation $reservation)
+    {
+        $reservation->update(['status' => 'cancelled']);
+        return redirect()->back()->with('success', 'Réservation annulée.');
+    }
+
+    public function transferReservation(Request $request, Reservation $reservation)
+    {
+        $validated = $request->validate([
+            'station_id' => 'required|exists:stations,id'
+        ]);
+        $propositionService = app(\App\Services\PropositionService::class);
+        DB::transaction(function () use ($reservation, $validated, $propositionService) {
+
+            $reservation->update(['status' => 'cancelled']);
+            $newReservation = $reservation->replicate();
+            $newReservation->station_id = $validated['station_id'];
+            $newReservation->status = 'pending';
+            $newReservation->created_at = now();
+            $newReservation->save();
+
+            foreach ($reservation->attributions as $attr) {
+                $newAttr = $attr->replicate();
+                $newAttr->reservation_id = $newReservation->id;
+                $newAttr->bike_id = null;
+                $newAttr->save();
+            }
+            $isResolved = $this->reservationService->attemptResolution($newReservation);
+            if ($isResolved) {
+                $proposition = $newReservation->propositions()->where('status', 'pending')->first();
+                if ($proposition) {
+                    $propositionService->acceptProposition($proposition);
+                }
+            }
+        });
+
+        return redirect()->back()->with('success', 'Transfert réussi !');
     }
 }
