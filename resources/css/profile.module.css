@@ -1,29 +1,181 @@
 .profilePage {
-    background-color: var(--secondary);
+    --primary: #0031A4;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 4rem 2rem;
-    background-color: var(--secondary);
+    padding: 32px 24px 60px;
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
+    gap: 24px;
     box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.blocProfile{
+    margin-top: 50px;
 }
 
 .blocProfile,
+.blocPeople,
+.blocReservations,
 .tabs {
     width: 100%;
-    max-width: 900px;
-    background-color: white;
-    border-radius: 24px;
-    padding: 2rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    max-width: 780px;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 24px rgba(0, 49, 164, 0.07);
+    overflow: hidden;
     box-sizing: border-box;
-    margin-bottom: 2rem;
 }
 
-.blocProfile {
-    margin-top: 2rem;
+.blocPeople,
+.blocReservations {
+    padding: 24px 28px;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+}
+
+.blocPeople h2,
+.blocReservations h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1a2744;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--primary);
+    padding-left: 12px;
+}
+
+.blocPeople ul,
+.blocReservations > ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.blocPeople > ul > li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 18px;
+    background: #f8f9fb;
+    border-radius: 12px;
+    border: 1px solid #eef0f5;
+}
+
+.blocPeople > ul > li > span {
+    font-size: 0.88rem;
+    color: #1a2744;
+    font-weight: bold;
+}
+
+.blocPeople > ul > li form {
+    width: 100%;
+    border-top: 1px solid #eef0f5;
+    padding-top: 14px;
+    margin-top: 4px;
+}
+
+.blocReservations > ul > li {
+    border-radius: 14px;
+    border: 1px solid #eef0f5;
+    overflow: hidden;
+    list-style: none;
+}
+
+.resaTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #f8f9fb;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.resaDates {
+    font-size: 0.88rem;
+    color: #1a2744;
+    font-weight: bold;
+}
+
+.resaSub {
+    font-size: 0.76rem;
+    color: #6b7a99;
+    margin-top: 3px;
+}
+
+.resaBody {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.resaActions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.blocReservations > ul > li > ul {
+    padding: 0 18px 12px;
+    gap: 4px;
+}
+
+.blocReservations > ul > li > ul > li {
+    font-size: 0.78rem;
+    color: #6b7a99;
+    padding: 2px 0 2px 12px;
+    border-left: 2px solid #e0e5ef;
+}
+
+.profileHeader {
+    background: linear-gradient(120deg, var(--primary) 0%, #185FA5 100%);
+    padding: 28px 28px 52px;
+    position: relative;
+}
+
+.profileHeader h1 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.profileHeader p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.82rem;
+    margin-top: 4px;
+}
+
+.profileAvatar {
+    position: absolute;
+    bottom: -28px;
+    left: 28px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profileBody {
+    padding: 44px 28px 28px;
 }
 
 .infosProfile {
@@ -39,80 +191,160 @@
 }
 
 .pending {
+    margin-left: 10px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
     background-color: #fef9c3;
     color: #854d0e;
 }
 
 .confirmed {
+    margin-left: 10px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
     background-color: #dcfce7;
     color: #166534;
 }
 
 .cancelled {
+    margin-left: 10px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
     background-color: #fee2e2;
     color: #991b1b;
 }
 
 .completed {
+    margin-left: 10px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: inline-block;
     background-color: #f3f4f6;
     color: #4b5563;
 }
 
 .blocProfile form,
-.tabs form {
+.tabs form,
+.updateFormResa {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
+    gap: 10px;
+    margin-top: 16px;
+    max-width: 420px;
 }
 
 .blocProfile form input,
-.tabs form input {
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 1rem;
+.tabs form input,
+.updateFormResa input,
+.updateFormResa select {
+    padding: 10px 14px;
+    border: 1px solid #e2e6ef;
+    border-radius: 10px;
+    font-size: 0.9rem;
     width: 100%;
     box-sizing: border-box;
+    background: #f8f9fb;
+    color: #1a2744;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .blocProfile form input:focus,
-.tabs form input:focus {
+.tabs form input:focus,
+.updateFormResa input:focus,
+.updateFormResa select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 49, 164, 0.1);
+}
+
+.blocProfile form label,
+.updateFormResa label {
+    font-size: 0.8rem;
+    color: #6b7a99;
+    font-weight: bold;
+    margin-bottom: -4px;
+}
+
+.bnt, .updateButton, .submitButton {
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-size: 0.82rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    border: none;
 }
 
 .bnt {
-    margin-top: 20px;
-    background-color: rgb(10, 35, 96);
+    background: var(--primary);
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .bnt:hover {
-    background-color: #003dcb;
+    opacity: 0.88;
 }
 
 
-@media (min-width: 768px) {
-    .tabs ul {
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+.updateButton {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+}
 
-    .tabs > button {
-        width: auto;
-        min-width: 150px;
-    }
+.updateButton:hover {
+    background: var(--primary);
+    color: white;
+}
 
-    .blocProfile form,
-    .tabs form {
-        max-width: 400px;
+.cancelButton {
+    background: #fff1f1;
+    color: #c0392b;
+    border: 1.5px solid #fca5a5;
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-size: 0.82rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.cancelButton:hover {
+    background: #fee2e2;
+}
+
+.submitButton {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1.5px solid #86efac;
+}
+
+.submitButton:hover {
+    background: #dcfce7;
+}
+
+
+@media (max-width: 600px) {
+    .infoGrid {
+        grid-template-columns: 1fr;
+    }
+    .infoItem.full {
+        grid-column: span 1;
+    }
+    .blocPeople > ul > li {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
@@ -121,4 +353,81 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+}
+
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.infoItem {
+    background: #f8f9fb;
+    border-radius: 10px;
+    padding: 12px 16px;
+}
+
+.infoItem.full {
+    grid-column: span 2;
+}
+
+.infoLabel {
+    font-size: 0.72rem;
+    color: #6b7a99;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.infoValue {
+    font-size: 0.92rem;
+    font-weight: bold;
+    color: #1a2744;
+}
+
+.formActions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.tabNav {
+    display: flex;
+    border-bottom: 1px solid #f0f0f4;
+    padding: 6px 20px 0;
+    gap: 4px;
+}
+
+.btn_info{
+    color: white;
+    background-color: #0031A4;
+     opacity: 0.88;
+}
+
+.active, .inactive {
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    padding: 12px 20px;
+    font-size: 0.88rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    color: #6b7a99;
+}
+
+.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.inactive:hover {
+    color: var(--primary);
+}
+
+.tabContent {
+    padding: 24px 28px;
 }

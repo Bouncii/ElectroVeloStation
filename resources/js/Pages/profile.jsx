@@ -24,44 +24,48 @@ function InfosProfil() {
 
     return (
         <div className={styles.blocProfile}>
-            <h1>Bienvenue {user.first_name} {user.last_name}</h1>
-            <h2>Vos informations :</h2>
-            <div className={styles.infosProfile}>
-                <p><strong>Nom :</strong> {user.last_name}</p>
-                <p><strong>Prénom :</strong> {user.first_name}</p>
-                <p><strong>Email :</strong> {user.email}</p>
+        <div className={styles.profileHeader}>
+            <h1>Bonjour, {user.first_name} {user.last_name}</h1>
+            <p>Mon compte</p>
+            <div className={styles.profileAvatar}>
+                {user.first_name?.[0]}{user.last_name?.[0]}
+            </div>
+        </div>
+        <div className={styles.profileBody}>
+            <div className={styles.infoGrid}>
+                <div className={styles.infoItem}>
+                    <div className={styles.infoLabel}>Nom</div>
+                    <div className={styles.infoValue}>{user.last_name}</div>
+                </div>
+                <div className={styles.infoItem}>
+                    <div className={styles.infoLabel}>Prénom</div>
+                    <div className={styles.infoValue}>{user.first_name}</div>
+                </div>
+                <div className={`${styles.infoItem} ${styles.full}`}>
+                    <div className={styles.infoLabel}>Email</div>
+                    <div className={styles.infoValue}>{user.email}</div>
+                </div>
             </div>
             <button onClick={() => setEditing(true)} className={styles.updateButton}>
                 Modifier mes informations
             </button>
-            {editing ? (
+            {editing && (
                 <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Nom"
-                        value={formData.last_name}
-                        onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Prénom"
-                        value={formData.first_name}
-                        onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                    />
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    />
+                    <input type="text" placeholder="Nom" value={formData.last_name}
+                        onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} />
+                    <input type="text" placeholder="Prénom" value={formData.first_name}
+                        onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} />
+                    <input type="email" placeholder="Email" value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                     <div className={styles.formActions}>
                         <button type="submit" className={styles.bnt}>Enregistrer</button>
-                        <button type="button" onClick={() => setEditing(false)} className={styles.bnt}>Annuler</button>
+                        <button type="button" onClick={() => setEditing(false)} className={styles.cancelButton}>Annuler</button>
                     </div>
                 </form>
-            ) : null}
+            )}
         </div>
-    );
+    </div>
+);
 }
 
 export function InfosPeople() {
@@ -211,11 +215,14 @@ export function AfficheReservations() {
                         const scheduleStation = schedules.find(s => s.station_id === reservation.station_id);
 
                         return (
-                            <li className={styles[reservation.status]} key={reservation.id}>
+                            <li key={reservation.id}>
                                 <span>
                                     Réservation du {reservation.start_date} au {reservation.end_date}
                                     {" "}pour {reservation.attributions.length} personne(s)
-                                    {" — "}statut : {reservation.status}
+                                    {" — "}statut : 
+                                    <span className={styles[reservation.status]}>
+                                    {reservation.status}
+                                    </span>
                                 </span>
 
                                 <ul>
@@ -317,15 +324,21 @@ export function AfficheReservations() {
 function Tabinfos() {
     const [activeTab, setActiveTab] = useState("people");
     return (
-        <div className={styles.tabs}>
-            <button onClick={() => setActiveTab("people")} className={activeTab === "people" ? styles.active : styles.inactive}>
+    <div className={styles.tabs}>
+        <div className={styles.tabNav}>
+            <button onClick={() => setActiveTab("people")}
+                className={`${styles.btn_infos} ${activeTab === "people" ? styles.active : styles.inactive}`}>
                 Mes cyclistes
             </button>
-            <button onClick={() => setActiveTab("reservations")} className={activeTab === "reservations" ? styles.active : styles.inactive}>
+            <button onClick={() => setActiveTab("reservations")}
+                className={`${styles.btn_infos} ${activeTab === "reservations" ? styles.active : styles.inactive}`}>
                 Mes réservations
             </button>
+        </div>
+        <div className={styles.tabContent}>
             {activeTab === "people" ? <InfosPeople /> : <AfficheReservations />}
         </div>
+    </div>
     );
 }
 
