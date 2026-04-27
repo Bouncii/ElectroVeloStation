@@ -101,14 +101,14 @@ class ProfileController extends Controller{
             $reservation->propositions()
                 ->where('status', 'pending')
                 ->where('id', '!=', $proposition->id)
-                ->update(['status' => 'rejected']);
+                ->update(['status' => 'declined']);
         });
         return redirect()->back()->with('success', 'Proposition acceptée !');
     }
 
     public function rejectProposition(Proposition $proposition)
     {
-        $proposition->update(['status' => 'rejected']);
+        $proposition->update(['status' => 'declined']);
         return redirect()->back()->with('success', 'Proposition refusée.');
     }
 

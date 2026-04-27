@@ -27,7 +27,7 @@ class PropositionObserver
      */
     public function updated(Proposition $proposition): void
     {
-        if ($proposition->wasChanged('status') && $proposition->status === 'rejected') {
+        if ($proposition->wasChanged('status') && $proposition->status === 'declined') {
             $this->reservationService->checkPendingsForResolutions($proposition->reservation->station_id);
         }
     }

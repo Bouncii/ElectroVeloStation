@@ -16,8 +16,8 @@ class PropositionService
             //Création de la proposition
             $proposition = Proposition::create([
                 'reservation_id' => $reservation->id,
-                'status'         => 'pending',
-                'expires_at'     => now()->addHours(24),
+                'status'=> 'pending',
+                'expires_at'=> now()->addHours(24),
             ]);
 
             //Etape de liaison entre les velos et l'attribution
@@ -61,7 +61,7 @@ class PropositionService
     //Traie le refus de la proposition de la part du client
     public function rejectProposition(Proposition $proposition)
     {
-        $proposition->update(['status' => 'rejected']);
+        $proposition->update(['status' => 'declined']);
         return $proposition;
     }
 }
