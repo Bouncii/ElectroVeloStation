@@ -10,7 +10,7 @@ export default function ConfirmationReservation() {
     <div className={styles.confirmationMessage}>
     <h1>
     Votre réservation a bien été prise en compte ! </h1>
-    <button><Link href="/">Retour à l'accueil</Link></button>
-    <button><Link href="/profile">Voir mon profil</Link></button></div></div>
+    <button className={styles.btn}><Link href="/">Retour à l'accueil</Link></button>
+    <button className={styles.btn}><Link href="/profile">Voir mon profil</Link></button></div></div>
     </>
 }

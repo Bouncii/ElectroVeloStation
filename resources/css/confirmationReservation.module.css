@@ -21,17 +21,17 @@
     color: var(--primary);
 }
 
-.confirmationPage button {
-    background-color: var(--primary);
+.confirmationPage .btn {
+    background-color: #0031A4;
     border-radius: 0%;
     padding: 10px;
     border-radius: 30px;
 }
-.confirmationPage button:hover{
+.confirmationPage .btn:hover{
     background-color: rgb(36, 0, 129);
 }
 
-button a {
+.confirmationPage a {
     color: white;
     text-decoration: none;
 }
