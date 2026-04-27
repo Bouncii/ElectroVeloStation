@@ -71,6 +71,7 @@ class DashboardController extends Controller
         $bikes = $station->bikes()->get();
         $allStates = ['available', 'maintenance'];
         $bikeStats = [];
+        $sizes = Bike::distinct()->orderBy('size', 'asc')->pluck('size');
 
         foreach ($bikes as $bike) {
             if (!array_key_exists($bike->size, $bikeStats)) {
@@ -115,6 +116,7 @@ class DashboardController extends Controller
         return Inertia::render('dashboard/dashboard', [
             'station' => $station,
             'bikeStats' => $bikeStats,
+            'bikeSizes' => $sizes,
             'departingReservations' => $departingReservations,
             'arrivingReservations' => $arrivingReservations,
             'pendingReservations' => $pendingReservations,
