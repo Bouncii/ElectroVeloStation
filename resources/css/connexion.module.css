@@ -1,7 +1,8 @@
 .connexionPage {
     text-align: center;
     color:#262626;
-    display: flex;
+    display: grid;
+    place-items: center;
     flex-direction: column;
     background-image: url('../../public/images/bikeBackground.jpg');
     background-repeat: no-repeat;
@@ -59,4 +60,12 @@
 
 .connexionPage .blocConnexion button:hover {
     background-color: #003dcb;
+}
+
+@media (max-width: 500px) {
+    .connexionPage {
+        background-image: none;
+    }
+    
+    
 }
