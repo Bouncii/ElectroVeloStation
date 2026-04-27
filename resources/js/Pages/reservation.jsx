@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router, usePage } from "@inertiajs/react";
 import { Header } from "../Pages/home.jsx";
 import styles from '@css/reservation.module.css';
@@ -9,6 +9,17 @@ export default function Reservation({
     peopleDb = [], // Cyclistes enregistrés dans la base de données
     allStations = [] // Liste de toutes les stations récupérée depuis le backend
  }) {
+
+
+    useEffect(() => {
+                    document.body.setAttribute('data-theme','landing');
+                    document.body.classList.add('theme-landing', 'landing');
+                    return () => {
+                        document.body.removeAttribute('data-theme');
+                        document.body.classList.remove('theme-landing', 'landing');
+                        document.body.classList.remove('theme-admin', 'admin');
+                    };
+                }, []);
 
     const { errors, flash, auth } = usePage().props;
 
