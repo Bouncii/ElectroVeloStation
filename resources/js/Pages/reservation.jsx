@@ -7,7 +7,8 @@ import '@css/app.css';
 export default function Reservation({ 
     schedules = [], // Horaires des stations récupérés depuis le backend
     peopleDb = [], // Cyclistes enregistrés dans la base de données
-    allStations = [] // Liste de toutes les stations récupérée depuis le backend
+    allStations = [], // Liste de toutes les stations récupérée depuis le backend
+    sizes = [] // Tailles de vélos disponibles récupérées depuis le backend
  }) {
 
 
@@ -77,7 +78,14 @@ function Formulaire() {
         <label>Âge :</label>
         <input type="number" name="age" />
         <label>Taille (cm) :</label>
-        <input type="number" name="taille" />
+        <select name="taille">
+            <option value="">Choisir</option>
+            {sizes.map((size) => (
+                <option key={size.id} value={size.id}>
+                    {size.name}
+                </option>
+            ))}
+        </select>
         <button className="boutonRegister">Enregistrer</button>
         </form>
         
@@ -448,12 +456,16 @@ function Formulaire() {
 
         <label>Taille</label>
 
-        <input
-        type="number"
-        name="taille"
-        value={person.taille}
+        <select name="taille"
         onChange={(e)=>handlePeopleChange(index,e)}
-        />
+        >
+            <option value="">Choisir</option>
+            {sizes.map((size) => (
+                <option key={size.id} value={size.id}>
+                    {size.name}
+                </option>
+            ))}
+        </select>
 
         {index>0 && (
 
