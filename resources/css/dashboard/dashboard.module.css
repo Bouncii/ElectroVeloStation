@@ -96,3 +96,247 @@
     text-decoration: none;
     font-weight: bold;
 }
+
+/* DepartWindow / ArriveWindow / InProgressWindow */
+
+.departWinContainer {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.departWinContainer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.departWinContainer > ul > li {
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.departWinContainer > ul > li:last-child {
+    border-bottom: none;
+}
+
+.departWinContainer > ul > li > ul {
+    margin-top: 8px;
+    padding-left: 0;
+}
+
+.departWinContainer > ul > li > ul > li {
+    font-size: 0.82rem;
+    color: var(--faintText);
+    padding: 3px 0 3px 12px;
+    border-left: 2px solid #ebebeb;
+    margin-top: 4px;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.btn_checkin, .btn_checkout {
+    background-color: #e8f4fd;
+    color: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn_checkin:hover, .btn_checkout:hover {
+    background-color: #cce4fa;
+}
+
+/*
+.btn_checkout {
+    background-color: #fdf6e8;
+    color: #e69c00;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn_checkout:hover {
+    background-color: #faeac5;
+}*/
+
+/* WaitWindow */
+
+.wait_entry {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+}
+
+.div1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.div1 p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--faintText);
+}
+
+.div1 p:first-child {
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-weight: bold;
+    font-size: 0.78rem;
+}
+
+.titre_modale {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text);
+    border-left: 4px solid var(--accent);
+    padding-left: 15px;
+    margin: 0 0 14px;
+}
+
+.wait_entry p {
+    font-size: 0.88rem;
+    color: var(--text);
+    margin: 6px 0;
+}
+
+.wait_entry p strong {
+    color: var(--faintText);
+    font-weight: normal;
+    display: inline-block;
+    min-width: 80px;
+}
+
+.WaitListCommande {
+    margin-top: 4px;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+}
+
+.wait_liste_velos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wait_liste_velos li {
+    font-size: 0.85rem;
+    color: var(--faintText);
+    padding: 4px 0 4px 12px;
+    border-left: 2px solid #ebebeb;
+    margin-top: 4px;
+}
+
+/* OpeWindow */
+
+.opeWinContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.containerReequi {
+    grid-column: span 2;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.containerGeneric {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.description {
+    font-size: 0.85rem;
+    color: var(--faintText);
+    margin: 0;
+}
+
+.containerGeneric select,
+.containerGeneric input[type="number"] {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: #fafafa;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.containerGeneric select:focus,
+.containerGeneric input[type="number"]:focus {
+    border-color: var(--accent);
+}
+
+.containerGeneric input[type="number"] {
+    width: 80px;
+}
+
+.containerGeneric button {
+    align-self: flex-start;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.containerGeneric button:hover {
+    opacity: 0.88;
+}
+
+.btn_admin {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn_admin:hover {
+    opacity: 0.88;
+}
