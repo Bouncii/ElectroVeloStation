@@ -134,7 +134,7 @@ class UserReservationController extends Controller
         Mail::to($reservation->email)
             ->send(new ReservationConfirmation($reservation));
 
-        return redirect()->route('home')
+        return redirect()->route('confirmation')
             ->with('success', 'Réservation créée avec succès ! + mail envoyé');
 
     } catch (\Exception $e) {
