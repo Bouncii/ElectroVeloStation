@@ -1,50 +1,57 @@
 import { Link } from '@inertiajs/react';
-import '@css/dashboard/stationSelection.css';
+import styles from "@css/dashboard/stationSelection.module.css";
 import '@css/app.css';
 
 function StationSelection({ stations }) {
     return (
-        <section id='pageContainer'>
+        <section className={styles.pageContainer}>
+            <div className={styles.pageHeader}>
             <h1>Veuillez choisir une station : </h1>
-            <Link href="/" className="back">Accueil</Link>
-            <Link href="/panel" className="back">Panel</Link>
-            <div id='stationCardsContainer'> 
+            <div className={styles.navLinks}>
+            <Link href="/" className={styles.back}>Accueil</Link>
+            <Link href="/panel" className={styles.back}>Panel</Link>
+            </div>
+            </div>    
+
+            <div className={styles.stationCardsContainer}> 
                 {stations.map((station) => (
                     <StationCard key={station.id} station={station} />
                 ))}
-            </div>
+            </div>   
         </section>
     );
 }
 
 function StationCard({ station }) {
     return (
-        <div className="cards">
-            <div className='cardTop'><h3>{station.name}</h3></div>
-            <div className='cardMiddle'>
-                <div className='statContainer'>
+        <div className={styles.cards}>
+            <div className={styles.cardTop}><h3>{station.name}</h3></div>
+            <div className={styles.cardMiddle}>
+                <div className={styles.statContainer}>
                     <p>Vélos :</p>
-                    <div className='digitContainer'>
-                        <img  id='bikeimg' src="/images/bike.png" alt="bike" />
-                        <span className='digits blue'>{station.bikes_count}</span>
+                    <div className={styles.digitContainer}>
+                        <img className={styles.bikeimg} src="/images/bike.png" alt="bike" />
+                        <span className={styles.digits_blue}>{station.bikes_count}</span>
                     </div>
                 </div>
-                <div className='statContainer'>
+                <div className={styles.statSep} />
+                <div className={styles.statContainer}>
                     <p>Arrivées :</p>
-                    <div className='digitContainer'>
+                    <div className={styles.digitContainer}>
                         <img src="/images/downarrow.png" alt="downarrow" />
-                        <span className='digits green'>{station.arrivals_count}</span>
+                        <span className={styles.digits_green}>{station.arrivals_count}</span>
                     </div>
                 </div>
-                <div className='statContainer'>
+                <div className={styles.statSep} />
+                <div className={styles.statContainer}>
                     <p>Départs :</p>
-                    <div className='digitContainer'>
+                    <div className={styles.digitContainer}>
                         <img src="/images/uparrow.png" alt="uparrow" />
-                        <span className='digits orange'>{station.departures_count}</span>
+                        <span className={styles.digits_orange}>{station.departures_count}</span>
                     </div>
                 </div>
             </div>
-            <Link className='cardBottom' href={`/panel/dashboard/${station.id}`}>Accéder</Link>
+            <Link className={styles.cardBottom} href={`/panel/dashboard/${station.id}`}>Accéder</Link>
         </div>
     )
 }
