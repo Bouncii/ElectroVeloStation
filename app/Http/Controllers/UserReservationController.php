@@ -24,6 +24,7 @@ class UserReservationController extends Controller
     {
         $allStations = Station::all();
         $schedules = Schedule::all(); 
+        $sizes = Bike::distinct()->orderBy('size', 'asc')->pluck('size');
         $peopleDb = [];
         
         if (Auth::check()) {
@@ -33,6 +34,7 @@ class UserReservationController extends Controller
         return Inertia::render('reservation', [
             'allStations' => $allStations,
             'schedules' => $schedules,
+            'bikeSizes' => $sizes,
             'peopleDb' => $peopleDb,
         ]);
     }
