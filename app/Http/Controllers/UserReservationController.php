@@ -51,12 +51,12 @@ class UserReservationController extends Controller
         'start_date' => 'required|date|after_or_equal:now',
         'end_date' => 'required|date|after:start_date',
         'email' => 'required|email|max:255',
-        'attributions'=> 'required|array|min:1',
-        'attributions.*.id' => 'nullable|exists:people,id',
-        'attributions.*.nom' => 'required|string|max:255',
-        'attributions.*.prenom' => 'required|string|max:255',
-        'attributions.*.age' => 'required|integer|min:1|max:120',
-        'attributions.*.taille' => 'required|integer|min:100|max:250',
+        'persons'=> 'required|array|min:1',
+        'persons.*.id' => 'nullable|exists:people,id',
+        'persons.*.nom' => 'required|string|max:255',
+        'persons.*.prenom' => 'required|string|max:255',
+        'persons.*.age' => 'required|integer|min:1|max:120',
+        'persons.*.taille' => 'required|integer|min:100|max:250',
     ]);
 
     try {
