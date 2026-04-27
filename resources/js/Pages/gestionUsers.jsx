@@ -1,6 +1,7 @@
-import '@css/gestionUsers.css';
 import { useState } from "react";
 import {useForm, router, Link, usePage} from '@inertiajs/react';
+import styles from '@css/gestionUsers.module.css';
+import '@css/app.css';
 
 const AddUserForm = ({ onCancel}) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -19,7 +20,7 @@ const AddUserForm = ({ onCancel}) => {
     };
         return(
 
-            <form onSubmit={handleSubmit} className='addUserForm'>
+            <form onSubmit={handleSubmit} className={styles.AddUserForm}>
                 <input type="text" value={data.first_name} onChange={e => setData('first_name', e.target.value)} placeholder="Prénom" />
                 {errors.first_name && <div>{errors.first_name}</div>}
 
@@ -68,7 +69,7 @@ const UserCard = ({ user }) => {
     };
 
     return (
-        <div className='usersCardDetails'>
+        <div className={styles.usersCardDetails}>
             {isEditing ? (
                 <form onSubmit={handleSave}>
                     <input 
@@ -76,21 +77,21 @@ const UserCard = ({ user }) => {
                         value={data.first_name} 
                         onChange={(e) => setData('first_name',e.target.value)} 
                     />
-                    {errors.first_name && <p className='error'>{errors.first_name}</p>}
+                    {errors.first_name && <p className={styles.error}>{errors.first_name}</p>}
 
                     <input 
                         type="text" 
                         value={data.last_name} 
                         onChange={(e) => setData('last_name',e.target.value)} 
                     />
-                    {errors.last_name && <p className='error'>{errors.last_name}</p>}
+                    {errors.last_name && <p className={styles.error}>{errors.last_name}</p>}
 
                     <input 
                         type="text" 
                         value={data.email} 
                         onChange={(e) => setData('email',e.target.value)} 
                     />
-                    {errors.email && <p className='error'>{errors.email}</p>}
+                    {errors.email && <p className={styles.error}>{errors.email}</p>}
                     
                     <select
                         value={data.role}
@@ -100,10 +101,10 @@ const UserCard = ({ user }) => {
                         <option value="employee">Employé</option>
                         <option value="admin">Admin</option>
                     </select>
-                    {errors.role && <p className='error'>{errors.role}</p>}
+                    {errors.role && <p className={styles.error}>{errors.role}</p>}
                     
                     
-                    <div className='button'>
+                    <div className={styles.button}>
                         <button type='submit' disabled={processing}>
                             {processing ? 'Enregistrement en cours...' : 'Enregistrer'}
                         </button>
@@ -131,7 +132,7 @@ const UserCard = ({ user }) => {
                 ) : (
                     <p>Aucune personne associée</p>
                 )}
-            <div className="button">
+            <div className={styles.button}>
                         <button onClick={() => setIsEditing(true)}>
                             Modifier
                         </button>
@@ -143,7 +144,7 @@ const UserCard = ({ user }) => {
                         </button>
                     </div>
                     {showPersons && (
-                        <div className="persons_section">
+                        <div className={styles.persons_section}>
                             {user.people && user.people.length > 0 ? (
                                 user.people.map(person => 
                                 <PersonRow 
@@ -188,7 +189,7 @@ const PersonRow = ({ person }) => {
 
     return (
         <>
-            <form onSubmit={handleUpdate} className='person_row'>
+            <form onSubmit={handleUpdate} className={styles.person_row}>
                 <input type="text" 
                     value={data.first_name}
                     onChange={e => setData('first_name', e.target.value)}
@@ -224,13 +225,17 @@ const PersonRow = ({ person }) => {
     )
 }
 
-export default function gestionUsers({ users}){
+export default function GestionUsers({ users}){
 
     const [showForm, setShowForm] = useState(false);
 
     return(
     <>
-    <button className='btn_add' onClick={() => setShowForm(!showForm)}>
+    <div className={styles.nav}>
+            <Link href="/" className={styles.back}>Accueil</Link>
+            <Link href="/panel" className={styles.back}>Panel</Link>
+            </div>
+    <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>
                 {showForm ? "Annuler" : "Ajouter un user"}
             </button>
 
@@ -239,7 +244,7 @@ export default function gestionUsers({ users}){
                     onCancel={() => setShowForm(false)} />
             )}
 
-    <div className='users_grid'>
+    <div className={styles.users_grid}>
         {users.length > 0 ? (
             users.map((user) => (
                 <UserCard 

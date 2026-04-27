@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useForm, router, Link } from '@inertiajs/react';
+import styles from '@css/gestionReservations.module.css';
+import '@css/app.css';
 
 const AddReservationForm = ({ onCancel }) => {
 
@@ -36,7 +38,7 @@ const AddReservationForm = ({ onCancel }) => {
 
     return (
 
-        <form onSubmit={handleSubmit} className='addUserForm'>
+        <form onSubmit={handleSubmit} className={styles.addUserForm}>
             <h3>Nouvelle Réservation</h3>
             
             {errors.attributions && <p style={{color: 'red'}}>Erreur : {errors.attributions}</p>}
@@ -155,7 +157,7 @@ const ReservationCard = ({ reservation }) => {
 
     return (
 
-        <div className="usersCardDetails">
+        <div className={styles.usersCardDetails}>
 
             {isEditing ? (
 
@@ -217,7 +219,7 @@ const ReservationCard = ({ reservation }) => {
                         )}
                     </div>
 
-                    <div className="button">
+                    <div className={styles.button}>
 
                         <button type="submit" disabled={processing}>
                             {processing ? "Sauvegarde..." : "Enregistrer"}
@@ -265,7 +267,7 @@ const ReservationCard = ({ reservation }) => {
                         )}
                     </div>
 
-                    <div className="button">
+                    <div className={styles.button}>
 
                         <button onClick={() => setIsEditing(true)}>
                             Modifier
@@ -294,8 +296,12 @@ export default function GestionReservations({ reservations = [], persons = [], e
     return (
 
         <>
+            <div className={styles.nav}>
+                    <Link href="/" className={styles.back}>Accueil</Link>
+                    <Link href="/panel" className={styles.back}>Panel</Link>
+                    </div>
             
-            <button className='btn_add' onClick={() => setShowForm(!showForm)}>
+            <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>
                 {showForm ? "Annuler" : "Nouvelle réservation"}
             </button>
 
@@ -307,7 +313,7 @@ export default function GestionReservations({ reservations = [], persons = [], e
 
             <h2>Liste des réservations</h2>
 
-            <div className="users_grid">
+            <div className={styles.users_grid}>
 
                 {reservations.length > 0 ? (
 
