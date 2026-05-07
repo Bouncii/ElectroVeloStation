@@ -8,10 +8,10 @@ export default function Reservation({
     schedules = [], // Horaires des stations récupérés depuis le backend
     peopleDb = [], // Cyclistes enregistrés dans la base de données
     allStations = [], // Liste de toutes les stations récupérée depuis le backend
-    sizes = [] // Tailles de vélos disponibles récupérées depuis le backend
+    bikeSizes = [] // Tailles de vélos disponibles récupérées depuis le backend
  }) {
 
-
+    console.log(bikeSizes);
     useEffect(() => {
                     document.body.setAttribute('data-theme','landing');
                     document.body.classList.add('theme-landing', 'landing');
@@ -80,9 +80,9 @@ function Formulaire() {
         <label>Taille (cm) :</label>
         <select name="taille">
             <option value="">Choisir</option>
-            {sizes.map((size) => (
-                <option key={size.id} value={size.id}>
-                    {size.name}
+            {bikeSizes.map((bikeSize) => (
+                <option key={bikeSize.id} value={bikeSize}>
+                    {bikeSize}
                 </option>
             ))}
         </select>
@@ -460,9 +460,9 @@ function Formulaire() {
         onChange={(e)=>handlePeopleChange(index,e)}
         >
             <option value="">Choisir</option>
-            {sizes.map((size) => (
-                <option key={size.id} value={size.id}>
-                    {size.name}
+            {bikeSizes.map((bikeSize) => (
+                <option key={bikeSize.id} value={bikeSize}>
+                    {bikeSize}
                 </option>
             ))}
         </select>
