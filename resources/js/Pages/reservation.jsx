@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router, usePage } from "@inertiajs/react";
 import { Header } from "../Pages/home.jsx";
 import styles from '@css/reservation.module.css';
@@ -7,8 +7,20 @@ import '@css/app.css';
 export default function Reservation({ 
     schedules = [], // Horaires des stations récupérés depuis le backend
     peopleDb = [], // Cyclistes enregistrés dans la base de données
-    allStations = [] // Liste de toutes les stations récupérée depuis le backend
+    allStations = [], // Liste de toutes les stations récupérée depuis le backend
+    bikeSizes = [] // Tailles de vélos disponibles récupérées depuis le backend
  }) {
+
+    console.log(bikeSizes);
+    useEffect(() => {
+                    document.body.setAttribute('data-theme','landing');
+                    document.body.classList.add('theme-landing', 'landing');
+                    return () => {
+                        document.body.removeAttribute('data-theme');
+                        document.body.classList.remove('theme-landing', 'landing');
+                        document.body.classList.remove('theme-admin', 'admin');
+                    };
+                }, []);
 
     const { errors, flash, auth } = usePage().props;
 
@@ -66,7 +78,14 @@ function Formulaire() {
         <label>Âge :</label>
         <input type="number" name="age" />
         <label>Taille (cm) :</label>
-        <input type="number" name="taille" />
+        <select name="taille">
+            <option value="">Choisir</option>
+            {bikeSizes.map((bikeSize) => (
+                <option key={bikeSize.id} value={bikeSize}>
+                    {bikeSize}
+                </option>
+            ))}
+        </select>
         <button className="boutonRegister">Enregistrer</button>
         </form>
         
@@ -437,12 +456,16 @@ function Formulaire() {
 
         <label>Taille</label>
 
-        <input
-        type="number"
-        name="taille"
-        value={person.taille}
+        <select name="taille"
         onChange={(e)=>handlePeopleChange(index,e)}
-        />
+        >
+            <option value="">Choisir</option>
+            {bikeSizes.map((bikeSize) => (
+                <option key={bikeSize.id} value={bikeSize}>
+                    {bikeSize}
+                </option>
+            ))}
+        </select>
 
         {index>0 && (
 

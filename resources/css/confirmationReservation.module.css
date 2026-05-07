@@ -1,5 +1,4 @@
 .confirmationPage {
-    background-color: var(--secondary);
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;

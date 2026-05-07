@@ -215,9 +215,17 @@ const OperationForm = ({ title, description, buttonText, onSubmit }) => {
             <p className={styles.description}>{description}</p>
             <select value={size} onChange={(e) => setSize(e.target.value)}>
                 <option value="">-- Taille --</option>
-                <option value="140">140</option>
-                <option value="160">160</option>
+                <option value="140">100</option>
+                <option value="160">110</option>
+                <option value="180">120</option>
+                <option value="140">130</option>
+                <option value="160">140</option>
+                <option value="180">150</option>
+                <option value="140">160</option>
+                <option value="160">170</option>
                 <option value="180">180</option>
+                <option value="140">190</option>
+                <option value="160">200</option>
             </select>
             <input 
                 type="number" 

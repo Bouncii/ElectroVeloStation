@@ -44,3 +44,9 @@
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+@media (max-width: 500px) {
+    .inscriptionPage {
+        background-image: none;
+    }
+}
