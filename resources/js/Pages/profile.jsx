@@ -7,6 +7,7 @@ import '@css/app.css';
 
 function InfosProfil() {
     const [editing, setEditing] = useState(false);
+    const [editingPassword, setEditingPassword] = useState(false);
     const { user } = usePage().props.auth;
 
     const [formData, setFormData] = useState({
@@ -15,6 +16,14 @@ function InfosProfil() {
         email: user.email,
     });
 
+    const [passwordData, setPasswordData] = useState({
+        current_password: '',
+        password: '',
+        password_confirmation: '',
+    });
+
+    const [passwordError, setPasswordError] = useState('');
+
     function handleSubmit(e) {
         e.preventDefault();
         router.patch('/profile/update', formData, {
@@ -22,50 +31,94 @@ function InfosProfil() {
         });
     }
 
+    function handlePasswordSubmit(e) {
+        e.preventDefault();
+        setPasswordError('');
+
+        if (passwordData.password !== passwordData.password_confirmation) {
+            setPasswordError('Les mots de passe ne correspondent pas.');
+            return;
+        }
+
+        router.patch('/profile/password', passwordData, {
+            onSuccess: () => {
+                setEditingPassword(false);
+                setPasswordData({ current_password: '', password: '', password_confirmation: '' });
+            },
+            onError: (errors) => {
+                setPasswordError(errors.current_password || errors.password || 'Une erreur est survenue.');
+            },
+        });
+    }
+
     return (
         <div className={styles.blocProfile}>
-        <div className={styles.profileHeader}>
-            <h1>Bonjour, {user.first_name} {user.last_name}</h1>
-            <p>Mon compte</p>
-            <div className={styles.profileAvatar}>
-                {user.first_name?.[0]}{user.last_name?.[0]}
-            </div>
-        </div>
-        <div className={styles.profileBody}>
-            <div className={styles.infoGrid}>
-                <div className={styles.infoItem}>
-                    <div className={styles.infoLabel}>Nom</div>
-                    <div className={styles.infoValue}>{user.last_name}</div>
-                </div>
-                <div className={styles.infoItem}>
-                    <div className={styles.infoLabel}>Prénom</div>
-                    <div className={styles.infoValue}>{user.first_name}</div>
-                </div>
-                <div className={`${styles.infoItem} ${styles.full}`}>
-                    <div className={styles.infoLabel}>Email</div>
-                    <div className={styles.infoValue}>{user.email}</div>
+            <div className={styles.profileHeader}>
+                <h1>Bonjour, {user.first_name} {user.last_name}</h1>
+                <p>Mon compte</p>
+                <div className={styles.profileAvatar}>
+                    {user.first_name?.[0]}{user.last_name?.[0]}
                 </div>
             </div>
-            <button onClick={() => setEditing(true)} className={styles.updateButton}>
-                Modifier mes informations
-            </button>
-            {editing && (
-                <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Nom" value={formData.last_name}
-                        onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} />
-                    <input type="text" placeholder="Prénom" value={formData.first_name}
-                        onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} />
-                    <input type="email" placeholder="Email" value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                    <div className={styles.formActions}>
-                        <button type="submit" className={styles.bnt}>Enregistrer</button>
-                        <button type="button" onClick={() => setEditing(false)} className={styles.cancelButton}>Annuler</button>
+            <div className={styles.profileBody}>
+                <div className={styles.infoGrid}>
+                    <div className={styles.infoItem}>
+                        <div className={styles.infoLabel}>Nom</div>
+                        <div className={styles.infoValue}>{user.last_name}</div>
                     </div>
-                </form>
-            )}
+                    <div className={styles.infoItem}>
+                        <div className={styles.infoLabel}>Prénom</div>
+                        <div className={styles.infoValue}>{user.first_name}</div>
+                    </div>
+                    <div className={`${styles.infoItem} ${styles.full}`}>
+                        <div className={styles.infoLabel}>Email</div>
+                        <div className={styles.infoValue}>{user.email}</div>
+                    </div>
+                </div>
+
+                {/* Modification des infos */}
+                <button onClick={() => setEditing(true)} className={styles.updateButton}>
+                    Modifier mes informations
+                </button>
+                {editing && (
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" placeholder="Nom" value={formData.last_name}
+                            onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} />
+                        <input type="text" placeholder="Prénom" value={formData.first_name}
+                            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} />
+                        <input type="email" placeholder="Email" value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                        <div className={styles.formActions}>
+                            <button type="submit" className={styles.bnt}>Enregistrer</button>
+                            <button type="button" onClick={() => setEditing(false)} className={styles.cancelButton}>Annuler</button>
+                        </div>
+                    </form>
+                )}
+
+                {/* Modification du mot de passe */}
+                <button onClick={() => setEditingPassword(true)} className={styles.updateButton}>
+                    Modifier mon mot de passe
+                </button>
+                {editingPassword && (
+                    <form onSubmit={handlePasswordSubmit}>
+                        {passwordError && (
+                            <p className={styles.errorMessage}>{passwordError}</p>
+                        )}
+                        <input type="password" placeholder="Mot de passe actuel" value={passwordData.current_password}
+                            onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })} />
+                        <input type="password" placeholder="Nouveau mot de passe" value={passwordData.password}
+                            onChange={(e) => setPasswordData({ ...passwordData, password: e.target.value })} />
+                        <input type="password" placeholder="Confirmer le nouveau mot de passe" value={passwordData.password_confirmation}
+                            onChange={(e) => setPasswordData({ ...passwordData, password_confirmation: e.target.value })} />
+                        <div className={styles.formActions}>
+                            <button type="submit" className={styles.bnt}>Enregistrer</button>
+                            <button type="button" onClick={() => setEditingPassword(false)} className={styles.cancelButton}>Annuler</button>
+                        </div>
+                    </form>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
 }
 
 export function InfosPeople() {
@@ -254,9 +307,6 @@ export function AfficheReservations() {
                                 )}
                                 {reservation.status !== 'cancelled' && reservation.status !== 'completed' && (
                                  <>
-                                 <button className={styles.updateButton} onClick={() => handleEdit(reservation)}>
-                                      Modifier
-                                </button>
                                 <button className={styles.cancelButton} onClick={() => handleCancelReservation(reservation.id)}>
                                     Annuler la réservation
                                 </button>
