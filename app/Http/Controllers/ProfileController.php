@@ -91,11 +91,18 @@ class ProfileController extends Controller{
     {
         DB::transaction(function () use ($proposition) {
             $reservation = $proposition->reservation;
-        
-            foreach ($proposition->bikes as $attributionId => $bikeId) {
-                $reservation->attributions()
-                    ->where('id', $attributionId)
-                    ->update(['bike_id' => $bikeId]);
+            $bikes = $proposition->bikes;
+            $attributions = $reservation->attributions()->with('person')->whereNull('bike_id')->get();
+
+            foreach ($bikes as $bike) {
+                $attribution = $attributions->first(function ($attr) use ($bike) {
+                    return $attr->bike_id === null && $attr->person->required_bike_size === $bike->size;
+                });
+
+                if ($attribution) {
+                    $attribution->update(['bike_id' => $bike->id]);
+                    $attribution->bike_id = $bike->id; 
+                }
             }
 
             $reservation->update(['status' => 'confirmed']);
@@ -117,8 +124,9 @@ class ProfileController extends Controller{
 
     public function cancelReservation(Reservation $reservation)
     {
+
         $reservation->update(['status' => 'cancelled']);
-        return redirect()->back()->with('success', 'Réservation annulée.');
+        return redirect()->back()->with('success', 'Réservation annulée et vélos libérés.');
     }
 
     public function distanceGPS(float $lat1, float $lon1, float $lat2, float $lon2): float
@@ -179,7 +187,7 @@ public function findClosestStationWithBikes(Reservation $reservation): ?Station
 
     if (!$targetStation) {
         return redirect()->back()->withErrors([
-            'transfer' => 'Aucune station disponible trouvée pour ce transfert.',
+            'transfer' => 'Aucune station disponible trouvée pour ce transfert.'
         ]);
     }
 

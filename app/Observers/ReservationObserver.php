@@ -8,6 +8,7 @@ use App\Services\ReservationService;
 class ReservationObserver
 {
     protected $reservationService;
+    public $afterCommit = true;
 
     public function __construct(ReservationService $reservationService)
     {
@@ -20,7 +21,6 @@ class ReservationObserver
     public function updated(Reservation $reservation): void
     {
         if ($reservation->wasChanged('status') && $reservation->status === 'cancelled') {
-            $reservation->attributions()->update(['bike_id' => null]);
             $this->reservationService->checkPendingsForResolutions($reservation->station_id);
         }
     }
