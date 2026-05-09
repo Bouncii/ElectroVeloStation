@@ -164,6 +164,19 @@ export function AfficheReservations() {
 
     const [editingId, setEditingId] = useState(null);
     const [editData, setEditData] = useState({});
+    const [suggestion, setSuggestion] = useState({}); // { [reservationId]: { available, station, distance_km } }
+
+    async function handleSuggestTransfer(reservationId) {
+        const res = await fetch(`/profile/reservations/${reservationId}/suggest-transfer`);
+        const data = await res.json();
+        setSuggestion((prev) => ({ ...prev, [reservationId]: data }));
+    }
+
+    function handleTransfer(reservationId) {
+        router.post(`/profile/reservations/${reservationId}/transfer`, {}, {
+            onSuccess: () => setSuggestion((prev) => ({ ...prev, [reservationId]: null })),
+        });
+    }
 
     function handleEdit(reservation) {
         setEditingId(reservation.id);
@@ -260,6 +273,38 @@ export function AfficheReservations() {
                                 <button className={styles.cancelButton} onClick={() => handleCancelReservation(reservation.id)}>
                                     Annuler la réservation
                                 </button>
+                                {reservation.status === 'pending' && (
+    <div>
+        <button
+            type="button"
+            className={styles.updateButton}
+            onClick={() => handleSuggestTransfer(reservation.id)}
+        >
+            Trouver une station disponible
+        </button>
+
+        {suggestion[reservation.id] && (
+            suggestion[reservation.id].available ? (
+                <div className={styles.suggestion}>
+                    <p>
+                        Station la plus proche disponible :{' '}
+                        <strong>{suggestion[reservation.id].station.name}</strong>
+                        {' '}— à {suggestion[reservation.id].distance_km} km
+                    </p>
+                    <button
+                        type="button"
+                        className={styles.submitButton}
+                        onClick={() => handleTransfer(reservation.id)}
+                    >
+                        Confirmer le transfert
+                    </button>
+                </div>
+            ) : (
+                <p>Aucune station disponible pour ces dates.</p>
+            )
+        )}
+    </div>
+)}
                                   </>
                                  )}
 

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Station;
+use App\Models\Bike;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Person;
@@ -118,36 +119,117 @@ class ProfileController extends Controller{
         return redirect()->back()->with('success', 'Réservation annulée.');
     }
 
-    public function transferReservation(Request $request, Reservation $reservation)
-    {
-        $validated = $request->validate([
-            'station_id' => 'required|exists:stations,id'
-        ]);
-        $propositionService = app(\App\Services\PropositionService::class);
-        DB::transaction(function () use ($reservation, $validated, $propositionService) {
+    public function distanceGPS(float $lat1, float $lon1, float $lat2, float $lon2): float
+{
+    $earthRadius = 6371;
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLon = deg2rad($lon2 - $lon1);
+    $a = sin($dLat / 2) ** 2 + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) ** 2;
 
-            $reservation->update(['status' => 'cancelled']);
-            $newReservation = $reservation->replicate();
-            $newReservation->station_id = $validated['station_id'];
-            $newReservation->status = 'pending';
-            $newReservation->created_at = now();
-            $newReservation->save();
+    return $earthRadius * 2 * atan2(sqrt($a), sqrt(1 - $a));
+}
 
-            foreach ($reservation->attributions as $attr) {
-                $newAttr = $attr->replicate();
-                $newAttr->reservation_id = $newReservation->id;
-                $newAttr->bike_id = null;
-                $newAttr->save();
-            }
-            $isResolved = $this->reservationService->attemptResolution($newReservation);
-            if ($isResolved) {
-                $proposition = $newReservation->propositions()->where('status', 'pending')->first();
-                if ($proposition) {
-                    $propositionService->acceptProposition($proposition);
+public function findClosestStationWithBikes(Reservation $reservation): ?Station
+{
+    $origin = $reservation->station;
+
+    $requiredSizes = $reservation->attributions
+        ->pluck('person.required_bike_size')
+        ->filter()
+        ->values();
+
+    $best = Station::where('id', '!=', $origin->id)
+        ->get()
+        ->filter(function (Station $station) use ($reservation, $requiredSizes) {
+            $assignedIds = [];
+
+            foreach ($requiredSizes as $size) {
+                $bike = Bike::where('size', $size)
+                    ->whereNotIn('id', $assignedIds)
+                    ->availableAtStationOn(
+                        $station->id,
+                        $reservation->start_date,
+                        $reservation->end_date,
+                        $reservation->id
+                    )
+                    ->first();
+
+                if (!$bike) {
+                    return false;
                 }
-            }
-        });
 
-        return redirect()->back()->with('success', 'Transfert réussi !');
+                $assignedIds[] = $bike->id;
+            }
+
+            return true;
+        })
+        ->sortBy(fn(Station $s) => $this->distanceGPS(
+            $origin->latitude, $origin->longitude,
+            $s->latitude, $s->longitude
+        ))
+        ->first();
+
+    return $best ?: null;
+}
+
+    public function transferReservation(Reservation $reservation){
+    $targetStation = $this->findClosestStationWithBikes($reservation);
+
+    if (!$targetStation) {
+        return redirect()->back()->withErrors([
+            'transfer' => 'Aucune station disponible trouvée pour ce transfert.',
+        ]);
     }
+
+    $propositionService = app(\App\Services\PropositionService::class);
+
+    DB::transaction(function () use ($reservation, $targetStation, $propositionService) {
+        $reservation->update(['status' => 'cancelled']);
+
+        $newReservation = $reservation->replicate();
+        $newReservation->station_id = $targetStation->id;
+        $newReservation->status = 'pending';
+        $newReservation->created_at = now();
+        $newReservation->save();
+
+        foreach ($reservation->attributions as $attr) {
+            $newAttr = $attr->replicate();
+            $newAttr->reservation_id = $newReservation->id;
+            $newAttr->bike_id = null;
+            $newAttr->save();
+        }
+
+        $isResolved = $this->reservationService->attemptResolution($newReservation);
+
+        if ($isResolved) {
+            $proposition = $newReservation->propositions()->where('status', 'pending')->first();
+
+            if ($proposition) {
+                $propositionService->acceptProposition($proposition);
+            }
+        }
+    });
+
+    return redirect()->back()->with('success', 'Transfert réussi !'); 
+    }
+
+
+public function suggestTransfer(Reservation $reservation)
+{
+    $targetStation = $this->findClosestStationWithBikes($reservation);
+
+    $data = $targetStation
+        ? [
+            'available'   => true,
+            'station'     => ['id' => $targetStation->id, 'name' => $targetStation->name],
+            'distance_km' => round($this->distanceGPS(
+                $reservation->station->latitude, $reservation->station->longitude,
+                $targetStation->latitude, $targetStation->longitude
+            ), 2),
+        ]
+        : ['available' => false];
+
+    return response()->json($data);
+}
+
 }

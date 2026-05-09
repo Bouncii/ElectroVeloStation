@@ -39,7 +39,9 @@ Route::middleware(['auth','role:admin,employee,client'])
         Route::patch('/propositions/{proposition}/reject', [ProfileController::class, 'rejectProposition']);
 
         Route::patch('/reservations/{reservation}/cancel', [ProfileController::class, 'cancelReservation']);
-        Route::post('/reservations/{reservation}/transfer', [ProfileController::class, 'transferReservation']);  
+        Route::get('/reservations/{reservation}/suggest-transfer', [ProfileController::class, 'suggestTransfer']);
+        Route::post('/reservations/{reservation}/transfer', [ProfileController::class, 'transferReservation']);
+
     });
 
 
