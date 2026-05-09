@@ -29,6 +29,7 @@ Route::middleware(['auth','role:admin,employee,client'])
     
         Route::get('/', [ProfileController::class, "index"]);
         Route::patch('/update', [ProfileController::class, "update"]);
+        Route::patch('/password', [ProfileController::class, 'updatePassword']);
 
         // --- GESTION DES PERSONNES ---
         Route::post('/persons', [ProfileController::class, 'storePerson']);

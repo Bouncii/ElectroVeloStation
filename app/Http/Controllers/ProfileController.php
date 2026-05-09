@@ -12,6 +12,8 @@ use App\Models\Proposition;
 use App\Models\Schedule;
 use App\Services\ReservationService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 
 class ProfileController extends Controller{
@@ -232,4 +234,17 @@ public function suggestTransfer(Reservation $reservation)
     return response()->json($data);
 }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password'      => ['required', 'current_password'],
+            'password'              => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return back();
+    }
 }
