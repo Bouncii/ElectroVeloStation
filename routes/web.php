@@ -27,7 +27,7 @@ Route::middleware(['auth','role:admin,employee,client'])
     ->prefix('profile')
     ->group(function () {
     
-        Route::get('/', [ProfileController::class, "index"]);
+        Route::get('/', [ProfileController::class, "index"])->name("profile.index");
         Route::patch('/update', [ProfileController::class, "update"]);
         Route::patch('/password', [ProfileController::class, 'updatePassword']);
 

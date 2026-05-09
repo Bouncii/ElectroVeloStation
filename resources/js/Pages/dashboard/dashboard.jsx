@@ -204,6 +204,8 @@ const OperationForm = ({ title, description, buttonText, onSubmit }) => {
     const [size, setSize] = useState('');
     const [count, setCount] = useState(1);
 
+    const availableSizes = [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200];
+
     const handleSubmit = () => {
         if (!size) return alert("Sélectionnez une taille");
         onSubmit(size, count);
@@ -215,17 +217,9 @@ const OperationForm = ({ title, description, buttonText, onSubmit }) => {
             <p className={styles.description}>{description}</p>
             <select value={size} onChange={(e) => setSize(e.target.value)}>
                 <option value="">-- Taille --</option>
-                <option value="140">100</option>
-                <option value="160">110</option>
-                <option value="180">120</option>
-                <option value="140">130</option>
-                <option value="160">140</option>
-                <option value="180">150</option>
-                <option value="140">160</option>
-                <option value="160">170</option>
-                <option value="180">180</option>
-                <option value="140">190</option>
-                <option value="160">200</option>
+                {availableSizes.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                ))}
             </select>
             <input 
                 type="number" 
