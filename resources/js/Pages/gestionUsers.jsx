@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useForm, router, Link, usePage} from '@inertiajs/react';
 import styles from '@css/gestionUsers.module.css';
 import '@css/app.css';
@@ -229,12 +229,25 @@ export default function GestionUsers({ users}){
 
     const [showForm, setShowForm] = useState(false);
 
+    useEffect(() => {
+            document.body.setAttribute('data-theme','admin');
+            document.body.classList.add('theme-admin', 'admin');
+            return () => {
+                document.body.removeAttribute('data-theme');
+                document.body.classList.remove('theme-admin', 'admin');
+                document.body.classList.remove('theme-landing', 'landing');
+            };
+        },
+        []);
+
     return(
     <>
+    
     <div className={styles.nav}>
             <Link href="/" className={styles.back}>Accueil</Link>
             <Link href="/panel" className={styles.back}>Panel</Link>
             </div>
+        <h2>Gestion des users</h2>
     <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>
                 {showForm ? "Annuler" : "Ajouter un user"}
             </button>

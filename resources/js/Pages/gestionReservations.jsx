@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, router, Link } from '@inertiajs/react';
 import styles from '@css/gestionReservations.module.css';
 import '@css/app.css';
@@ -293,14 +293,26 @@ export default function GestionReservations({ reservations = [], persons = [], e
 /* ... = [] évite erreur .lenght */
     const [showForm, setShowForm] = useState(false);
 
+    useEffect(() => {
+        document.body.setAttribute('data-theme','admin');
+        document.body.classList.add('theme-admin', 'admin');
+        return () => {
+            document.body.removeAttribute('data-theme');
+            document.body.classList.remove('theme-admin', 'admin');
+            document.body.classList.remove('theme-landing', 'landing');
+        };
+    },
+    []);
+
     return (
 
         <>
+            
             <div className={styles.nav}>
                     <Link href="/" className={styles.back}>Accueil</Link>
                     <Link href="/panel" className={styles.back}>Panel</Link>
                     </div>
-            
+            <h2>Gestion des réservations</h2>
             <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>
                 {showForm ? "Annuler" : "Nouvelle réservation"}
             </button>
@@ -310,8 +322,6 @@ export default function GestionReservations({ reservations = [], persons = [], e
                 persons={persons}
                 />
             )}
-
-            <h2>Liste des réservations</h2>
 
             <div className={styles.users_grid}>
 

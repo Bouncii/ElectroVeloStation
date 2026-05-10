@@ -75,9 +75,9 @@ div.stations{
     margin: 0;
     font-size: small;
     white-space: nowrap;
-    overflow: hidden;
+    /*overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 120px;
+    max-width: 120px; */
 }
 
 div.bottom {
@@ -136,12 +136,13 @@ div.status {
 }
 
 .waitGrid {
-    display: grid;
-    grid-template-columns: 200px 2fr 1.5fr 100px;
-    border: 1px solid #D9D9D9;;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
     border-radius: 8px;
     background-color: white;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .waitGrid h3, #btnTri, .wait_entry {
@@ -156,12 +157,17 @@ div.status {
 }
 
 .wait_entry{
-    display: contents;
+    display: flex;
+    align-items: center;
+}
+
+.div1, .div2, .div3 {
+    flex: 1;                /* Chaque colonne prend le même espace disponible */
+    min-width: 150px;       /* Évite que les colonnes ne s'écrasent trop */
 }
 
 .wait_entry div {
     padding: 12px 15px;
-    border-bottom: 1px solid #f0f0f0;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -174,6 +180,7 @@ div.status {
 }
 
 .btn_details {
+    margin-left: auto;
     background-color: #979bff;
     color: white;
     border: none;
@@ -193,8 +200,8 @@ div.status {
 }
 
 .waitGrid div {
-    padding: 5px 0px;
-    border-bottom: 1px solid #f0f0f0;
+    /* padding: 5px 0px;
+    border-bottom: 1px solid #f0f0f0; */
 }
 
 .btnTri:hover{
@@ -225,6 +232,7 @@ div.status {
     animation: modalFade 0.3s ease-out;
     background-color: white;
     padding: 30px;
+    margin-left: 5%;
     border-radius: 16px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     max-width: 500px;
@@ -338,4 +346,18 @@ div.status {
 
 .boxDash {
     grid-area: Boxdas;
+}
+
+.headWaitGrid {
+    display: flex; 
+  
+}
+
+.headWaitGrid h3 {
+    flex: 1;                
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: bold;
 }

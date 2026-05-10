@@ -340,3 +340,44 @@
 .btn_admin:hover {
     opacity: 0.88;
 }
+
+.btnPopUp {
+    position: relative;
+    z-index: 50;
+}
+
+.containerPopUp {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.PanelDialog {
+    max-width: 32rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    padding: 3rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.DialogTitle {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.confirmBtn {
+    display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}

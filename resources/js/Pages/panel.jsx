@@ -6,6 +6,18 @@ import { usePage, Link } from '@inertiajs/react';
 import styles from "@css/panel.module.css";
 import '@css/app.css';
 
+    const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  
+  return new Intl.DateTimeFormat('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(date);
+    };
+
 function AfficherWaitList({pendingReservations}){
 
     const [selectedRes, setSelectedRes] = useState(null);
@@ -19,7 +31,7 @@ function AfficherWaitList({pendingReservations}){
                     <div key={res.id} className={styles.wait_entry}>
                         <div className={styles.div1}>
                         <p> {res.id}</p>
-                        <p>{res.created_at}</p>
+                        <p>{formatDate(res.created_at)}</p> 
                         </div>
 
                         <div className={styles.div2}>
@@ -61,7 +73,7 @@ const WaitDetail = ({isOpen, onClose, data}) => {
                 <p><strong>Taille :</strong> {data.user?.height}</p>*/}
                 <p><strong>Email :</strong> {data.user?.email}</p>
                 <p><strong>Station :</strong> {data.station.name}</p>
-                <p><strong>Date :</strong> {data.created_at}</p>
+                <p><strong>Date :</strong>{formatDate(data.created_at)}</p>
                 <p><strong>Commande :</strong></p>
                 <div className={styles.WaitListCommande}>                        
                         {data.attributions && data.attributions.length > 0 ? (
@@ -115,9 +127,6 @@ function AfficherReservations({ allReservations }){
                     <div key={res.id} className={styles.reservation_card}>
                         <div className={styles.stations}>
                         <p> {res.station?.name || res.station_name}</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="#000" d="m7.089 18.5l4.653-6.5L7.09 5.5h1.219l4.654 6.5l-4.654 6.5zm5.796 0l4.654-6.5l-4.655-6.5h1.22l4.654 6.5l-4.654 6.5z" />
-                        </svg>
                         </div>
 
                         <div className={styles.hours}>
@@ -210,10 +219,12 @@ export default function Panel() {
             <div className={styles.waitList}>
                 <h2>Liste d'attente</h2>
                 <div className={styles.waitGrid}>
+                    <div className={styles.headWaitGrid}>
                     <h3>Réservation</h3>
                     <h3>Client</h3>
                     <h3>Station </h3>
-                    <button className={styles.btnTri} onClick={trierListeAttente}>  </button> {/* Boutton de tri qu'on remettra après*/ }
+                    </div>
+                    {/*<button className={styles.btnTri} onClick={trierListeAttente}>  </button>  Boutton de tri qu'on remettra après*/ }
 
                     <AfficherWaitList pendingReservations={pendingReservations}/>
                 </div>

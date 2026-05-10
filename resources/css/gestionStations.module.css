@@ -38,10 +38,10 @@ button {
     cursor: pointer;
     border: none;
 }
-
+/*
 button:hover, .back:hover{
     background-color: rgb(163, 202, 163);
-}
+}*/
 /*
 .stationCardDetails div {
     min-width: 250px;
@@ -104,5 +104,31 @@ button:hover, .back:hover{
 
 .nav{
     display: flex;
-    justify-content: center;
+    justify-content: end;
+}
+
+.nav a {
+    text-decoration: none;
+    padding: 10px;
+    margin: 10px;
+    background-color: #979bff;
+    border-radius: 10px;
+    color: white;
+}
+
+.nav a:hover {
+    background-color: #7b7fd4;
+}
+
+.btn_add {
+    background-color: #979bff;
+    color: white;
+    font-weight: bold;
+    display: block;
+    margin: 20px auto;
+}
+
+.error {
+    color: #e74c3c;
+    font-size: 11px;
 }

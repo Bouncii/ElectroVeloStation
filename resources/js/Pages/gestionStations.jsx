@@ -160,11 +160,12 @@ export default function gestionStations({ stations }){
     []);
     return (
         <> 
+        
         <div className={styles.nav}>
-        <Link href="/" className={styles.back}>Accueil</Link>
-        <Link href="/panel" className={styles.back}>Panel</Link>
+            <Link href="/" className={styles.back}>Accueil</Link>
+            <Link href="/panel" className={styles.back}>Panel</Link>
         </div> 
-        <h1>Gestion des stations</h1>
+        <h2>Gestion des stations</h2>
 
             <button className={styles.btn_add} onClick={() => setShowForm(!showForm)}>
                 {showForm ? "Annuler" : "Ajouter une station"}

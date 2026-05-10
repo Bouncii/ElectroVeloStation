@@ -1,7 +1,41 @@
 import { useState, useEffect } from "react"
 import { usePage, Link, router } from '@inertiajs/react';
+import { Description, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import styles from "@css/dashboard/dashboard.module.css";
 import '@css/app.css';
+
+function PopUp({isOpen,  setIsOpen, titre, subTitre, Desc, onConfirm}) {
+    return (
+        <>
+            <Dialog open={isOpen} onClose={() => setIsOpen(false)} className={styles.btnPopUp}>
+                <div className={styles.containerPopUp}>
+                    <DialogPanel className={styles.PanelDialog}>
+                        <DialogTitle className={styles.DialogTitle}>{titre}</DialogTitle>
+                        <Description>{Desc}</Description>
+                        
+                        <div className={styles.confirmBtn}>
+                            <button onClick={() => setIsOpen(false)}>
+                                {onConfirm ? "Annuler" : "Ok"}
+                            </button>
+                            {onConfirm && (
+                            <button 
+                                className={styles.btn_validate} 
+                                onClick={() => {
+                                    onConfirm();
+                                    setIsOpen(false);
+                                }}>
+                                Confirmer
+                            </button>
+                            )}
+                        </div>
+                    </DialogPanel>
+                </div>
+
+            </Dialog>
+            
+        </>
+    )
+} 
 
 const BikeStatsTable = ({ data }) => {
         // permet de transformer un objet en tableau
@@ -73,16 +107,21 @@ const StatWindow = ({bikeData, resaData}) => {
     )
 }
 
-const DepartWindow = ({data, stationId}) => {
+const DepartWindow = ({data, stationId, onAlert}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
 
     const handleCheckIn = (reservationId) => {
-        if (confirm("Confirmer le départ de cette réservation ?")) {
-            router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkin`, {}, {
-                onSuccess: (page) => alert(page.props.flash.success),
-                onError: () => alert("Erreur lors du check-in.")
-            });
-        }
+        onAlert(
+            "Confirmation", 
+            "Voulez-vous vraiment confirmer le départ de cette réservation ?", 
+            `Réservation #${reservationId}`,
+            () => {
+                router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkin`, {}, {
+                    onSuccess: (page) => onAlert("Succès", page.props.flash.success),
+                    onError: () => onAlert("Erreur", "Erreur lors du check-in.")
+                });
+            }
+        );
     };
 
     return(
@@ -200,13 +239,20 @@ const ArriveWindow = ({data, stationId}) => {
     )
 }
 
-const OperationForm = ({ title, description, buttonText, onSubmit }) => {
+const OperationForm = ({ title, description, buttonText, onSubmit, onAlert }) => {
     const [size, setSize] = useState('');
     const [count, setCount] = useState(1);
 
     const handleSubmit = () => {
-        if (!size) return alert("Sélectionnez une taille");
-        onSubmit(size, count);
+        if (!size) return onAlert("Erreur", "Sélectionnez une taille");
+        //onSubmit(size, count);
+
+        onAlert(
+            "Confirmation",
+            `Voulez-vous vraiment appliquer l'opération "${title}" pour ${count} vélo(s) ?`,
+            `Taille : ${size}`,
+            () => onSubmit(size, count)
+        );
     };
 
     return (
@@ -215,17 +261,17 @@ const OperationForm = ({ title, description, buttonText, onSubmit }) => {
             <p className={styles.description}>{description}</p>
             <select value={size} onChange={(e) => setSize(e.target.value)}>
                 <option value="">-- Taille --</option>
-                <option value="140">100</option>
-                <option value="160">110</option>
-                <option value="180">120</option>
-                <option value="140">130</option>
-                <option value="160">140</option>
-                <option value="180">150</option>
-                <option value="140">160</option>
-                <option value="160">170</option>
+                <option value="100">100</option>
+                <option value="110">110</option>
+                <option value="120">120</option>
+                <option value="130">130</option>
+                <option value="140">140</option>
+                <option value="150">150</option>
+                <option value="160">160</option>
+                <option value="170">170</option>
                 <option value="180">180</option>
-                <option value="140">190</option>
-                <option value="160">200</option>
+                <option value="190">190</option>
+                <option value="200">200</option>
             </select>
             <input 
                 type="number" 
@@ -238,15 +284,22 @@ const OperationForm = ({ title, description, buttonText, onSubmit }) => {
     );
 };
 
-const OpeWindow = ({stationId}) => {
+const OpeWindow = ({stationId, onAlert}) => {
     if (!stationId) return null;
     
     const handleRebalance = () => {
-        router.post(`/panel/dashboard/${stationId}/rebalance`, {}, {
-           onSuccess: (page) => alert(page.props.flash.success),
-            onError: () => alert("Erreur lors du rééquillibrage.")
-        });
-    };
+        onAlert(
+        "Rééquillibrage",
+        "Lancer le scan et le rapatriement automatique des vélos ?",
+        "Cette opération peut prendre quelques instants.",
+        () => {
+            router.post(`/panel/dashboard/${stationId}/rebalance`, {}, {
+                onSuccess: (page) => onAlert("Succès", page.props.flash.success),
+                onError: () => onAlert("Erreur", "Erreur lors du rééquilibrage.")
+            });
+        }
+    );
+};
 
 
     const sendRequest = (endpoint, size, count) => {
@@ -255,14 +308,14 @@ const OpeWindow = ({stationId}) => {
             {
             onSuccess: (page) => {
                 if (page.props.flash.success) {
-                    alert(page.props.flash.success);
+                    onAlert("Succès", page.props.flash.success);
                 }
             },
             onError: (errors) => {
                 if (errors.error) {
-                    alert(errors.error);
+                    onAlert("Erreur", errors.error);
                 } else {
-                    alert("Une erreur est survenue lors de l'opération.");
+                    onAlert("Erreur", "Une erreur est survenue lors de l'opération.");
                 }
             }
         }
@@ -289,12 +342,14 @@ const OpeWindow = ({stationId}) => {
                 title="Maintenance"
                 description="Mettre les vélos en maintenance."
                 buttonText="Mettre en maintenance"
+                onAlert={onAlert}
                 onSubmit={(s, c) => sendRequest('maintenance', s, c)}
             />
 
             <OperationForm 
                 title="Disponibilité"
                 description="Rendre des vélos disponibles."
+                onAlert={onAlert}
                 buttonText="Rendre disponible"
                 onSubmit={(s, c) => sendRequest('available', s, c)}
             />
@@ -302,6 +357,7 @@ const OpeWindow = ({stationId}) => {
             <OperationForm 
                 title="Ajout"
                 description="Ajouter des vélos à la station."
+                onAlert={onAlert}
                 buttonText="Ajouter"
                 onSubmit={(s, c) => sendRequest('add', s, c)}
             />
@@ -309,6 +365,7 @@ const OpeWindow = ({stationId}) => {
             <OperationForm 
                 title="Supression"
                 description="Supprimer des vélos d'une station."
+                onAlert={onAlert}
                 buttonText="Supprimer"
                 onSubmit={(s, c) => sendRequest('remove', s, c)}
             />
@@ -317,16 +374,21 @@ const OpeWindow = ({stationId}) => {
     );
 }
 
-const InProgressWindow = ({ data, stationId }) => {
+const InProgressWindow = ({ data, stationId, onAlert }) => {
     if (!data) return <p>Pas d'informations sur la station.</p>;
 
     const handleCheckOut = (reservationId) => {
-        if (confirm("Confirmer la réception de cette réservation ?")) {
+        onAlert(
+        "Confirmation",
+        "Confirmer le départ de cette réservation ?",
+        `Réservation #${reservationId}`,
+        () => {
             router.patch(`/panel/dashboard/${stationId}/reservations/${reservationId}/checkout`, {}, {
-                onSuccess: (page) => alert(page.props.flash.success),
-            onError: () => alert("Erreur lors du check-out.")
-            });
-        }
+                onSuccess: (page) => onAlert("Succès", page.props.flash.success),
+                onError: () => onAlert("Erreur", "Erreur lors du check-out.")
+                });
+            }
+        );
     };
 
 
@@ -372,6 +434,18 @@ export default function DashboardTest() {
         "En cours": inProgressReservations.length,
     };
 
+    const [popupConfig, setPopupConfig] = useState({
+        isOpen: false,
+        titre: '',
+        subTitre: '',
+        desc: '',
+        action: null
+    });
+
+    const triggerPopUp = (titre, desc, subTitre = '', action = null) => {
+        setPopupConfig({ isOpen: true, titre, desc, subTitre, action });
+    };
+
     useEffect(() => {
         document.body.setAttribute('data-theme','admin');
         document.body.classList.add('theme-admin', 'admin');
@@ -399,14 +473,22 @@ export default function DashboardTest() {
         </ul>
         </div>
         <div className={styles.changingWindow}>
-                {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} />}
-                {activeWindow === 'departing' && <DepartWindow data={departingReservations} stationId={station.id} />}
-                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} stationId={station.id}/>}
-                {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} stationId={station.id}/>}
-                {activeWindow === 'operation' && <OpeWindow stationId={station.id} />}
-                {activeWindow === 'inprogress' && <InProgressWindow data={inProgressReservations} stationId={station.id}  />}
+                {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} onAlert={triggerPopUp} />}
+                {activeWindow === 'departing' && <DepartWindow data={departingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
+                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
+                {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
+                {activeWindow === 'operation' && <OpeWindow stationId={station.id} onAlert={triggerPopUp}/>}
+                {activeWindow === 'inprogress' && <InProgressWindow data={inProgressReservations} stationId={station.id} onAlert={triggerPopUp} />}
         </div>
+        <PopUp 
+                isOpen={popupConfig.isOpen} 
+                setIsOpen={(val) => setPopupConfig({...popupConfig, isOpen: val})}
+                titre={popupConfig.titre}
+                subTitre={popupConfig.subTitre}
+                Desc={popupConfig.desc}
+                onConfirm={popupConfig.action}
+            />
     </div>    
-        </>
+    </>
     )
 }

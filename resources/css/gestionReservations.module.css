@@ -4,7 +4,7 @@
     justify-content: center;
     gap: 20px;
     padding: 20px;
-    background-color: #f4f4f9;
+    /*background-color: #f4f4f9;*/
     min-height: 100vh;
 }
 
@@ -100,7 +100,7 @@ button:hover {
 
 .nav{
     display: flex;
-    justify-content: center;
+    justify-content: end;
 }
 
 .nav a {
