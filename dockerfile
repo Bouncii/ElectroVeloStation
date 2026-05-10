@@ -28,6 +28,6 @@ COPY . .
 
 COPY --from=node_builder /app/public/build /var/www/public/build
 
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
