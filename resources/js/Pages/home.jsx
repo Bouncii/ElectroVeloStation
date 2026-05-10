@@ -133,7 +133,7 @@ const CardTuto = (props) => {
 }
 
 
-export default function Home(){
+export default function Home({ stations }){
     useEffect(() => {
                     document.body.setAttribute('data-theme','landing');
                     document.body.classList.add('theme-landing', 'landing');
@@ -172,22 +172,16 @@ export default function Home(){
             
 
             <div className={styles.stations}>
-                <Station
-                    name="Amusment Park"
-                    desc="Voici uee description super pertinante."
-                />
-                <Station
-                    name="Judgment"
-                    desc="Voici uee description super pertinante."
-                />
-                <Station
-                    name="Ashura-chan"
-                    desc="Voici uee description super pertinante."
-                />
-                <Station
-                    name="Throne"
-                    desc="Voici uee description super pertinante."
-                />
+                {stations && stations.length > 0 ? (
+                    stations.map((station) => (
+                        <Station
+                            key={station.id}
+                            name={station.name}
+                        />
+                    ))
+                ) : (
+                    <p>Chargement des stations...</p>
+                )}
             </div>
             <h2 className={styles.titreGros}>Réservez votre premier vélo.</h2>
 
