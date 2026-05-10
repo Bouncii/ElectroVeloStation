@@ -245,10 +245,9 @@ public function suggestTransfer(Reservation $reservation)
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'current_password'      => ['required', 'current_password'],
-            'password'              => ['required', Password::defaults(), 'confirmed'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
-
+        
         $request->user()->update([
             'password' => Hash::make($request->password),
         ]);

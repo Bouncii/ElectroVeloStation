@@ -104,8 +104,6 @@ function InfosProfil() {
                         {passwordError && (
                             <p className={styles.errorMessage}>{passwordError}</p>
                         )}
-                        <input type="password" placeholder="Mot de passe actuel" value={passwordData.current_password}
-                            onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })} />
                         <input type="password" placeholder="Nouveau mot de passe" value={passwordData.password}
                             onChange={(e) => setPasswordData({ ...passwordData, password: e.target.value })} />
                         <input type="password" placeholder="Confirmer le nouveau mot de passe" value={passwordData.password_confirmation}
