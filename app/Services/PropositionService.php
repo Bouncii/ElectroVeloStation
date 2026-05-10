@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Reservation;
 use App\Models\Proposition;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PropositionReceived;
 
 class PropositionService
 {
@@ -24,6 +26,7 @@ class PropositionService
             foreach ($foundBikes as $attributionId => $bikeId) {
                 $proposition->bikes()->attach($bikeId);
             }
+            Mail::to($reservation->email)->send(new PropositionReceived($reservation));
             return $proposition;
         });
     }

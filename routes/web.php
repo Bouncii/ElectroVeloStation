@@ -26,7 +26,7 @@ Route::middleware(['auth','role:admin,employee,client'])
     ->prefix('profile')
     ->group(function () {
     
-        Route::get('/', [ProfileController::class, "index"]);
+        Route::get('/', [ProfileController::class, "index"])->name("profile.index");
         Route::patch('/update', [ProfileController::class, "update"]);
         Route::patch('/password', [ProfileController::class, 'updatePassword']);
 
@@ -39,7 +39,9 @@ Route::middleware(['auth','role:admin,employee,client'])
         Route::patch('/propositions/{proposition}/reject', [ProfileController::class, 'rejectProposition']);
 
         Route::patch('/reservations/{reservation}/cancel', [ProfileController::class, 'cancelReservation']);
-        Route::post('/reservations/{reservation}/transfer', [ProfileController::class, 'transferReservation']);  
+        Route::get('/reservations/{reservation}/suggest-transfer', [ProfileController::class, 'suggestTransfer']);
+        Route::post('/reservations/{reservation}/transfer', [ProfileController::class, 'transferReservation']);
+
     });
 
 

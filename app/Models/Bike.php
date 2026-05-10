@@ -45,7 +45,8 @@ class Bike extends Model
                 $q->whereIn('status', ['pending', 'accepted'])
                   ->whereHas('reservation', function ($resQuery) use ($startDate, $endDate, $ignoreReservationId) {
                       $resQuery->where('start_date', '<', $endDate)
-                               ->where('end_date', '>', $startDate); 
+                               ->where('end_date', '>', $startDate)
+                               ->where('status', '!=', 'cancelled');; 
                       if ($ignoreReservationId) {
                           $resQuery->where('id', '!=', $ignoreReservationId);
                       }

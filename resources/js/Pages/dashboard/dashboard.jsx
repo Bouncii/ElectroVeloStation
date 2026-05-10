@@ -243,6 +243,8 @@ const OperationForm = ({ title, description, buttonText, onSubmit, onAlert }) =>
     const [size, setSize] = useState('');
     const [count, setCount] = useState(1);
 
+    const availableSizes = [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200];
+
     const handleSubmit = () => {
         if (!size) return onAlert("Erreur", "Sélectionnez une taille");
         //onSubmit(size, count);
