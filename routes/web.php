@@ -9,11 +9,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
 
 // -------- ROUTES PUBLIQUES -------
-Route::get('/', function () {
-    return inertia('home');
-})->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 Route::get('/reservation', [UserReservationController::class, 'index']);
