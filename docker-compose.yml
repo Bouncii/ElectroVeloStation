@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: electro-velo-apache
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./.env:/var/www/.env
+    networks:
+      - velo-network
+
+  db:
+    image: mariadb:10.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - velo-network
+
+networks:
+  velo-network:
+    driver: bridge
+
+volumes:
+  db_data:
