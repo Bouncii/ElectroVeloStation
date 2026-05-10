@@ -10,9 +10,8 @@ export default function Reservation({
     allStations = [], // Liste de toutes les stations récupérée depuis le backend
     bikeSizes = [] // Tailles de vélos disponibles récupérées depuis le backend
  }) {
-
-    console.log(bikeSizes);
     useEffect(() => {
+                    // Applique le thème "landing" à la page de réservation
                     document.body.setAttribute('data-theme','landing');
                     document.body.classList.add('theme-landing', 'landing');
                     return () => {
@@ -22,7 +21,7 @@ export default function Reservation({
                     };
                 }, []);
 
-    const { errors, flash, auth } = usePage().props;
+    const { errors, flash, auth } = usePage().props; // Récupère les erreurs de validation, les messages flash et les informations d'authentification depuis les props de la page
 
     // -----------------------------
     // STATE RESERVATION
@@ -54,6 +53,7 @@ export default function Reservation({
     // -----------------------------
 
 function Formulaire() {
+    // Composant pour gérer le formulaire d'ajout d'un nouveau cycliste
     return <>
         <h3>Nouveau cycliste : </h3>
         // Ajouter un if pour l'afficher ou non 
@@ -94,6 +94,7 @@ function Formulaire() {
     
 }
     const handleReservationChange = (e) => {
+        // Vérifie que les heures sont dans les limites d'ouverture de la station
         if(e.target.name === "heureDebut" || e.target.name === "heureFin" ){
             if(e.target.value < e.target.min || e.target.value > e.target.max){
                 e.target.value = "";
@@ -113,6 +114,7 @@ function Formulaire() {
     // -----------------------------
 
     const handlePeopleChange = (index, e) => {
+        // Met à jour les informations d'une personne dans le tableau people en fonction de l'index et du champ modifié
         const newPeople = [...people];
         newPeople[index] = { 
             ...newPeople[index], 
@@ -128,7 +130,7 @@ function Formulaire() {
     // -----------------------------
 
     const addPerson = () => {
-
+        
         setPeople([
             ...people,
             { nom:"", prenom:"", age:"", taille:"" }
@@ -157,10 +159,10 @@ function Formulaire() {
     // -----------------------------
 
     const selectExistingPerson = (index, id) => {
-
+        // Permet de sélectionner une personne déjà enregistrée dans la base de données et de remplir automatiquement les champs du formulaire
         const person = peopleDb.find(p => p.id == id);
 
-        if(person){
+        if(person){ // Si une personne est trouvée avec l'id sélectionné, met à jour les informations 
 
             const newPeople = [...people];
 
@@ -202,18 +204,26 @@ function Formulaire() {
     // -----------------------------
 
     const calculDuree = () => {
+        // Calcule la durée de réservation en heures
+        var res;
+        if(!reservation.dateDebut || !reservation.dateFin || !reservation.heureDebut || !reservation.heureFin){
+            res = 0;
+        }
+        else{
+            const debut = new Date(`${reservation.dateDebut}T${reservation.heureDebut}`);
+            const fin = new Date(`${reservation.dateFin}T${reservation.heureFin}`);
 
-        if(!reservation.dateDebut || !reservation.dateFin || !reservation.heureDebut || !reservation.heureFin)
-            return 0;
+            const diff = fin - debut;
 
-        const debut = new Date(`${reservation.dateDebut}T${reservation.heureDebut}`);
-        const fin = new Date(`${reservation.dateFin}T${reservation.heureFin}`);
+            if(diff <= 0){
+                res = 0;
+            } else {
 
-        const diff = fin - debut;
-
-        if(diff <= 0) return 0;
-
-        return Math.floor(diff / (1000*60*60));
+            return Math.floor(diff / (1000*60*60));
+            }
+        }          
+        return res;
+        
     };
 
 
@@ -257,6 +267,7 @@ function Formulaire() {
     // -----------------------------
 
     const handleSubmit = () => {
+        // Envoie les données de la réservation au back pour créer une nouvelle réservation
         router.post("/reservation", {
             station_id: reservation.station_id,
             start_date: `${reservation.dateDebut} ${reservation.heureDebut}:00`,
@@ -271,7 +282,9 @@ function Formulaire() {
     const minDate = tomorrow.toISOString().split('T')[0];
 
     return (
-
+        // -----------------------------
+        // AFFICHAGE PAGE RESERVATION
+        // -----------------------------
         <>
         <div className={styles.reservationPage}>
         <header>
@@ -317,6 +330,10 @@ function Formulaire() {
         >
 
         <option value="">Choisir</option>
+
+        {
+        // Récupère la liste des stations depuis le backend et crée une option pour chacune d'elles
+        }
 
         {allStations.map(station => (
 
@@ -499,15 +516,6 @@ function Formulaire() {
         <p>Durée : {calculDuree()} heure(s)</p>
 
         <p>Prix total : {calculPrix()} €</p>
-
-
-        {/*{!stockDisponible() &&
-
-        <p style={{color:"red"}}>
-        Pas assez de vélos disponibles
-        </p>
-
-        }*/}
 
 
         <button onClick={handleSubmit}>

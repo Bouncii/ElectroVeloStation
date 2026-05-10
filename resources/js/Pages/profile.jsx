@@ -6,32 +6,33 @@ import styles from '@css/profile.module.css';
 import '@css/app.css';
 
 function InfosProfil() {
-    const [editing, setEditing] = useState(false);
-    const [editingPassword, setEditingPassword] = useState(false);
-    const { user } = usePage().props.auth;
+    const [editing, setEditing] = useState(false); // Indique si l'utilisateur modifie ses infos
+    const [editingPassword, setEditingPassword] = useState(false); // Indique si l'utilisateur modifie son mot de passe
+    const { user } = usePage().props.auth; // Récupère les données de l'utilisateur connecté
 
     const [formData, setFormData] = useState({
         last_name: user.last_name,
         first_name: user.first_name,
         email: user.email,
-    });
+    }); // Données du formulaire de modification des infos
 
     const [passwordData, setPasswordData] = useState({
         current_password: '',
         password: '',
         password_confirmation: '',
-    });
+    }); // Données du formulaire de modification du mot de passe
 
-    const [passwordError, setPasswordError] = useState('');
+    const [passwordError, setPasswordError] = useState(''); // Message d'erreur pour le formulaire de mot de passe
 
     function handleSubmit(e) {
         e.preventDefault();
         router.patch('/profile/update', formData, {
             onSuccess: () => setEditing(false),
         });
-    }
+    } // Envoie les données de modification des infos au serveur
 
     function handlePasswordSubmit(e) {
+        // Valide que les mots de passe correspondent avant d'envoyer la requête
         e.preventDefault();
         setPasswordError('');
 
@@ -52,6 +53,8 @@ function InfosProfil() {
     }
 
     return (
+
+        // Affichage des infos de l'utilisateur
         <div className={styles.blocProfile}>
             <div className={styles.profileHeader}>
                 <h1>Bonjour, {user.first_name} {user.last_name}</h1>
@@ -122,23 +125,27 @@ function InfosProfil() {
 }
 
 export function InfosPeople() {
-    const { user } = usePage().props;
-    const people = user.people;
+    // Affichage et gestion des personnes associées à l'utilisateur
+    const { user } = usePage().props; 
+    const people = user.people; // Récupère les personnes associées depuis le back
 
     const [editingId, setEditingId] = useState(null);
-    const [editData, setEditData] = useState({});
+    const [editData, setEditData] = useState({}); // { first_name, last_name, age, required_bike_size }
 
     function handleEdit(person) {
+        // Pré-remplit le formulaire avec les données de la personne à modifier
         setEditingId(person.id);
         setEditData({ ...person });
     }
 
     function handleCancel() {
+        // Annule la modification en réinitialisant les infos
         setEditingId(null);
         setEditData({});
     }
 
     function handleSave(e, id) {
+        // Envoie les données modifiées de la personne au serveur
         e.preventDefault();
         router.patch(`/profile/persons/${id}`, editData, {
             onSuccess: () => {
@@ -149,17 +156,21 @@ export function InfosPeople() {
     }
 
     function handleDelete(id) {
+        // Envoie une requête pour supprimer la personne associée
         router.delete(`/profile/persons/${id}`);
     }
 
     return (
+        //bloc d'affichage des personnes associées
         <div className={styles.blocPeople}>
             <h2>Vos personnes associées :</h2>
             {people.length === 0 ? (
                 <p>Aucune personne associée.</p>
             ) : (
                 <ul>
-                    {people.map((p) => (
+                    
+                    {// Affiche les infos de chaque personne avec des boutons pour modifier ou supprimer
+                    people.map((p) => (
                         <li key={p.id}>
                             <span>
                                 {p.first_name} {p.last_name} — {p.age} ans — taille(cm) : {p.required_bike_size}
@@ -171,7 +182,7 @@ export function InfosPeople() {
                             <button type="button" onClick={() => handleDelete(p.id)} className={styles.cancelButton}>
                                 Supprimer
                             </button>
-                            {editingId === p.id ? (
+                            {editingId === p.id && ( // Affiche le formulaire de modification pour la personne sélectionnée
                                 <form onSubmit={(e) => handleSave(e, p.id)}>
                                     <input
                                         type="text"
@@ -202,7 +213,7 @@ export function InfosPeople() {
                                         <button type="button" onClick={handleCancel} className={styles.bnt}>Annuler</button>
                                     </div>
                                 </form>
-                            ) : null}
+                             )}
                         </li>
                     ))}
                 </ul>
@@ -212,26 +223,30 @@ export function InfosPeople() {
 }
 
 export function AfficheReservations() {
+    // Affichage et gestion des réservations de l'utilisateur
     const { user, stations, schedules } = usePage().props;
-    const reservations = user.reservations;
+    const reservations = user.reservations; // Inclut les propositions et attributions grâce à eager loading dans le contrôleur
 
-    const [editingId, setEditingId] = useState(null);
-    const [editData, setEditData] = useState({});
+    const [editingId, setEditingId] = useState(null); // ID de la réservation en cours de modification
+    const [editData, setEditData] = useState({}); // { station_id, start_date, start_time, end_date, end_time }
     const [suggestion, setSuggestion] = useState({}); // { [reservationId]: { available, station, distance_km } }
 
     async function handleSuggestTransfer(reservationId) {
+        // Envoie une requête pour obtenir une suggestion de station disponible pour la réservation
         const res = await fetch(`/profile/reservations/${reservationId}/suggest-transfer`);
         const data = await res.json();
         setSuggestion((prev) => ({ ...prev, [reservationId]: data }));
     }
 
     function handleTransfer(reservationId) {
+        // Envoie une requête pour transférer la réservation vers la station suggérée
         router.post(`/profile/reservations/${reservationId}/transfer`, {}, {
             onSuccess: () => setSuggestion((prev) => ({ ...prev, [reservationId]: null })),
         });
     }
 
     function handleEdit(reservation) {
+        // Pré-remplit le formulaire de modification avec les données de la réservation sélectionnée
         setEditingId(reservation.id);
         setEditData({ ...reservation,
             start_date: reservation.start_date?.split('T')[0] ?? reservation.start_date?.split(' ')[0],
@@ -242,11 +257,13 @@ export function AfficheReservations() {
     }
 
     function handleCancel() {
+        // Annule la modification en réinitialisant les infos
         setEditingId(null);
         setEditData({});
     }
 
     function handleSave(e, id) {
+        // Envoie les données modifiées de la réservation au serveur pour mise à jour
         e.preventDefault();
         router.post(`/profile/reservations/${id}/transfer`, editData, {
             onSuccess: () => {
@@ -257,28 +274,33 @@ export function AfficheReservations() {
     }
 
     function handleCancelReservation(id) {
+        // Envoie une requête pour annuler la réservation
         router.patch(`/profile/reservations/${id}/cancel`, {}, {
             onSuccess: () => setEditingId(null),
         });
     }
 
     function handleAcceptProposition(propositionId) {
+        // Envoie une requête pour accepter une proposition d'attribution de vélo
         router.patch(`/profile/propositions/${propositionId}/accept`);
     }
 
     function handleRejectProposition(propositionId) {
+        // Envoie une requête pour refuser une proposition d'attribution de vélo
         router.patch(`/profile/propositions/${propositionId}/reject`);
     }
 
     return (
+        // Bloc d'affichage de l'historique des réservations de l'utilisateur
         <div className={styles.blocReservations}>
             <h2>Historique de vos réservations :</h2>
             {reservations.length === 0 ? (
                 <p>Aucune réservation effectuée.</p>
             ) : (
                 <ul>
-                    {reservations.map((reservation) => {
-                        const scheduleStation = schedules.find(s => s.station_id === reservation.station_id);
+                    {// Affiche les détails de chaque réservation, les propositions associées et les options de modification ou d'annulation
+                    reservations.map((reservation) => {
+                        const scheduleStation = schedules.find(s => s.station_id === reservation.station_id); // Récupère les horaires de la station associée à la réservation pour valider les heures de début et fin
 
                         return (
                             <li key={reservation.id}>
@@ -299,7 +321,7 @@ export function AfficheReservations() {
                                     ))}
                                 </ul>
 
-                                {reservation.propositions?.length > 0 && (
+                                {reservation.propositions?.length > 0 && ( // Affiche les propositions d'attribution de vélo associées à la réservation
                                     <ul>
                                         {reservation.propositions.map((proposition) => (
                                             <li key={proposition.id}>
@@ -318,54 +340,52 @@ export function AfficheReservations() {
                                         ))}
                                     </ul>
                                 )}
-                                {reservation.status !== 'cancelled' && reservation.status !== 'completed' && (
+                                {reservation.status !== 'cancelled' && reservation.status !== 'completed' && ( // Affiche les options de modification et d'annulation uniquement pour les réservations actives (non annulées et non terminées)
                                  <>
                                 <button className={styles.cancelButton} onClick={() => handleCancelReservation(reservation.id)}>
                                     Annuler la réservation
                                 </button>
                                 {reservation.status === 'pending' && (
-    <div>
-        <button
-            type="button"
-            className={styles.updateButton}
-            onClick={() => handleSuggestTransfer(reservation.id)}
-        >
-            Trouver une station disponible
-        </button>
+                                <div>
+                                    <button
+                                        type="button"
+                                        className={styles.updateButton}
+                                        onClick={() => handleSuggestTransfer(reservation.id)}
+                                    >
+                                        Trouver une station disponible
+                                    </button>
 
-        {suggestion[reservation.id] && (
-            suggestion[reservation.id].available ? (
-                <div className={styles.suggestion}>
-                    <p>
-                        Station la plus proche disponible :{' '}
-                        <strong>{suggestion[reservation.id].station.name}</strong>
-                        {' '}— à {suggestion[reservation.id].distance_km} km
-                    </p>
-                    <button
-                        type="button"
-                        className={styles.submitButton}
-                        onClick={() => handleTransfer(reservation.id)}
-                    >
-                        Confirmer le transfert
-                    </button>
-                </div>
-            ) : (
-                <p>Aucune station disponible pour ces dates.</p>
-            )
-        )}
-    </div>
+                                    {suggestion[reservation.id] && ( // Affiche la suggestion de station disponible pour la réservation si elle existe
+                                        suggestion[reservation.id].available ? ( //Si la station est disponible on affiche les détails et le bouton de confirmation du transfert
+                                            <div className={styles.suggestion}> 
+                                                <p>
+                                                    Station la plus proche disponible :{' '}
+                                                    <strong>{suggestion[reservation.id].station.name}</strong>
+                                                    {' '} à {suggestion[reservation.id].distance_km} km
+                                                </p>
+                                                <button
+                                                    type="button"
+                                                    className={styles.submitButton}
+                                                    onClick={() => handleTransfer(reservation.id)}>
+                                                    Confirmer le transfert
+                                                </button>
+                                            </div>
+                                        ) : ( // Sinon on affiche le message
+                                            <p>Aucune station disponible pour ces dates.</p>
+                                        )
+                                    )}
+                                </div>
 )}
                                   </>
                                  )}
 
 
-                                {editingId === reservation.id ? (
+                                {editingId === reservation.id ? ( // Affiche le formulaire de modification pour la réservation sélectionnée
                                     <form className={styles.updateFormResa} onSubmit={(e) => handleSave(e, reservation.id)}>
                                         <label>Station :</label>
                                         <select
                                             value={editData.station_id}
-                                            onChange={(e) => setEditData({ ...editData, station_id: e.target.value })}
-                                        >
+                                            onChange={(e) => setEditData({ ...editData, station_id: e.target.value })}>
                                             <option value="">Sélectionnez une station</option>
                                             {stations.map((station) => (
                                                 <option key={station.id} value={station.id}>
@@ -377,8 +397,7 @@ export function AfficheReservations() {
                                         <input
                                             type="date"
                                             value={editData.start_date}
-                                            onChange={(e) => setEditData({ ...editData, start_date: e.target.value })}
-                                        />
+                                            onChange={(e) => setEditData({ ...editData, start_date: e.target.value })}/> 
                                         <label>Heure de début :</label>
                                         <input
                                             type="time"
@@ -417,12 +436,13 @@ export function AfficheReservations() {
 }
 
 function Tabinfos() {
-    const [activeTab, setActiveTab] = useState("people");
+    // Composant pour gérer l'affichage des personnes associées et réservations
+    const [activeTab, setActiveTab] = useState("people"); // Permet de choisir un onglet à afficher
     return (
     <div className={styles.tabs}>
         <div className={styles.tabNav}>
             <button onClick={() => setActiveTab("people")}
-                className={`${styles.btn_infos} ${activeTab === "people" ? styles.active : styles.inactive}`}>
+                className={`${styles.btn_infos} ${activeTab === "people" ? styles.active : styles.inactive}`}> 
                 Mes cyclistes
             </button>
             <button onClick={() => setActiveTab("reservations")}
@@ -431,13 +451,16 @@ function Tabinfos() {
             </button>
         </div>
         <div className={styles.tabContent}>
-            {activeTab === "people" ? <InfosPeople /> : <AfficheReservations />}
+            {
+            activeTab === "people" ? <InfosPeople /> : <AfficheReservations /> // Affiche le composant correspondant à l'onglet actif 
+            }
         </div>
     </div>
     );
 }
 
 export default function Profile() {
+    // Composant principal
     return (
         <>
             <Header />
