@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Bike;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationOnHold;
 
 class DashboardController extends Controller
 {
@@ -50,9 +52,14 @@ class DashboardController extends Controller
             })->get();
 
             foreach ($futureAttributions as $attr) {
+                $reservation = $attr->reservation;
                 $attr->update(['bike_id' => null]);
-                $attr->reservation->update(['status' => 'pending']); 
-                // Envoyer mail ici
+                $attr->reservation->update(['status' => 'pending']);
+                $reservation->propositions()
+                    ->whereIn('status', ['pending', 'accepted'])
+                    ->update(['status' => 'declined']);
+
+                Mail::to($reservation->email)->send(new ReservationOnHold($reservation));
             }
         }
     }
