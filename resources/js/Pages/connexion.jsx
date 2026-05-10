@@ -4,12 +4,13 @@ import { Header } from "./home.jsx";
 import '@css/app.css';
 
 function FormulaireConnexion() {
+
     const { data, setData, post, processing, errors } = useForm({
         email: '',
         password: '',
     });
 
-    
+    /* renvoie en post sur /login */
     function submit(e) {
         e.preventDefault();
         post('/login');
@@ -29,15 +30,18 @@ function FormulaireConnexion() {
                 <form onSubmit={submit}>
                     
                     <input 
+                    /* Formulaire pour le mail */
                         type="email" 
                         name="email" 
                         placeholder='email'
                         value={data.email} 
                         onChange={e => setData('email', e.target.value)} 
                     />
-                    {errors.email && <div className={styles.messageErr}>{errors.email}</div>}
+                    {/* Vérification des erreurs liées au mail */
+                    errors.email && <div className={styles.messageErr}>{errors.email}</div>}
                     
                     <input 
+                    /* Pareil mais pour le mot de passe */
                         type="password" 
                         name="password" 
                         placeholder='Mot de passe '
@@ -57,5 +61,6 @@ function FormulaireConnexion() {
 
 
 export default function Connexion() {
+    /* Fonction principale pour renvoyer la page */  
     return <><div className={styles.connexionPage}><div className={styles.flou}><FormulaireConnexion /></div></div></>;
 }

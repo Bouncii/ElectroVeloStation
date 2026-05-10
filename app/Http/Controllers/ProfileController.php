@@ -24,6 +24,8 @@ class ProfileController extends Controller{
         $this->reservationService = $reservationService;
     }
 
+
+    /* Affiche les données de l'utilisateur */
     public function index()
     {
         $user = Auth::user()->load([
@@ -39,7 +41,7 @@ class ProfileController extends Controller{
         ]);
     }
 
-
+    /* Modifie les données de l'utilisateur avec ce qu'il a rentré */
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -56,6 +58,7 @@ class ProfileController extends Controller{
     }
 
 
+    /* Affiche une personne de confiance */
     public function storePerson(Request $request)
     {
         $validated = $request->validate([
@@ -68,6 +71,8 @@ class ProfileController extends Controller{
         return redirect()->back()->with('success', 'Personne ajoutée avec succès.');
     }
 
+
+    /*Modifie les informations d'une personne de confiance avec les changements effectués*/
     public function updatePerson(Request $request, Person $person)
     {
 
@@ -81,12 +86,15 @@ class ProfileController extends Controller{
         return redirect()->back()->with('success', 'Personne mise à jour avec succès.');
     }
 
+
+    /* Supprime une personne de confiance */
     public function destroyPerson(Person $person)
     {
         $person->delete();
         return redirect()->back()->with('success', 'Personne supprimée.');
     }
 
+    /* Fonction lorsqu'une personne accepte une proposition faite */
     public function acceptProposition(Proposition $proposition)
     {
         DB::transaction(function () use ($proposition) {
@@ -94,6 +102,7 @@ class ProfileController extends Controller{
             $bikes = $proposition->bikes;
             $attributions = $reservation->attributions()->with('person')->whereNull('bike_id')->get();
 
+            /* Attribue un vélo à chaque personne */
             foreach ($bikes as $bike) {
                 $attribution = $attributions->first(function ($attr) use ($bike) {
                     return $attr->bike_id === null && $attr->person->required_bike_size === $bike->size;
@@ -105,6 +114,7 @@ class ProfileController extends Controller{
                 }
             }
 
+            /* On modifie la reservation pour qu'elle soit terminée et on prend la proposition */
             $reservation->update(['status' => 'confirmed']);
             $proposition->update(['status' => 'accepted']);
 
@@ -116,12 +126,14 @@ class ProfileController extends Controller{
         return redirect()->back()->with('success', 'Proposition acceptée !');
     }
 
+    /* Fonction lorsqu'on rejette une proposition*/
     public function rejectProposition(Proposition $proposition)
     {
         $proposition->update(['status' => 'declined']);
         return redirect()->back()->with('success', 'Proposition refusée.');
     }
 
+    /* Fonction pour supprimer une réservation */
     public function cancelReservation(Reservation $reservation)
     {
 
@@ -129,6 +141,7 @@ class ProfileController extends Controller{
         return redirect()->back()->with('success', 'Réservation annulée et vélos libérés.');
     }
 
+    /* Calcule les distances GPS entre deux stations*/
     public function distanceGPS(float $lat1, float $lon1, float $lat2, float $lon2): float
 {
     $earthRadius = 6371;
@@ -139,6 +152,8 @@ class ProfileController extends Controller{
     return $earthRadius * 2 * atan2(sqrt($a), sqrt(1 - $a));
 }
 
+
+/* Trouve la station la plus proche d'une autre */
 public function findClosestStationWithBikes(Reservation $reservation): ?Station
 {
     $origin = $reservation->station;
@@ -181,7 +196,7 @@ public function findClosestStationWithBikes(Reservation $reservation): ?Station
 
     return $best ?: null;
 }
-
+    /* Transfère une reservation d'une station à une autre */
     public function transferReservation(Reservation $reservation){
     $targetStation = $this->findClosestStationWithBikes($reservation);
 
@@ -223,7 +238,7 @@ public function findClosestStationWithBikes(Reservation $reservation): ?Station
     return redirect()->back()->with('success', 'Transfert réussi !'); 
     }
 
-
+/* fonction qui indique la station la plus proche et prépare à un possible transfert */
 public function suggestTransfer(Reservation $reservation)
 {
     $targetStation = $this->findClosestStationWithBikes($reservation);
@@ -242,11 +257,11 @@ public function suggestTransfer(Reservation $reservation)
     return response()->json($data);
 }
 
+    /* Modifie le mot de passe de l'utilisateur */ 
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'current_password'      => ['required', 'current_password'],
-            'password'              => ['required', Password::defaults(), 'confirmed'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
         $request->user()->update([
