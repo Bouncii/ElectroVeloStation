@@ -7,6 +7,8 @@ import '@css/app.css';
 const AddStationForm = ({ onCancel }) => {
     const { data, setData, post, processing, errors } = useForm({
         name:'',
+        latitude: '',
+        longitude: '',
     });
 
     const handleSubmit = (e) => {
@@ -39,6 +41,8 @@ const StationCard = ({ station }) => {
 
     const { data, setData, put, processing, errors } = useForm({
         name: station.name,
+        latitude: station.latitude || '',
+        longitude: station.longitude || '',
     });
 
     const handleSave = (e) => {
