@@ -190,11 +190,16 @@
 
 .stations {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
     gap: 16px;
     padding: 20px;
     margin-top: 40px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+
 }
 
 .stationCard{
@@ -208,6 +213,12 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+.stations::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
 }
 
 .stationcard_reserver {
@@ -219,7 +230,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
 
-    margin-top: 10px;
+    margin-top: auto;
     padding: 8px 16px;
     border: none;
     border-radius: 12px;
@@ -274,8 +285,8 @@
 .tuto {
     background-color: white;
     border-radius: 24px;
-    margin: auto;
-    margin-top: 4%;
+    margin: 2%;
+    /* margin-top: 4%; */
     margin-bottom: 4%;
     padding: 16px;
     text-align: center;
