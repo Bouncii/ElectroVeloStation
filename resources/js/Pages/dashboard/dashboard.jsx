@@ -217,7 +217,7 @@ const ArriveWindow = ({data, stationId}) => {
 
                 <h3 className={styles.subTitle}>Vélos entrants</h3>
                 {!(data && data.length > 0) ? (
-                    <p>Aucune résa</p>
+                    <p>Aucune réservation</p>
                 ): (
                 <ul>
                     {data.map((resa) => (
