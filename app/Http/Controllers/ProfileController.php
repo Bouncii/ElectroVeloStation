@@ -245,8 +245,8 @@ public function suggestTransfer(Reservation $reservation)
 
     $data = $targetStation
         ? [
-            'available'   => true,
-            'station'     => ['id' => $targetStation->id, 'name' => $targetStation->name],
+            'available' => true,
+            'station' => ['id' => $targetStation->id, 'name' => $targetStation->name],
             'distance_km' => round($this->distanceGPS(
                 $reservation->station->latitude, $reservation->station->longitude,
                 $targetStation->latitude, $targetStation->longitude

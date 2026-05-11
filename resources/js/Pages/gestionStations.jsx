@@ -7,6 +7,8 @@ import '@css/app.css';
 const AddStationForm = ({ onCancel }) => {
     const { data, setData, post, processing, errors } = useForm({
         name:'',
+        latitude: '',
+        longitude: '',
     });
 
     const handleSubmit = (e) => {
@@ -17,7 +19,6 @@ const AddStationForm = ({ onCancel }) => {
     };
 
     return (
-    
         <form onSubmit={handleSubmit} className={styles.addStationForm}>
             <input 
                 type="text" 
@@ -26,9 +27,30 @@ const AddStationForm = ({ onCancel }) => {
                 onChange={(e) => setData('name', e.target.value)} 
             />
             {errors.name && <p className={styles.error}>{errors.name}</p>}
-            <button type="submit" disabled={processing}>
-                {processing ? "Ajout en cours..." : "Confirmer l'ajout"}</button>
-            <button type="button" onClick={onCancel}>Annuler</button>
+
+            <input 
+                type="number" 
+                step="any"
+                placeholder="Latitude (ex: 45.123)" 
+                value={data.latitude} 
+                onChange={(e) => setData('latitude', e.target.value)} 
+            />
+            {errors.latitude && <p className={styles.error}>{errors.latitude}</p>}
+
+            <input 
+                type="number" 
+                step="any" 
+                placeholder="Longitude (ex: 5.456)" 
+                value={data.longitude} 
+                onChange={(e) => setData('longitude', e.target.value)} 
+            />
+            {errors.longitude && <p className={styles.error}>{errors.longitude}</p>}
+
+            <div className={styles.button}>
+                <button type="submit" disabled={processing}>
+                    {processing ? "Ajout en cours..." : "Confirmer l'ajout"}</button>
+                <button type="button" onClick={onCancel}>Annuler</button>
+            </div>
         </form>
     );
 };
@@ -39,6 +61,8 @@ const StationCard = ({ station }) => {
 
     const { data, setData, put, processing, errors } = useForm({
         name: station.name,
+        latitude: station.latitude || '',
+        longitude: station.longitude || '',
     });
 
     const handleSave = (e) => {
@@ -63,6 +87,23 @@ const StationCard = ({ station }) => {
                         onChange={(e) => setData('name',e.target.value)} 
                     />
                     {errors.name && <p className={styles.error}>{errors.name}</p>}
+
+                    <input 
+                        type="number" 
+                        step="any"
+                        value={data.latitude} 
+                        onChange={(e) => setData('latitude', e.target.value)} 
+                    />
+                    {errors.latitude && <p className={styles.error}>{errors.latitude}</p>}
+
+                    <input 
+                        type="number" 
+                        step="any"
+                        value={data.longitude} 
+                        onChange={(e) => setData('longitude', e.target.value)} 
+                    />
+                    {errors.longitude && <p className={styles.error}>{errors.longitude}</p>}
+
                     <div className={styles.button}>
                         <button type='submit' disabled={processing}>
                             {processing ? 'Enregistrement en cours...' : 'Enregistrer'}
@@ -75,6 +116,7 @@ const StationCard = ({ station }) => {
             ) : (
                 <>
                     <h3>{station.name}</h3>
+                    <p><strong>GPS :</strong> {station.latitude}, {station.longitude}</p>
                     <p>Créée le : {new Date(station.created_at).toLocaleString('fr-FR')}</p>
                     <p>Modifiée le : {new Date(station.updated_at).toLocaleString('fr-FR')}</p>
                 
