@@ -97,6 +97,9 @@ const PersonCard = ({ person }) => {
 export default function PersonDashboard({ person }) {
     return(
         <div>
+            <header>
+                <title>Gestion des personnes enregistrées EVS</title>
+            </header>
             <PersonCard 
                 key={person.id}
                 person={person}

@@ -211,6 +211,10 @@ export default function gestionStations({ stations }){
     []);
     return (
         <> 
+        <header>
+            <title>Gestion des stations EVS</title>
+        </header>
+
         {/* Nav */}
         <div className={styles.nav}>
             <Link href="/" className={styles.back}>Accueil</Link>

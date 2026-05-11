@@ -16,7 +16,12 @@ export default function ConfirmationReservation() {
                         };
                     }, []);
 
-    return <><div className={styles.confirmationPage}><Header />
+    return <>
+
+    <header>
+        <title>Merci d'avoir réservé avec EVS</title>
+    </header>
+    <div className={styles.confirmationPage}><Header />
     <div className={styles.confirmationMessage}>
     <h1>
     Votre réservation a bien été prise en compte ! </h1>

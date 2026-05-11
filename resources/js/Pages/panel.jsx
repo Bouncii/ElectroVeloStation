@@ -206,6 +206,9 @@ export default function Panel() {
     []);
     return(
     <>
+        <header>
+            <title>Panel admin EVS</title>
+        </header>
         <div className={styles.dash}>
         <Link href="/" className={styles.back}>Accueil</Link>  
            <div className={styles.containerResa}>

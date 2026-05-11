@@ -315,6 +315,11 @@ export default function GestionReservations({ reservations = [], persons = [], e
 
         <>
             
+        <header>
+            <title>Gestion des réservations EVS</title>
+        </header>
+
+
             <div className={styles.nav}>
                     <Link href="/" className={styles.back}>Accueil</Link>
                     <Link href="/panel" className={styles.back}>Panel</Link>

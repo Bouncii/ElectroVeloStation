@@ -265,6 +265,9 @@ export default function GestionUsers({ users}){
 
     return(
     <>
+    <header>
+        <title>Gestion des utilisateurs EVS</title>
+    </header>
     {/* Nav */}
     <div className={styles.nav}>
             <Link href="/" className={styles.back}>Accueil</Link>

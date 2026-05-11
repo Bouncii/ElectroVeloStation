@@ -166,6 +166,9 @@ export default function Home({ stations }){
     return (
         
         <>
+         <header>
+                <title>Electro Vélo Station</title>
+        </header>
         <div className={styles.homePage}>
             
             <Header />

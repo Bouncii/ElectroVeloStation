@@ -76,5 +76,13 @@ function FormulaireCreerCompte(){
 
 
 export default function CreerCompte(){
-    return <><div className={styles.inscriptionPage}><div className={styles.flou}><FormulaireCreerCompte /></div></div></>;
+    return <>
+    <header>
+        <title>Créez votre compte EVS</title>
+    </header>
+    <div className={styles.inscriptionPage}>
+        <div className={styles.flou}>
+            <FormulaireCreerCompte />
+            </div></div>
+            </>;
 }

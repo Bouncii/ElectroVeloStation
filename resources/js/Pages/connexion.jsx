@@ -62,5 +62,13 @@ function FormulaireConnexion() {
 
 export default function Connexion() {
     /* Fonction principale pour renvoyer la page */  
-    return <><div className={styles.connexionPage}><div className={styles.flou}><FormulaireConnexion /></div></div></>;
+    return <>
+    <header>
+        <title>Connexion EVS</title>
+    </header>
+    <div className={styles.connexionPage}>
+    <div className={styles.flou}>
+        <FormulaireConnexion />
+        </div></div>
+        </>;
 }

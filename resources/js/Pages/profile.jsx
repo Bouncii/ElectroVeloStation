@@ -296,8 +296,11 @@ export function AfficheReservations() {
     }
 
     return (
+
+
         // Bloc d'affichage de l'historique des réservations de l'utilisateur
         <div className={styles.blocReservations}>
+
             <h2>Historique de vos réservations :</h2>
             {reservations.length === 0 ? (
                 <p>Aucune réservation effectuée.</p>
@@ -468,6 +471,9 @@ export default function Profile() {
     // Composant principal
     return (
         <>
+             <header>
+                <title>Mon profil</title>
+            </header>
             <Header />
             <div className={styles.profilePage}>
                 <InfosProfil />
