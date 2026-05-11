@@ -1,5 +1,4 @@
 .reservationPage {
-    background-color: var(--secondary);
     text-align: center;
     color:#262626;
     scroll-behavior: smooth;
@@ -18,12 +17,14 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    
 }
 
 .infoReservation .infosResaGlobal {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    
 }
 
 .infoReservation .reservationContainer {
@@ -36,7 +37,15 @@
     width: 80vw;
     text-align: left;
     align-items: stretch;
+    margin-top: 100px;
+    box-shadow: black 0px 1px 1px, rgba(0, 0, 0, 0.2) 0px 1px 2px;
 } 
+
+.infoReservation .reservationContainer h3 {
+    border-left: var(--secondary) 4px solid;
+    padding-left: 10px;
+}
+
 .userInfoContainer {
     display: flex;
     flex-direction: column;
@@ -46,6 +55,13 @@
     background-color: white;
     width: 400px;
     text-align: left;
+    
+    box-shadow: black 0px 1px 1px, rgba(0, 0, 0, 0.2) 0px 1px 2px;
+}
+
+.userInfoContainer h3 {
+    border-left: var(--secondary) 4px solid;
+    padding-left: 10px;
 }
 
 .reservationPage .infoReservation .reservationContainer label , .reservationPage .userInfoContainer label {
@@ -112,7 +128,7 @@
     bottom: 0;
     width: 100%;
     padding-top: 10px;
-    background-color: var(--primary);
+    background-color: var(--secondary);
     color: white;
 }
 
@@ -123,15 +139,15 @@
 
 .reservationPage footer button {
     padding: 10px 20px;
-    background-color: var(--tertiary);
-    color: rgb(10, 35, 96);
+    background-color: var(--primary);
+    color: white;
     border: none;
     border-radius: 5px;
     
 }
 
 .reservationPage footer button:hover {
-    background-color: rgb(255, 255, 128);
+    background-color: #134fdb;
 }
 
 .success {
@@ -150,4 +166,16 @@
     border-radius: 5px; 
     margin: 80px auto 10px auto;
     width: 80%;
+}
+
+@media (max-width: 500px) {
+    .infoReservation .infosResaGlobal {
+        grid-template-columns: 1fr;
+    }
+    .infoReservation .reservationContainer {
+        width: 90vw;
+    }
+    .userInfoContainer {
+        width: 90vw;
+    }
 }
