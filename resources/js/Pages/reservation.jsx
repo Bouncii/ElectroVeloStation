@@ -266,7 +266,6 @@ export default function Reservation({
             )}
         </div>
 
-        <h1>Réserver un vélo</h1>
 
         <div className={styles.infoReservation}>
 
