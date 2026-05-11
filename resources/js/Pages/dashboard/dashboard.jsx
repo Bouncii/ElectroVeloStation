@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { usePage, Link, router } from '@inertiajs/react';
 import { Description, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { FormatDate } from "../../formatDate.jsx";
+import { FormatDate } from "@/formatDate.jsx";
 import styles from "@css/dashboard/dashboard.module.css";
 import '@css/app.css';
 
