@@ -321,7 +321,7 @@ export function AfficheReservations() {
                                 <ul>
                                     {reservation.attributions.map((attribution) => (
                                         <li key={attribution.id}>
-                                            Vélo : {attribution.bike ? attribution.bike.id : "Non attribué"}
+                                            Vélo : {attribution.bike ? attribution.bike.size + "cm " : "Non attribué"}
                                         </li>
                                     ))}
                                 </ul>
