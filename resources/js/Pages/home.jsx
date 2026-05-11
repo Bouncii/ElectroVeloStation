@@ -6,27 +6,27 @@ import { usePage, Link } from '@inertiajs/react';
 import styles from "@css/home.module.css";
 import '@css/app.css';
 
-export function Background() {
-  return (
-<svg 
-viewBox="0 0 376 4352" fill="none" xmlns="http://www.w3.org/2000/svg" className="backgroundSvg" preserveAspectRatio="none">
-<rect width="375" height="3557" transform="translate(0.23)" fill="#5AA9E6"/>
-<path d="M0.23 1017.2L375.23 924V2087.9L0.23 2181L0.23 1017.2Z" fill="#0031A4"/>
-</svg>
-  );
-}
+// export function Background() {
+//   return (
+// <svg 
+// viewBox="0 0 376 4352" fill="none" xmlns="http://www.w3.org/2000/svg" className="backgroundSvg" preserveAspectRatio="none">
+// <rect width="375" height="3557" transform="translate(0.23)" fill="#5AA9E6"/>
+// <path d="M0.23 1017.2L375.23 924V2087.9L0.23 2181L0.23 1017.2Z" fill="#0031A4"/>
+// </svg>
+//   );
+// }
 
 export function Header(){
-    
+    /* Fonction qui gère le header de navigation */
 
-    const [isOpen, setIsOpen] = useState(false);
-    const data = usePage().props;
-    const user = data.auth.user;
+    const [isOpen, setIsOpen] = useState(false); /* Les états du menu (déplié ou non) */
+    const data = usePage().props; /* Les données reçues */
+    const user = data.auth.user; /* Les données de l'utilisateur */
 
     return (
         
         <header className={styles.Header}>
-            <nav className={isOpen ? `${styles.Nav} ${styles.responsive}` : styles.Nav} id="topnav">
+            <nav className={isOpen ? `${styles.Nav} ${styles.responsive}` : styles.Nav} id="topnav"> 
                 
                 <div className={styles.menu}>
                     <Link href="/" className={styles.first_link}>Accueil</Link>
@@ -49,12 +49,13 @@ export function Header(){
                 </div>
 
                 <button className={styles.icon} onClick={() => setIsOpen(!isOpen)}>
+                {/* Logo menu hamburger (vue petit écran) */}
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
                     <path d="M4 6H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
                     <path d="M4 12H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
                     <path d="M4 18H20" stroke="white" strokeWidth="2" strokeLinecap="round"/>
 
-                    </svg>
+                </svg>
                 </button>
                 
             </nav>         
@@ -62,7 +63,9 @@ export function Header(){
     )
 }
 
-/* Les stations */
+/* Component Station.
+Props : - key, l'id de la station (int)
+        - name, le nom de la station (string) */
 
 const Station = (props) => {
     return (
@@ -70,11 +73,8 @@ const Station = (props) => {
             {/*<img src="./images/imgTop.png" className="StationImage"></img>*/}
             <h2>{props.name}</h2>
             <p>{props.desc}</p>
-        {/*<Link href="./TrucIG?" className="LinkStationMap">Afficher sur la carte</Link>
-            <button onClick={() => alert('Vélo réservé !')}>
-            Résever
-            </button>*/}
             <Link href={'/reservation'} className={styles.stationcard_reserver}>Réserver
+            {/* Flèche */}
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                     <path strokeDasharray="20" d="M3 12h17.5">
@@ -91,6 +91,12 @@ const Station = (props) => {
     );
 };
 
+/* Components des liens de redirection oval */
+
+/* Props :
+    - text, le texte à afficher (string).
+*/
+
 const TextOval = (props) => {
     return (
         <div className={styles.OvalLayout}>
@@ -102,6 +108,10 @@ const TextOval = (props) => {
         </div>
     )
 }
+
+/* Props : - link, un lien de redirection
+           - text, un court texte pour donner du contexte à la redirection
+ */
 
 const LinkOval = (props) => {
     return (
@@ -122,6 +132,12 @@ const LinkOval = (props) => {
 
     )
 }
+
+/* Component des Cards de tutoriel.
+Props : - un numéro sous forme de string au format "num ."
+        - une description (string)
+        - un text (string) */
+
 const CardTuto = (props) => {
     return (
         <div className={styles.tuto}>
@@ -132,8 +148,12 @@ const CardTuto = (props) => {
     )
 }
 
+/* Fonction principale. Appel les composants necessaire à la landing page.
+Prend les informations de toutes les stations en paramètre. */
 
 export default function Home({ stations }){
+
+    // Application de la bonne classe pour le thème css
     useEffect(() => {
                     document.body.setAttribute('data-theme','landing');
                     document.body.classList.add('theme-landing', 'landing');
@@ -170,7 +190,7 @@ export default function Home({ stations }){
                     text="Réservez votre vélo"    
                 />
             
-
+            {/* map pour récupérer les informations des stations à afficher */}
             <div className={styles.stations}>
                 {stations && stations.length > 0 ? (
                     stations.map((station) => (

@@ -4,6 +4,9 @@ import { usePage } from '@inertiajs/react';
 import styles from '@css/gestionStations.module.css';
 import '@css/app.css';
 
+
+// Formulaire d'ajout de sstation
+// onCancel : action fermeture
 const AddStationForm = ({ onCancel }) => {
     const { data, setData, post, processing, errors } = useForm({
         name:'',
@@ -11,6 +14,7 @@ const AddStationForm = ({ onCancel }) => {
         longitude: '',
     });
 
+    // envoie des données
     const handleSubmit = (e) => {
         e.preventDefault();
         post('/panel/stations', {
@@ -19,6 +23,7 @@ const AddStationForm = ({ onCancel }) => {
     };
 
     return (
+        // champs
         <form onSubmit={handleSubmit} className={styles.addStationForm}>
             <input 
                 type="text" 
@@ -55,6 +60,7 @@ const AddStationForm = ({ onCancel }) => {
     );
 };
 
+// Component qui affiche les infos de la station
 const StationCard = ({ station }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [showHours, setShowHours] = useState(false);
@@ -65,6 +71,7 @@ const StationCard = ({ station }) => {
         longitude: station.longitude || '',
     });
 
+    // Sauvegarde modifs
     const handleSave = (e) => {
         e.preventDefault();
         put(`/panel/stations/${station.id}`, {
@@ -72,6 +79,7 @@ const StationCard = ({ station }) => {
         });
     };
 
+    // Supression
     const handelDelete = () => {
         if (confirm(`Supprimer la station "${station.name}" ?`)) {
             router.delete(`/panel/stations/${station.id}`);
@@ -117,7 +125,8 @@ const StationCard = ({ station }) => {
                 <>
                     <h3>{station.name}</h3>
                     <p><strong>GPS :</strong> {station.latitude}, {station.longitude}</p>
-                    <p>Créée le : {new Date(station.created_at).toLocaleString('fr-FR')}</p>
+                    <p>Créée le : {new Date(station.created_at).toLocaleString('fr-FR')}</p> 
+                    {/* TODO */}
                     <p>Modifiée le : {new Date(station.updated_at).toLocaleString('fr-FR')}</p>
                 
                     <div className={styles.button}>
@@ -183,13 +192,13 @@ const ScheduleRow = ({ schedule }) => {
     );
 };
 
-
-
-
+/* Fonction principale. Appel les composants necessaire au panel.
+Prend en paramètre toutes les infos de toutes les stations */
 export default function gestionStations({ stations }){
     
     const [showForm, setShowForm] = useState(false);
-
+    
+    // Application de la bonne classe pour le css
     useEffect(() => {
         document.body.setAttribute('data-theme','admin');
         document.body.classList.add('theme-admin', 'admin');
@@ -202,7 +211,7 @@ export default function gestionStations({ stations }){
     []);
     return (
         <> 
-        
+        {/* Nav */}
         <div className={styles.nav}>
             <Link href="/" className={styles.back}>Accueil</Link>
             <Link href="/panel" className={styles.back}>Panel</Link>
@@ -213,7 +222,7 @@ export default function gestionStations({ stations }){
                 {showForm ? "Annuler" : "Ajouter une station"}
             </button>
 
-            {showForm && (
+        {showForm && (
                 <AddStationForm
                     onCancel={() => setShowForm(false)} />
             )}

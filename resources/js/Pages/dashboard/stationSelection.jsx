@@ -3,6 +3,8 @@ import { Link } from '@inertiajs/react';
 import styles from "@css/dashboard/stationSelection.module.css";
 import '@css/app.css';
 
+// Permet d'afficher les stations avec les bonnes infos.
+// Prend toutes les infos de toutes les stations.
 function StationSelection({ stations }) {
     useEffect(() => {
             document.body.setAttribute('data-theme','admin');
@@ -27,6 +29,7 @@ function StationSelection({ stations }) {
 
             <div className={styles.stationCardsContainer}> 
                 {stations.map((station) => (
+                    // Component qui affiche la station
                     <StationCard key={station.id} station={station} />
                 ))}
             </div>   
@@ -35,6 +38,8 @@ function StationSelection({ stations }) {
     );
 }
 
+// Component qui gère l'affichage d'UNE station
+// Prend les infos de ladite station en paramètre
 function StationCard({ station }) {
     return (
         <div className={styles.cards}>

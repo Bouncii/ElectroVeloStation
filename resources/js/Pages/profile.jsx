@@ -2,6 +2,7 @@ import { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
 import '@css/profile.module.css';
 import { Header } from "../Pages/home.jsx";
+import { FormatDate } from "@/formatDate.jsx";
 import styles from '@css/profile.module.css';
 import '@css/app.css';
 
@@ -301,7 +302,7 @@ export function AfficheReservations() {
             {reservations.length === 0 ? (
                 <p>Aucune réservation effectuée.</p>
             ) : (
-                <ul>
+                <ul className={styles.blocBas}>
                     {// Affiche les détails de chaque réservation, les propositions associées et les options de modification ou d'annulation
                     reservations.map((reservation) => {
                         const scheduleStation = schedules.find(s => s.station_id === reservation.station_id); // Récupère les horaires de la station associée à la réservation pour valider les heures de début et fin
@@ -309,7 +310,7 @@ export function AfficheReservations() {
                         return (
                             <li key={reservation.id}>
                                 <span>
-                                    Réservation du {reservation.start_date} au {reservation.end_date}
+                                    Réservation du {FormatDate(reservation.start_date)} au {FormatDate(reservation.end_date)}
                                     {" "}pour {reservation.attributions.length} personne(s)
                                     {" - "}statut : 
                                     <span className={styles[reservation.status]}>
