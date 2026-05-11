@@ -33,11 +33,14 @@ class ProfileController extends Controller{
             'reservations.attributions.bike',
             'reservations.propositions'
         ]);
+
+        $sizes = Bike::distinct()->orderBy('size', 'asc')->pluck('size');
     
         return Inertia::render('profile', [
             'user' => $user,
             'stations' => Station::all(), 
             'schedules' => Schedule::all(),
+            'bikeSizes' => $sizes,
         ]);
     }
 

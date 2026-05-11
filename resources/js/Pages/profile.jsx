@@ -126,6 +126,7 @@ export function InfosPeople() {
     // Affichage et gestion des personnes associées à l'utilisateur
     const { user } = usePage().props; 
     const people = user.people; // Récupère les personnes associées depuis le back
+    const bikeSizes = usePage().props.bikeSizes; // Récupère les tailles de vélo disponibles depuis le back
 
     const [editingId, setEditingId] = useState(null);
     const [editData, setEditData] = useState({}); // { first_name, last_name, age, required_bike_size }
@@ -171,7 +172,7 @@ export function InfosPeople() {
                     people.map((p) => (
                         <li key={p.id}>
                             <span>
-                                {p.first_name} {p.last_name} — {p.age} ans — taille(cm) : {p.required_bike_size}
+                                {p.first_name} {p.last_name} - {p.age} ans - taille(cm) : {p.required_bike_size}
                             </span>
                             <button
                             type="button" onClick={() => handleEdit(p)} className={styles.bnt} >
@@ -200,12 +201,17 @@ export function InfosPeople() {
                                         value={editData.age}
                                         onChange={(e) => setEditData({ ...editData, age: e.target.value })}
                                     />
-                                    <input
-                                        type="number"
-                                        placeholder="Taille(cm)"
+                                    <select
                                         value={editData.required_bike_size}
                                         onChange={(e) => setEditData({ ...editData, required_bike_size: e.target.value })}
-                                    />
+                                    >
+                                        <option value="">Taille de vélo requise</option>
+                                        {bikeSizes.map((size) => (
+                                            <option key={size} value={size}>
+                                                {size} cm
+                                            </option>
+                                        ))}
+                                    </select>
                                     <div className={styles.formActions}>
                                         <button type="submit" className={styles.bnt}>Enregistrer</button>
                                         <button type="button" onClick={handleCancel} className={styles.bnt}>Annuler</button>
@@ -305,7 +311,7 @@ export function AfficheReservations() {
                                 <span>
                                     Réservation du {reservation.start_date} au {reservation.end_date}
                                     {" "}pour {reservation.attributions.length} personne(s)
-                                    {" — "}statut : 
+                                    {" - "}statut : 
                                     <span className={styles[reservation.status]}>
                                     {reservation.status}
                                     </span>
@@ -323,7 +329,7 @@ export function AfficheReservations() {
                                     <ul>
                                         {reservation.propositions.map((proposition) => (
                                             <li key={proposition.id}>
-                                                Proposition — statut : {proposition.status}
+                                                Proposition - statut : {proposition.status}
                                                 {proposition.status === 'pending' && (
                                                     <>
                                                         <button type="button" onClick={() => handleAcceptProposition(proposition.id)} className={styles.submitButton}>

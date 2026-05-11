@@ -52,47 +52,6 @@ export default function Reservation({
     // CHANGE RESERVATION
     // -----------------------------
 
-function Formulaire() {
-    // Composant pour gérer le formulaire d'ajout d'un nouveau cycliste
-    return <>
-        <h3>Nouveau cycliste : </h3>
-        // Ajouter un if pour l'afficher ou non 
-        <select name="enregistres" onChange={(e) => {
-            if(e.target.value != ""){
-                e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "none";
-            } else {
-                e.target.parentElement.getElementsByClassName("formulaire")[0].style.display = "block";
-            }
-        }}>
-            <option value="">Pas encore enregistré</option>
-            //Faire en sorte de récupérer et créer les options automatiquement
-            <option value="1">M. Oui</option>
-            <option value="2">Mme Oui</option>
-            //TODO : ajouter les utilisateurs déjà enregistrés dans la base de données
-        </select>
-        <form className="formulaire" action="" method="post">
-        <label>Nom :</label>
-        <input type="text" name="nom" />
-        <label>Prénom :</label>
-        <input type="text" name="prenom" />
-        <label>Âge :</label>
-        <input type="number" name="age" />
-        <label>Taille (cm) :</label>
-        <select name="taille">
-            <option value="">Choisir</option>
-            {bikeSizes.map((bikeSize) => (
-                <option key={bikeSize.id} value={bikeSize}>
-                    {bikeSize}
-                </option>
-            ))}
-        </select>
-        <button className="boutonRegister">Enregistrer</button>
-        </form>
-        
-        
-    </>
-    
-}
     const handleReservationChange = (e) => {
         // Vérifie que les heures sont dans les limites d'ouverture de la station
         if(e.target.name === "heureDebut" || e.target.name === "heureFin" ){
@@ -233,6 +192,7 @@ function Formulaire() {
     // -----------------------------
 
     const calculPrix = () => {
+        // Calcule le prix total de la réservation en fonction de la durée et du nombre de personnes
 
         const heures = calculDuree();
 
@@ -413,7 +373,7 @@ function Formulaire() {
     
 
         {/* ------------------ */}
-        {/* PEOPLE */}
+        {/* Cyclistes */}
         {/* ------------------ */}
 
         {people.map((person,index)=>(
@@ -474,6 +434,7 @@ function Formulaire() {
         <label>Taille</label>
 
         <select name="taille"
+        value={person.taille}
         onChange={(e)=>handlePeopleChange(index,e)}
         >
             <option value="">Choisir</option>
