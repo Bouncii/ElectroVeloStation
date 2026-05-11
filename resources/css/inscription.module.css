@@ -45,8 +45,29 @@
     box-sizing: border-box;
 }
 
+/* Responsive design */
+
+@media (max-width: 800px) {
+    .inscriptionPage .blocCreerCompte {
+        width: 50%;
+    }
+    .blocCreerCompte input {
+        width: 100%;
+    }
+
+}
+
 @media (max-width: 500px) {
     .inscriptionPage {
         background-image: none;
     }
+
+    .inscriptionPage .blocCreerCompte {
+        width: 95%;
+        margin: 50px auto;
+    }
+    .blocCreerCompte input {
+        width: 100%;
+    }
+
 }

@@ -62,6 +62,18 @@
     background-color: #003dcb;
 }
 
+/* Responsive design */
+
+@media (max-width: 800px) {
+    .connexionPage .blocConnexion {
+        width: 50%;
+    }
+    .blocConnexion input {
+        width: 100%;
+    }
+
+}
+
 @media (max-width: 500px) {
     .connexionPage {
         background-image: none;
