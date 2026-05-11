@@ -248,6 +248,7 @@ export default function Reservation({
         <>
         <div className={styles.reservationPage}>
         <header>
+            <title>Réservez votre vélo</title>
             <Header/>
         </header>
 
