@@ -3,6 +3,8 @@ import {useForm, router, Link, usePage} from '@inertiajs/react';
 import styles from '@css/gestionUsers.module.css';
 import '@css/app.css';
 
+// Formulaire d'ajout d'utilisateur
+// onCancel : action fermeture
 const AddUserForm = ({ onCancel}) => {
     const { data, setData, post, processing, errors } = useForm({
         first_name:'',
@@ -12,6 +14,7 @@ const AddUserForm = ({ onCancel}) => {
         role:'client',
     });
 
+    // envoie des données
     const handleSubmit = (e) => {
         e.preventDefault();
         post('/panel/users', {
@@ -19,7 +22,7 @@ const AddUserForm = ({ onCancel}) => {
         });
     };
         return(
-
+            // champs
             <form onSubmit={handleSubmit} className={styles.AddUserForm}>
                 <input type="text" value={data.first_name} onChange={e => setData('first_name', e.target.value)} placeholder="Prénom" />
                 {errors.first_name && <div>{errors.first_name}</div>}
@@ -44,10 +47,12 @@ const AddUserForm = ({ onCancel}) => {
         );
     };
 
+// Component qui affiche les infos de l'utilisateur
 const UserCard = ({ user }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [showPersons, setShowPersons] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); // Indique si une modification est en cours
+    const [showPersons, setShowPersons] = useState(false); // Indique si on doit afficher où non les personnes liées 
 
+    // Formulaire
     const {data, setData, put, processing, errors } = useForm({
         first_name : user.first_name,
         last_name : user.last_name,
@@ -55,13 +60,16 @@ const UserCard = ({ user }) => {
         role : user.role,
     });
 
+    // Sauvegarde des modifications
     const handleSave = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
+        // requête
         put(`/panel/users/${user.id}`, {
             onSuccess: () => setIsEditing(false),
         });
     };
 
+    // Supression des modifications
     const handleDelete = () => {
         if (confirm(`Supprimer l'utilisateur' "${user.first_name}${user.last_name}" ?`)) {
             router.delete(`/panel/users/${user.id}`);
@@ -70,7 +78,8 @@ const UserCard = ({ user }) => {
 
     return (
         <div className={styles.usersCardDetails}>
-            {isEditing ? (
+            {isEditing ? ( // On vérifie l'état
+                // Formulaire
                 <form onSubmit={handleSave}>
                     <input 
                         type="text" 
@@ -103,11 +112,12 @@ const UserCard = ({ user }) => {
                     </select>
                     {errors.role && <p className={styles.error}>{errors.role}</p>}
                     
-                    
+                    {/* envoie */}
                     <div className={styles.button}>
                         <button type='submit' disabled={processing}>
                             {processing ? 'Enregistrement en cours...' : 'Enregistrer'}
                         </button>
+                        {/* modification de l'état */}
                         <button type='button' onClick={() => setIsEditing(false)}>
                             Annuler
                         </button>
@@ -115,12 +125,14 @@ const UserCard = ({ user }) => {
                 </form>
             ) : (
             <>
+                {/* affichage */}
                 <h3>{user.first_name} {user.last_name}</h3>
                 <p>{user.age}</p>
                 <p>{user.email}</p>
                 <p>{user.role}</p>
                 <p>Personnes associées :</p>
-
+                 
+                {/*map pour récupérer les infos */}
                 {user.people && user.people.length > 0 ? (
                     <ul>
                         {user.people.map(person => (
@@ -164,22 +176,29 @@ const UserCard = ({ user }) => {
     );
 }
 
-const PersonRow = ({ person }) => {
+// Le Component qui gère les personnes liés à l'user
 
+const PersonRow = ({ person }) => {
     
+    // Formulaire
     const {data, setData, put, processing, errors} = useForm({
         first_name: person.first_name,
         last_name: person.last_name,
         age: person.age,
         required_bike_size: person.required_bike_size,
     });
+
+    // Mise à jour des infos
     const handleUpdate = (e) => {
         e.preventDefault();
+        // requête
         put(`/panel/persons/${person.id}`, {
             preserveScroll: true,
         });
     };
 
+
+    // Supression
     const handleDelete = (e) => {
         e.preventDefault();
         if (confirm(`Supprimer la personne "${person.first_name} ${person.last_name}" ?`)) {
@@ -189,6 +208,7 @@ const PersonRow = ({ person }) => {
 
     return (
         <>
+            {/* champs */}
             <form onSubmit={handleUpdate} className={styles.person_row}>
                 <input type="text" 
                     value={data.first_name}
@@ -225,10 +245,13 @@ const PersonRow = ({ person }) => {
     )
 }
 
+/* Fonction principale. Appel les composants necessaire au panel.
+Prend en paramètre toutes les infos de tout les users */
 export default function GestionUsers({ users}){
 
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(false); // Savoir si on montre où non le formulaire
 
+    // Application de la bonne classe pour le css
     useEffect(() => {
             document.body.setAttribute('data-theme','admin');
             document.body.classList.add('theme-admin', 'admin');
@@ -242,7 +265,7 @@ export default function GestionUsers({ users}){
 
     return(
     <>
-    
+    {/* Nav */}
     <div className={styles.nav}>
             <Link href="/" className={styles.back}>Accueil</Link>
             <Link href="/panel" className={styles.back}>Panel</Link>

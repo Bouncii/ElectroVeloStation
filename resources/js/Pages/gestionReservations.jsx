@@ -3,6 +3,8 @@ import { useForm, router, Link } from '@inertiajs/react';
 import styles from '@css/gestionReservations.module.css';
 import '@css/app.css';
 
+// Formulaire d'ajout de réservation
+// onCancel : action fermeture
 const AddReservationForm = ({ onCancel }) => {
 
     const { data, setData, post, processing, errors } = useForm({
@@ -13,7 +15,7 @@ const AddReservationForm = ({ onCancel }) => {
         end_date: '',
         attributions: [],
     });
-
+    // envoie des données
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -23,7 +25,7 @@ const AddReservationForm = ({ onCancel }) => {
     };
 
     const [idsString, setIdsString] = useState('');
-
+    // gestion ID multiple personnes
     const handleIdsChange = (e) => {
         const input = e.target.value;
         setIdsString(input);
@@ -37,7 +39,7 @@ const AddReservationForm = ({ onCancel }) => {
     };
 
     return (
-
+        // champs
         <form onSubmit={handleSubmit} className={styles.addUserForm}>
             <h3>Nouvelle Réservation</h3>
             
@@ -93,7 +95,7 @@ const AddReservationForm = ({ onCancel }) => {
                 </p>
                 
                 {errors.attributions && <p style={{color: 'red'}}>{errors.attributions}</p>}
-                {Object.keys(errors).map(key => 
+                {Object.keys(errors).map(key => // map
                     key.includes('attributions') && <p key={key} style={{color: 'red'}}>{errors[key]}</p>
                 )}
 
@@ -107,11 +109,12 @@ const AddReservationForm = ({ onCancel }) => {
     );
 };
 
-
+// Component qui affiche les infos des réservations
 const ReservationCard = ({ reservation }) => {
 
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); // Indique si une modification est en cours
 
+    // Formulaire
     const { data, setData, put, processing, errors } = useForm({
         user_id: reservation.user_id || '',
         station_id: reservation.station_id || '',
@@ -121,6 +124,7 @@ const ReservationCard = ({ reservation }) => {
         attributions: reservation.attributions?.map(attr => ({ person_id: attr.person_id })) || [],
     });
 
+    // gestion ID persons associés a l'user
     const [idsString, setIdsString] = useState(
         reservation.attributions?.map(attr => attr.person_id).join(', ') || ''
     );
@@ -246,6 +250,7 @@ const ReservationCard = ({ reservation }) => {
                     </p>
 
                     <p>Du : {new Date(reservation.start_date).toLocaleString()}</p>
+                    {/* TODO */}
                     <p>Au : {new Date(reservation.end_date).toLocaleString()}</p>
 
                     <div>
@@ -289,10 +294,13 @@ const ReservationCard = ({ reservation }) => {
 };
 
 
+/* Fonction principale. Appel les composants necessaire.
+Prend en paramètre toutes les infos des réservations et des persons */
 export default function GestionReservations({ reservations = [], persons = [], errors }) {
 /* ... = [] évite erreur .lenght */
     const [showForm, setShowForm] = useState(false);
 
+    // Application de la bonne classe pour le thème css
     useEffect(() => {
         document.body.setAttribute('data-theme','admin');
         document.body.classList.add('theme-admin', 'admin');

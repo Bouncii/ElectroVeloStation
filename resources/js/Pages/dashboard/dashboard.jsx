@@ -5,6 +5,7 @@ import { FormatDate } from "../../formatDate.jsx";
 import styles from "@css/dashboard/dashboard.module.css";
 import '@css/app.css';
 
+// Permet de créer une pop Up grâce à la librairie headlessui
 function PopUp({isOpen,  setIsOpen, titre, subTitre, Desc, onConfirm}) {
     return (
         <>
@@ -38,8 +39,10 @@ function PopUp({isOpen,  setIsOpen, titre, subTitre, Desc, onConfirm}) {
     )
 } 
 
+// Permet de récup les stats concernant les vélos sous forme de tableau et les affcihe.
+// Prend lesdites stats en paramètre
 const BikeStatsTable = ({ data }) => {
-        // permet de transformer un objet en tableau
+    // permet de transformer un objet en tableau
     // [ ["M", {available: 5, maintenance: 1}], ["L", {...}] ]
     const statsArray = Object.entries(data);
     return (
@@ -64,6 +67,8 @@ const BikeStatsTable = ({ data }) => {
     );
 };
 
+// Permet de récup les stats concernant les réservations sous forme de tableau et les affiches.
+// Prend lesdites stats en paramètre
 const ResaStatsTable = ({ data }) => {
     const statsArray = Object.entries(data);
     return (
@@ -86,6 +91,8 @@ const ResaStatsTable = ({ data }) => {
     );
 };
 
+// Component qui affiche la fenêtre de stats
+// Prends les stats des vélos et les stats de résa
 const StatWindow = ({bikeData, resaData}) => {
     if (!bikeData) return <p>Aucunnes données disponibles pour les vélos.</p>;
     if (!resaData) return <p>Aucunnes données disponibles pour les réservations.</p>;
@@ -108,6 +115,8 @@ const StatWindow = ({bikeData, resaData}) => {
     )
 }
 
+// Component qui affiche la fenêtre de départs
+// Prends toutes les infos sur les résa partentes, l'id de la station et onAlert qui sert a afficher la popUp
 const DepartWindow = ({data, stationId, onAlert}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
 
@@ -163,6 +172,8 @@ const DepartWindow = ({data, stationId, onAlert}) => {
     )
 }
 
+// Component qui affiche la fenêtre de départs
+// Prends toutes les infos sur les résa en attentes et les infos sur la station actuelle
 function WaitWindow({data, station}){
     
 
@@ -175,7 +186,7 @@ function WaitWindow({data, station}){
                     <div key={res.id} className={styles.wait_entry}>
                         <div className={styles.div1}>
                         <p> {res.id}</p>
-                        <p>{FormatDate(res.created_at)}</p>
+                        <p>{FormatDate(res.created_at)}</p>  {/* Conversion format dates */}
                         </div>
 
                     <h2 className={styles.titre_modale}>Détails de la demande</h2>
@@ -209,6 +220,9 @@ function WaitWindow({data, station}){
         );
 }
 
+
+// Component qui affiche la fenêtre des arrivées
+// Prends toutes les infos sur les résa qui arrivent
 const ArriveWindow = ({data, stationId}) => {
     if (!data) return <p> Pas d'informations sur la station.</p>;
     return(
@@ -240,15 +254,18 @@ const ArriveWindow = ({data, stationId}) => {
     )
 }
 
+// Component qui gère un formulaire général utilisé dans les opérations de réaprovisionnement
+// Prends toutes les infos sur les résa qui arrivent
 const OperationForm = ({ title, description, buttonText, onSubmit, onAlert }) => {
     const [size, setSize] = useState('');
     const [count, setCount] = useState(1);
 
-    const availableSizes = [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200];
+    // const availableSizes = [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200];
 
+    // envoie données
     const handleSubmit = () => {
         if (!size) return onAlert("Erreur", "Sélectionnez une taille");
-        //onSubmit(size, count);
+
 
         onAlert(
             "Confirmation",
@@ -287,9 +304,12 @@ const OperationForm = ({ title, description, buttonText, onSubmit, onAlert }) =>
     );
 };
 
+// Component qui affiche la fenêtre des opérations de réaprovisionnement
+// Prends l'id de la startion et onAlert qui permet d'utiliser la popUp
 const OpeWindow = ({stationId, onAlert}) => {
     if (!stationId) return null;
     
+    // Lance le rééquilibrage
     const handleRebalance = () => {
         onAlert(
         "Rééquillibrage",
@@ -340,7 +360,7 @@ const OpeWindow = ({stationId, onAlert}) => {
                     Lancer le rééquilibrage
                 </button>
             </div>
-
+            {/* // Maintenance */}
             <OperationForm 
                 title="Maintenance"
                 description="Mettre les vélos en maintenance."
@@ -349,6 +369,7 @@ const OpeWindow = ({stationId, onAlert}) => {
                 onSubmit={(s, c) => sendRequest('maintenance', s, c)}
             />
 
+            {/* Disponibilité */}
             <OperationForm 
                 title="Disponibilité"
                 description="Rendre des vélos disponibles."
@@ -357,6 +378,7 @@ const OpeWindow = ({stationId, onAlert}) => {
                 onSubmit={(s, c) => sendRequest('available', s, c)}
             />
 
+            {/* Ajout */}
             <OperationForm 
                 title="Ajout"
                 description="Ajouter des vélos à la station."
@@ -365,6 +387,7 @@ const OpeWindow = ({stationId, onAlert}) => {
                 onSubmit={(s, c) => sendRequest('add', s, c)}
             />
 
+            {/* Supression */}
             <OperationForm 
                 title="Supression"
                 description="Supprimer des vélos d'une station."
@@ -377,6 +400,8 @@ const OpeWindow = ({stationId, onAlert}) => {
     );
 }
 
+// Component qui affiche la fenêtre des résa en attentes
+// Prends les infos des résas, l'id de la station et onAlert qui permet d'utiliser la popUp
 const InProgressWindow = ({ data, stationId, onAlert }) => {
     if (!data) return <p>Pas d'informations sur la station.</p>;
 
@@ -423,9 +448,10 @@ const InProgressWindow = ({ data, stationId, onAlert }) => {
     );
 };
 
+/* Fonction principale. Appel les composants necessaire au panel. */
 export default function DashboardTest() {
 
-    const [activeWindow, setActiveWindow] = useState('none');
+    const [activeWindow, setActiveWindow] = useState('stats'); // Etat pour savoir quel fenêtre afficher
     const {station, bikeStats, 
         departingReservations, arrivingReservations, 
         pendingReservations, inProgressReservations} = usePage().props;
@@ -437,7 +463,7 @@ export default function DashboardTest() {
         "En cours": inProgressReservations.length,
     };
 
-    const [popupConfig, setPopupConfig] = useState({
+    const [popupConfig, setPopupConfig] = useState({ // Etat de la Pop UP
         isOpen: false,
         titre: '',
         subTitre: '',
@@ -445,10 +471,12 @@ export default function DashboardTest() {
         action: null
     });
 
+    // Permet de déclancher la pop up
     const triggerPopUp = (titre, desc, subTitre = '', action = null) => {
         setPopupConfig({ isOpen: true, titre, desc, subTitre, action });
     };
 
+    // applcation de la bon ne classe pour le thème css
     useEffect(() => {
         document.body.setAttribute('data-theme','admin');
         document.body.classList.add('theme-admin', 'admin');
@@ -464,6 +492,7 @@ export default function DashboardTest() {
         <>
         <div className={styles.pageContainer}>
         <div className={styles.menu}>
+        {/* Menu de changement de fenêtre */}
         <ul>
             <li className={styles.stationTitle}>{station?.name}</li>
             <li onClick={() => setActiveWindow('stats')}>Statistiques</li>
@@ -475,6 +504,7 @@ export default function DashboardTest() {
             <li className={styles.back}> <Link href="./">Retour</Link></li>
         </ul>
         </div>
+        {/* changement de fenêtres */}
         <div className={styles.changingWindow}>
                 {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} onAlert={triggerPopUp} />}
                 {activeWindow === 'departing' && <DepartWindow data={departingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
@@ -483,6 +513,7 @@ export default function DashboardTest() {
                 {activeWindow === 'operation' && <OpeWindow stationId={station.id} onAlert={triggerPopUp}/>}
                 {activeWindow === 'inprogress' && <InProgressWindow data={inProgressReservations} stationId={station.id} onAlert={triggerPopUp} />}
         </div>
+        {/* Pop Up */}
         <PopUp 
                 isOpen={popupConfig.isOpen} 
                 setIsOpen={(val) => setPopupConfig({...popupConfig, isOpen: val})}
