@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { usePage, Link, router } from '@inertiajs/react';
 import { Description, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { FormatDate } from "../../formatDate.jsx";
 import styles from "@css/dashboard/dashboard.module.css";
 import '@css/app.css';
 
@@ -174,7 +175,7 @@ function WaitWindow({data, stationId}){
                     <div key={res.id} className={styles.wait_entry}>
                         <div className={styles.div1}>
                         <p> {res.id}</p>
-                        <p>{res.created_at}</p>
+                        <p>{FormatDate(res.created_at)}</p>
                         </div>
 
                     <h2 className={styles.titre_modale}>Détails de la demande</h2>
@@ -182,7 +183,7 @@ function WaitWindow({data, stationId}){
                 <p><strong>Client :</strong> {res.user?.first_name} {res.user?.last_name}</p>
                 <p><strong>Email :</strong> {res.user?.email}</p>
                 <p><strong>Station :</strong> {res.station?.name}</p>
-                <p><strong>Date :</strong> {res.created_at}</p>
+                <p><strong>Date :</strong> {FormatDate(res.created_at)}</p>
                 <p><strong>Commande :</strong></p>
                 <div className={styles.WaitListCommande}>                        
                         {res.attributions && res.attributions.length > 0 ? (

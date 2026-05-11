@@ -3,20 +3,9 @@
 /* <></> */
 import { useState, useEffect } from "react"
 import { usePage, Link } from '@inertiajs/react';
+import { FormatDate } from "../formatDate.jsx";
 import styles from "@css/panel.module.css";
 import '@css/app.css';
-
-    const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  
-  return new Intl.DateTimeFormat('fr-FR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }).format(date);
-    };
 
 function AfficherWaitList({pendingReservations}){
 
@@ -31,7 +20,7 @@ function AfficherWaitList({pendingReservations}){
                     <div key={res.id} className={styles.wait_entry}>
                         <div className={styles.div1}>
                         <p> {res.id}</p>
-                        <p>{formatDate(res.created_at)}</p> 
+                        <p>{FormatDate(res.created_at)}</p> 
                         </div>
 
                         <div className={styles.div2}>
