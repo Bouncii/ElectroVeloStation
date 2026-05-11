@@ -42,7 +42,7 @@
 } 
 
 .infoReservation .reservationContainer h3 {
-    border-left: var(--secondary) 4px solid;
+    border-left: var(--primary) 4px solid;
     padding-left: 10px;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .userInfoContainer h3 {
-    border-left: var(--secondary) 4px solid;
+    border-left: var(--primary) 4px solid;
     padding-left: 10px;
 }
 
