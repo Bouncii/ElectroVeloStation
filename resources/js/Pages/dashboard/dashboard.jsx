@@ -163,7 +163,7 @@ const DepartWindow = ({data, stationId, onAlert}) => {
     )
 }
 
-function WaitWindow({data, stationId}){
+function WaitWindow({data, station}){
     
 
     if (!data) {
@@ -182,7 +182,7 @@ function WaitWindow({data, stationId}){
                 <p><strong>ID :</strong> {res.id}</p>
                 <p><strong>Client :</strong> {res.user?.first_name} {res.user?.last_name}</p>
                 <p><strong>Email :</strong> {res.user?.email}</p>
-                <p><strong>Station :</strong> {res.station?.name}</p>
+                <p><strong>Station :</strong> {station?.name}</p>
                 <p><strong>Date :</strong> {FormatDate(res.created_at)}</p>
                 <p><strong>Commande :</strong></p>
                 <div className={styles.WaitListCommande}>                        
@@ -478,7 +478,7 @@ export default function DashboardTest() {
         <div className={styles.changingWindow}>
                 {activeWindow === 'stats' && <StatWindow bikeData={bikeStats} resaData={resaStats} onAlert={triggerPopUp} />}
                 {activeWindow === 'departing' && <DepartWindow data={departingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
-                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
+                {activeWindow === 'waitlist' && <WaitWindow data={pendingReservations} station={station} onAlert={triggerPopUp}/>}
                 {activeWindow === 'arriving' && <ArriveWindow data={arrivingReservations} stationId={station.id} onAlert={triggerPopUp}/>}
                 {activeWindow === 'operation' && <OpeWindow stationId={station.id} onAlert={triggerPopUp}/>}
                 {activeWindow === 'inprogress' && <InProgressWindow data={inProgressReservations} stationId={station.id} onAlert={triggerPopUp} />}
