@@ -250,9 +250,8 @@ const ReservationCard = ({ reservation }) => {
                     </p>
 
                     <p>Du : {new Date(reservation.start_date).toLocaleString()}</p>
-                    {/* TODO */}
                     <p>Au : {new Date(reservation.end_date).toLocaleString()}</p>
-
+                    <p>Statut : <strong>{reservation.status}</strong></p>
                     <div>
                         <strong>Personnes :</strong>
                         {reservation.attributions && reservation.attributions.length > 0 ? (
