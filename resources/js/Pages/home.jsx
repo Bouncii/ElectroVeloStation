@@ -45,7 +45,7 @@ export function Header(){
 
                     <Link href = '/reservation' className={styles.nav_link}>Reserver</Link>
                     
-                    <Link href = '/profile' className={styles.btn4}>Profile</Link>
+                    <Link href = '/profile' className={styles.btn4}>Profil</Link>
                 </div>
 
                 <button className={styles.icon} onClick={() => setIsOpen(!isOpen)}>
