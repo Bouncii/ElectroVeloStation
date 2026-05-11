@@ -94,14 +94,14 @@ class DashboardController extends Controller
 
         $departingReservations = Reservation::where('station_id', $station->id)
             ->where('status', 'confirmed')
-            ->whereDate('start_date', '<=', $today)
+            ->whereDate('start_date', $today) 
             ->with($loadRelations)
             ->orderBy('start_date', 'asc')
             ->get();
 
         $arrivingReservations = Reservation::where('station_id', $station->id)
-            ->where('status', 'confirmed')
-            ->whereDate('end_date', '<=', $today)
+            ->whereIn('status', ['confirmed', 'in_progress']) // Un vélo en cours peut être rendu
+            ->whereDate('end_date', $today)
             ->with($loadRelations)
             ->orderBy('end_date', 'asc')
             ->get();
@@ -114,9 +114,7 @@ class DashboardController extends Controller
 
         $inProgressReservations = Reservation::where('station_id', $station->id)
             ->where('status', 'in_progress')
-            ->whereDate('end_date', '<=', $today)
             ->with($loadRelations)
-            ->orderBy('end_date', 'asc')
             ->get();
 
         return Inertia::render('dashboard/dashboard', [
