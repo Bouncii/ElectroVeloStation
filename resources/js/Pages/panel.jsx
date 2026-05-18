@@ -72,7 +72,7 @@ const WaitDetail = ({isOpen, onClose, data}) => {
                 <p><strong>Taille :</strong> {data.user?.height}</p>*/}
                 <p><strong>Email :</strong> {data.user?.email}</p>
                 <p><strong>Station :</strong> {data.station.name}</p>
-                <p><strong>Date :</strong>{formatDate(data.created_at)}</p>
+                <p><strong>Date :</strong>{FormatDate(data.created_at)}</p>
                 <p><strong>Commande :</strong></p>
                 <div className={styles.WaitListCommande}>   
                     {/* map pour récupérer les infos                      */}
